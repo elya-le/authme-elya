@@ -1,6 +1,6 @@
-# MeetPup - Meetup Clone
+# MeetPup 
 
-## Database Schema Design
+## Meetup Clone
 
 ![db-schema]
 

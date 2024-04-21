@@ -9,7 +9,7 @@ module.exports = {
     typeValidation: true, // validates datatypes before querying the db
   },
   production: {
-    use_env_variable: "DATABASE_URL", // db connection string from enviroment variable
+    use_env_variable: 'DATABASE_URL', // db connection string from enviroment variable
     dialect: "postgres", // use PostgreSQL as the database dialect
     seederStorage: "sequelize", // tracks seed file executed by Sequelize
     dialectOptions: {
