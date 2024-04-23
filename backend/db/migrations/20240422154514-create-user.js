@@ -7,8 +7,9 @@ if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
 
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
     await queryInterface.createTable(
       'Users',
       {
@@ -18,16 +19,6 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.INTEGER,
         },
-        username: {
-          allowNull: false,
-          type: Sequelize.STRING(30),
-          unique: true,
-        },
-        email: {
-          allowNull: false,
-          type: Sequelize.STRING(256),
-          unique: true,
-        },
         firstName: {
           allowNull: false,
           type: Sequelize.STRING,
@@ -36,9 +27,19 @@ module.exports = {
           allowNull: false,
           type: Sequelize.STRING,
         },
+        username: {
+          allowNull: false,
+          type: Sequelize.STRING(30),
+          unique: true,
+        },
         hashedPassword: {
           allowNull: false,
           type: Sequelize.STRING.BINARY,
+        },
+        email: {
+          allowNull: false,
+          type: Sequelize.STRING(256),
+          unique: true,
         },
         createdAt: {
           allowNull: false,
@@ -54,8 +55,9 @@ module.exports = {
       options
     );
   },
-  async down(queryInterface, Sequelize) {
+
+  async down (queryInterface, Sequelize) {
     options.tableName = 'Users'; // set table name for the operation
     return queryInterface.dropTable(options); // drop the 'Users' table from the database
-  },
+  }
 };
