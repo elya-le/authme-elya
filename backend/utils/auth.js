@@ -4,7 +4,7 @@ const { User } = require('../db/models');
 
 const { secret, expiresIn } = jwtConfig;
 
-
+// helper function
 // sends a JWT Cookie
 const setTokenCookie = (res, user) => {
     // create the token.
@@ -32,29 +32,30 @@ const setTokenCookie = (res, user) => {
     return token;
 };
 
+// middleware
 // if there is a User found in the search, then save the user to a key of user onto the Request (req.user)
-
 // if there is an error verifying the JWT or a Usercannot be found with the id in the JWT payload, 
 // then clear the token cookie from the response and set req.user to null.
 const restoreUser = (req, res, next) => {
     // token parsed from cookies
     const { token } = req.cookies;
     req.user = null;
-
+    // to verify that JWT hasnt been tampered with
     return jwt.verify(token, secret, null, async (err, jwtPayload) => {
         if (err) {
-        return next();
+        return next(); // allow request to pass through if user is not logged in
         }
-
+    
+    // if token is present find users whos info attatched to that token
     try {
         const { id } = jwtPayload.data;
         req.user = await User.findByPk(id, {
             attributes: {
-            include: ['email', 'createdAt', 'updatedAt']
+            include: ['email', 'createdAt', 'updatedAt'] // offerides part of scope that hides this info from user
             }
         });
         } catch (e) {
-        res.clearCookie('token');
+        res.clearCookie('token'); // if no user is found then token is removed
         return next();
         }
 
@@ -66,7 +67,7 @@ const restoreUser = (req, res, next) => {
 
 // if there is no current user, return an error
 const requireAuth = function (req, _res, next) {
-    if (req.user) return next();
+    if (req.user) return next(); 
 
     const err = new Error('Authentication required');
     err.title = 'Authentication required';
