@@ -55,8 +55,6 @@ app.use(routes);
 // placed at bottom to make sure all requests 
 // are passed through global middleware
 
-
-
 /* --- place endpoints below this middleware --- */
 
 

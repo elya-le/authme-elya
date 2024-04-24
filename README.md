@@ -1,6 +1,6 @@
-# MeetPup 
+<!-- # MeetPup 
 
-## Meetup Clone
+## Meetup Clone -->
 
 ![db-schema]
 
