@@ -1,6 +1,6 @@
 'use strict';
 
-const { Model, Validator } = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -32,14 +32,6 @@ module.exports = (sequelize, DataTypes) => {
           name: "User already exists",
           msg: "User with that username already exists",
         },
-        validate: {
-          len: [4, 30],
-          isNotEmail(value) {
-            if (Validator.isEmail(value)) {
-              throw new Error("Cannot be an email.");
-            }
-          },
-        },
       },
       email: {
         type: DataTypes.STRING,
@@ -63,6 +55,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
+      modelName: 'User',
       // excludes from sending this infomation to user
       defaultScope: {
         attributes: {
