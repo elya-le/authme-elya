@@ -5,47 +5,49 @@ const bcrypt = require('bcryptjs'); // import bcryptjs to hash passwords
 const { body, validationResult } = require('express-validator'); // for validation
 const { User } = require('../../db/models');
 
+
+
 // POST route for logging in a user
 router.post('/',
-    [
-        body('credential').not().isEmpty().withMessage('Email or username is required'), // validate 'credential' is not empty
-        body('password').not().isEmpty().withMessage('Password is required') // validate 'password' is not empty
-    ],
-    async (req, res) => {
-        // handle validation results
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            // if there are validation errors, return 400 status with details
-            return res.status(400).json({
-                message: "Bad Request",
-                errors: errors.array().reduce((acc, error) => ({
-                    ...acc,
-                    [error.param]: error.msg
-                }), {})
+[
+    body('credential').not().isEmpty().withMessage('Email or username is required'), // validate 'credential' is not empty
+    body('password').not().isEmpty().withMessage('Password is required') // validate 'password' is not empty
+],
+async (req, res) => {
+    // handle validation results
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        // if there are validation errors, return 400 status with details
+        return res.status(400).json({
+            message: "Bad Request",
+            errors: errors.array().reduce((acc, error) => ({
+                ...acc,
+                [error.param]: error.msg
+            }), {})
+        });
+    }
+    
+    try {
+        // extract credential and password from request body
+        const { credential, password } = req.body;
+        
+        // find user by credential (email or username)
+        const user = await User.findOne({
+            where: {
+                [Op.or]: [
+                    { email: credential },
+                    { username: credential }
+                ]
+            },
+            attributes: [
+                'id', 
+                'email', 
+                'username', 
+                'firstName', 
+                'lastName', 
+                'hashedPassword']  // ensure hashedPassword is included
             });
-        }
-
-        try {
-            // extract credential and password from request body
-            const { credential, password } = req.body;
-
-            // find user by credential (email or username)
-            const user = await User.findOne({
-                where: {
-                    [Op.or]: [
-                        { email: credential },
-                        { username: credential }
-                    ]
-                },
-                attributes: [
-                    'id', 
-                    'email', 
-                    'username', 
-                    'firstName', 
-                    'lastName', 
-                    'hashedPassword']  // ensure hashedPassword is included
-            });
-
+            
             // check user and password validity
             if (user && bcrypt.compareSync(password, user.hashedPassword)) {
                 // if credentials are valid, respond with user details
@@ -73,6 +75,28 @@ router.post('/',
         }
     }
 );
+
+// check if the user is logged in
+router.get('/', (req, res) => {
+
+    if (req.user) {
+        // return the user's information if they are logged in
+        res.status(200).json({
+            user: {
+                id: req.user.id,
+                firstName: req.user.firstName,
+                lastName: req.user.lastName,
+                email: req.user.email,
+                username: req.user.username
+            }
+        });
+    } else {
+        // return null if no user is logged in
+        res.status(200).json({
+            user: null
+        });
+    }
+});
 
 module.exports = router;
 
