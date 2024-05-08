@@ -5,6 +5,25 @@ const bcrypt = require('bcryptjs'); // import bcryptjs to hash passwords
 const { body, validationResult } = require('express-validator');
 const { User } = require('../../db/models');
 
+
+
+// restore session user
+router.get("/", (req, res) => {
+    const { user } = req;
+
+    if (user) {
+        const safeUser = {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            username: user.username,
+        };
+        
+    return res.json({ user: safeUser });
+    } else return res.json({ user: null });
+});
+
 // POST route for logging in a user
 router.post('/',
     [

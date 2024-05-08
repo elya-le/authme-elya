@@ -8,37 +8,46 @@ const cors = require('cors');
 const csurf = require('csurf');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 const { environment } = require('./config');
-const isProduction = environment === 'production'; // determine while enviroment were in
+const isProduction = environment === 'production'; // determine which environment we're in
 
 // import routes
 const routes = require('./routes');
 
-const app = express(); // initialize exprees app
+const app = express(); // initialize express app
 
 /* --- global middleware --- */
 
-app.use(morgan('dev')); // global middleware print info about each request
-app.use(cookieParser()); // read cookies from mthe headers of our request
+app.use(morgan('dev')); // log information about each request
+app.use(cookieParser()); // parse cookies from the headers of our requests
 app.use(express.json()); // parse json bodies
 
-
-// set up basic security middleware
-
+// security middleware setups
 if (!isProduction) {
     // enable cors only in development
     app.use(cors());
 }
-// helmet helps set a variety of headers for more security
+
 app.use(
     helmet.crossOriginResourcePolicy({
         policy: "cross-origin"
     })
 );
 
-// set the _csrf token and create req.csrfToken method
-// helps protect againsts csurf attacks
+// session middleware configuration
+app.use(session({
+    secret: 'secret-key', // a secret key for signing the session ID cookie (use a secure, unique string)
+    resave: false, // don't save session if unmodified
+    saveUninitialized: false, // don't create a session until something is stored
+    cookie: {
+        secure: isProduction, // use secure cookies in production (requires HTTPS)
+        maxAge: 1000 * 60 * 60 * 24 // expire cookie in 24 hours
+    }
+}));
+
+// CSRF protection setup
 app.use(
     csurf({
         cookie: {
@@ -50,25 +59,6 @@ app.use(
 );
 
 // connect all the routes
-app.use(routes); 
-// placed at bottom to make sure all requests 
-// are passed through global middleware
-
-const session = require('express-session');
-
-// middleware that creates a session for each user when they log in
-app.use(session({
-    secret: 'secret-key',// a secret key for signing the session ID cookie (use a secure, unique string)
-    resave: false, // dont save session if unmodified
-    saveUninitialized: false, // dont create a session until something is stored
-    cookie: {
-        secure: process.env.NODE_ENV === "production",  // use secure cookies in production (requires HTTPS)
-        maxAge: 1000 * 60 * 60 * 24  // expire cookie in 24 hours
-    }
-}));
-
-/* --- place endpoints below this middleware --- */
-
-
+app.use(routes); // placed after all middleware to ensure they are configured first
 
 module.exports = app;
