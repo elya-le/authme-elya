@@ -11,54 +11,82 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 const { environment } = require('./config');
-const isProduction = environment === 'production'; // determine which environment we're in
+const isProduction = environment === 'production';
 
 // import routes
 const routes = require('./routes');
 
-const app = express(); // initialize express app
+const app = express();
 
-/* --- global middleware --- */
+app.use(morgan('dev'));
+app.use(cookieParser());
+app.use(express.json());
 
-app.use(morgan('dev')); // log information about each request
-app.use(cookieParser()); // parse cookies from the headers of our requests
-app.use(express.json()); // parse json bodies
-
-// security middleware setups
 if (!isProduction) {
-    // enable cors only in development
-    app.use(cors());
+    app.use(cors({
+        origin: true,
+        credentials: true,
+    }));
 }
 
-app.use(
-    helmet.crossOriginResourcePolicy({
-        policy: "cross-origin"
-    })
-);
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    contentSecurityPolicy: false,
+}));
 
-// session middleware configuration
 app.use(session({
-    secret: 'secret-key', // a secret key for signing the session ID cookie (use a secure, unique string)
-    resave: false, // don't save session if unmodified
-    saveUninitialized: false, // don't create a session until something is stored
+    secret: 'secret-key',
+    resave: false,
+    saveUninitialized: false,
     cookie: {
-        secure: isProduction, // use secure cookies in production (requires HTTPS)
-        maxAge: 1000 * 60 * 60 * 24 // expire cookie in 24 hours
+        secure: isProduction,
+        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true,
+        sameSite: isProduction ? 'None' : 'Lax',
     }
 }));
 
-// CSRF protection setup
-app.use(
-    csurf({
-        cookie: {
-            secure: isProduction,
-            sameSite: isProduction && "Lax",
-            httpOnly: true
-        }
-    })
-);
+// add the CSRF token restore route after setting CSRF middleware
+app.use(csurf({
+    cookie: {
+        secure: isProduction,
+        sameSite: isProduction ? 'None' : 'Strict',
+        httpOnly: true
+    }
+}));
 
-// connect all the routes
-app.use(routes); // placed after all middleware to ensure they are configured first
+app.get('/api/csrf/restore', (req, res) => {
+    const csrfToken = req.csrfToken();
+    res.cookie('XSRF-TOKEN', csrfToken);
+    res.status(200).json({
+        'XSRF-Token': csrfToken
+    });
+});
+
+// add a log to show incoming cookies
+app.use((req, res, next) => {
+    console.log('Incoming cookies:', req.cookies);
+    next();
+});
+
+// use the routes defined in your routes folder
+app.use(routes);
+
+// Not Found middleware - catches and forwards to error handler
+app.use((req, res, next) => {
+    const err = new Error("Not Found");
+    err.status = 404;
+    next(err);
+});
+
+// general error handler
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(err.status || 500);
+    res.json({
+        message: err.message,
+        error: isProduction ? {} : err.stack
+    });
+});
 
 module.exports = app;

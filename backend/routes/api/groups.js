@@ -16,6 +16,29 @@ router.get('/', async (req, res, next) => {
     }
 });
 
+// GET /api/groups/current - Gets all groups organized or joined by the current user
+router.get('/current', async (req, res, next) => {
+    try {
+        const groups = await Group.findAll({
+            where: {
+                // Assuming you have a way to determine if a user is an organizer or a member
+                [Op.or]: [
+                    { organizerId: req.user.id },
+                    { '$Members.userId$': req.user.id } // If you have a Members model linked
+                ]
+            },
+            include: [{
+                model: User, // This includes details about users in the response
+                as: 'Members',
+                required: false
+            }]
+        });
+        res.status(200).json({ Groups: groups });
+    } catch (error) {
+        next(error);
+    }
+});
+
 // validation middleware to check the incoming data
 const validateGroup = [
     check('name')

@@ -1,40 +1,38 @@
 const express = require('express');
 const { Op } = require("sequelize");
 const router = express.Router();
-const bcrypt = require('bcryptjs'); // import bcryptjs to hash passwords
+const bcrypt = require('bcryptjs');
 const { body, validationResult } = require('express-validator');
 const { User } = require('../../db/models');
+const { setTokenCookie, restoreUser } = require('../../utils/auth');
 
-
-
-// restore session user
-router.get("/", (req, res) => {
-    const { user } = req;
-
-    if (user) {
-        const safeUser = {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            username: user.username,
-        };
-        
-    return res.json({ user: safeUser });
-    } else return res.json({ user: null });
+// GET /api/session - Return the current user
+router.get('/', restoreUser, (req, res) => {
+    if (req.user) {
+        return res.json({
+            user: {
+                id: req.user.id,
+                firstName: req.user.firstName,
+                lastName: req.user.lastName,
+                email: req.user.email,
+                username: req.user.username
+            }
+        });
+    } else {
+        return res.json({ user: null });
+    }
 });
+
 
 // POST route for logging in a user
 router.post('/',
     [
-        body('credential').not().isEmpty().withMessage('Email or username is required'), // validate 'credential' is not empty
-        body('password').not().isEmpty().withMessage('Password is required') // validate 'password' is not empty
+        body('credential').not().isEmpty().withMessage('Email or username is required'),
+        body('password').not().isEmpty().withMessage('Password is required')
     ],
     async (req, res) => {
-        // handle validation results
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            // if there are validation errors, return 400 status with details
             return res.status(400).json({
                 message: "Bad Request",
                 errors: errors.array().reduce((acc, error) => ({
@@ -44,55 +42,39 @@ router.post('/',
             });
         }
 
-        try {
-            // extract credential and password from request body
-            const { credential, password } = req.body;
+        const { credential, password } = req.body;
+        const user = await User.findOne({
+            where: {
+                [Op.or]: [
+                    { email: credential },
+                    { username: credential }
+                ]
+            },
+            attributes: ['id', 'email', 'username', 'firstName', 'lastName', 'hashedPassword']
+        });
 
-            // find user by credential (email or username)
-            const user = await User.findOne({
-                where: {
-                    [Op.or]: [
-                        { email: credential },
-                        { username: credential }
-                    ]
-                },
-                attributes: [
-                    'id', 
-                    'email', 
-                    'username', 
-                    'firstName', 
-                    'lastName', 
-                    'hashedPassword']  // ensure hashedPassword is included
+        console.log("Password:", password);
+        console.log("Hashed Password:", user ? user.hashedPassword : "No user found");
+
+        if (user && bcrypt.compareSync(password, user.hashedPassword)) {
+            setTokenCookie(res, user);  // ensure this is called
+
+            return res.json({
+                user: {
+                    id: user.id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    username: user.username
+                }
             });
-
-            // check user and password validity
-            if (user && bcrypt.compareSync(password, user.hashedPassword)) {
-                // if credentials are valid, respond with user details
-                return res.status(200).json({
-                    user: {
-                        id: user.id,
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        email: user.email,
-                        username: user.username
-                    }
-                });
-            } else {
-                // if credentials are invalid, return 401 status
-                return res.status(401).json({
-                    message: "Invalid credentials"
-                });
-            }
-        } catch (error) {
-            // log the error and return 500 status for server error
-            console.error('Login error:', error);
-            return res.status(500).json({
-                message: "An unexpected error occurred"
+        } else {
+            return res.status(401).json({
+                message: "Invalid credentials"
             });
         }
     }
 );
-
 
 module.exports = router;
 

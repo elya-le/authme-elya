@@ -89,8 +89,16 @@ class Group extends Model {
                     isUppercase: true, // must be uppercase letters
                 }
             },
-        },
-        {
+            numMembers: {
+                type: DataTypes.INTEGER,
+                defaultValue: 0,  // default number of members when a group is created
+                allowNull: false
+            },
+            previewImage: {
+                type: DataTypes.STRING,
+                allowNull: true  // preview image is optional
+            }
+        }, {
             sequelize,
             modelName: 'Group',
         }
