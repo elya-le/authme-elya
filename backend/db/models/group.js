@@ -3,17 +3,18 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-class Group extends Model {
-    static associate(models) {
+    class Group extends Model {
+        static associate(models) {
         // can define association here
         // i.e. Group.belongsTo(models.User, { foreignKey: 'organizerId', as: 'organizer' });
         Group.belongsTo(models.User, {
             foreignKey: "organizerId",
             as: "Organizer",
         });
-    //   Group.hasMany(models.GroupImage, {
-    //     foreignKey: "groupId",
-    //   });
+        // Group.hasMany(models.GroupImage, {
+        //     foreignKey: "groupId",
+        //     as: "GroupImages"
+        // });
     //   Group.hasMany(models.Venue, {
     //     foreignKey: "groupId",
     //   });
@@ -43,7 +44,7 @@ class Group extends Model {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 references: { // user hasMany Groups
-                    model: 'User',
+                    model: 'Users',
                     key: 'id',
                 }
             },
@@ -51,15 +52,15 @@ class Group extends Model {
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate: {
-                notEmpty: true, // don't allow empty strings
+                    notEmpty: true, // don't allow empty strings
                 }
             },
             about: {
                 type: DataTypes.TEXT,
                 allowNull: false,
                 validate: {
-                notEmpty: true, // don't allow empty strings
-                len: [10, 2000], // only allow values with length between 10 and 2000
+                    notEmpty: true, // don't allow empty strings
+                    len: [10, 2000], // only allow values with length between 10 and 2000
                 }
             },
             type: {
@@ -77,14 +78,14 @@ class Group extends Model {
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate: {
-                notEmpty: true, // don't allow empty strings
+                    notEmpty: true, // don't allow empty strings
                 }
             },
             state: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate: {
-                notEmpty: true, // don't allow empty strings
+                    notEmpty: true, // don't allow empty strings
                     len: [2, 2], // assuming state is in two-letter format
                     isUppercase: true, // must be uppercase letters
                 }
