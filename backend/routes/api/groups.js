@@ -1,50 +1,60 @@
 const express = require('express');
 const router = express.Router();
-const { Group, User, GroupImage, Venue} = require('../../db/models');
-const { Op } = require('sequelize');
+const { Group, User, GroupImage, Venue } = require('../../db/models');
 const { check, validationResult } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
-const { restoreUser } = require('../../utils/auth');
+const { restoreUser, requireAuth } = require('../../utils/auth');
 
-// Middleware to require authentication
-const requireAuth = [restoreUser, (req, res, next) => {
-    if (req.user) {
-        next();
-    } else {
-        res.status(401).json({ message: "Authentication required" });
-    }
-}];
+// use restoreUser globally (or apply only to specific routes)
 router.use(restoreUser);
-router.use(requireAuth);
+
+// middleware to require authentication
+const authenticated = [restoreUser, requireAuth];
+
+// Helper function to handle validation errors
+const handleValidationErrors = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            message: "Bad Request",
+            errors: errors.mapped()
+        });
+    }
+    next();
+};
 
 
 // GET /api/groups - Gets all groups
 router.get('/', async (req, res, next) => {
     try {
         const groups = await Group.findAll({
-            include: [{ model: User, as: 'Organizer' }]  // Use the correct alias as defined in your model association
+            include: [{ 
+                model: User, 
+                as: 'Organizer', 
+                attributes: ['id', 'firstName', 'lastName'] 
+            }]
         });
         res.status(200).json({ Groups: groups });
     } catch (error) {
-        next(error);
+        console.error('Error fetching groups:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
 // GET /api/groups/current - Gets all groups organized or joined by the current user
-router.get('/current', requireAuth, async (req, res, next) => {
+router.get('/current', authenticated, async (req, res, next) => {
     try {
         const groups = await Group.findAll({
-            where: {
-                [Op.or]: [
-                    { organizerId: req.user.id },
-                    // Add here if there are other ways to determine group membership
-                ]
-            },
-            include: [{ model: User, as: 'Organizer' }]  // Adjust the alias to match your model association
+            where: { organizerId: req.user.id },
+            include: [{ 
+                model: User, 
+                as: 'Organizer', 
+                attributes: ['id', 'firstName', 'lastName'] 
+            }]
         });
         res.status(200).json({ Groups: groups });
     } catch (error) {
-        next(error);
+        console.error('Error fetching current user groups:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
@@ -102,7 +112,7 @@ router.post('/', validateGroup, async (req, res, next) => {
 
 
 // GET /api/groups/:groupId - Gets details of a group by its id
-router.get('/:groupId', async (req, res, next) => {
+router.get('/:groupId', async (req, res) => {
     const { groupId } = req.params;
 
     try {
@@ -118,60 +128,61 @@ router.get('/:groupId', async (req, res, next) => {
             return res.status(404).json({ message: "Group couldn't be found" });
         }
 
-        res.status(200).json(group);
+        // Respond with the group data formatted as specified
+        res.status(200).json({
+            id: group.id,
+            organizerId: group.organizerId,
+            name: group.name,
+            about: group.about,
+            type: group.type,
+            private: group.private,
+            city: group.city,
+            state: group.state,
+            createdAt: group.createdAt,
+            updatedAt: group.updatedAt,
+            numMembers: group.numMembers,
+            GroupImages: group.GroupImages,
+            Organizer: {
+                id: group.Organizer.id,
+                firstName: group.Organizer.firstName,
+                lastName: group.Organizer.lastName
+            },
+            Venues: group.Venues
+        });
     } catch (error) {
-        next(error);
+        console.error('Error fetching group details:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
 // PUT /api/groups/:groupId - Updates a group
-router.put('/:groupId', validateGroup, async (req, res, next) => {
+router.put('/:groupId', authenticated, handleValidationErrors, async (req, res) => {
     const { groupId } = req.params;
-    const { user } = req;
-    const { name, about, type, private, city, state } = req.body;
-
-    // Handle validation errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({
-            message: "Bad Request",
-            errors: errors.mapped()
-        });
-    }
+    const { name, about, type, private: isPrivate, city, state } = req.body;
 
     try {
-        // Find the group with the provided ID
         const group = await Group.findByPk(groupId);
-
-        // If the group doesn't exist, return a 404 error
         if (!group) {
-            return res.status(404).json({
-                message: "Group couldn't be found",
-            });
+            return res.status(404).json({ message: "Group couldn't be found" });
         }
 
-        // Check if the current user is the organizer of the group
-        if (group.organizerId !== user.id) {
-            // If not, return a 403 error for unauthorized access
-            return res.status(403).json({
-                message: "Forbidden. You are not authorized to edit this group.",
-            });
+        if (group.organizerId !== req.user.id) {
+            return res.status(403).json({ message: "Forbidden. You are not authorized to edit this group." });
         }
 
-        // Update the group if the user is authorized
         const updatedGroup = await group.update({
             name,
             about,
             type,
-            private,
+            private: isPrivate,
             city,
             state,
         });
 
-        // Send a success response
         res.json(updatedGroup);
     } catch (error) {
-        next(error);
+        console.error('Error updating group:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 

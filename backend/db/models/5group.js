@@ -11,13 +11,13 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: "organizerId",
             as: "Organizer",
         });
-        // Group.hasMany(models.GroupImage, {
-        //     foreignKey: "groupId",
-        //     as: "GroupImages"
-        // });
-    //   Group.hasMany(models.Venue, {
-    //     foreignKey: "groupId",
-    //   });
+        Group.hasMany(models.GroupImage, {
+            foreignKey: "groupId",
+            as: "GroupImages"
+        });
+        Group.hasMany(models.Venue, {
+            foreignKey: "groupId",
+        });
     //   Group.belongsToMany(models.User, {
     //     through: models.Membership,
     //     foreignKey: "groupId",
