@@ -45,6 +45,13 @@ module.exports = (sequelize) => { // export a function that defines this model
                   isUppercase: true // ensure the state is in uppercase letters
                 }
             },
+            lat: {
+                type: DataTypes.FLOAT,
+                allowNull: false,
+                validate: {
+                isFloat: true   // ensure it is a float number
+                }
+            },
             lng: {
                 type: DataTypes.FLOAT,
                 allowNull: false,

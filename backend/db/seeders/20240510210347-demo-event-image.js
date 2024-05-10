@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === "production") {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('GroupImages', 
+    await queryInterface.bulkInsert('EventImages', 
       [
         {
           id: 1,
@@ -38,6 +38,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('GroupImages', null, {});
+    await queryInterface.bulkDelete('EventImages', null, {});
   },
 };

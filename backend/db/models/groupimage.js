@@ -51,7 +51,7 @@ GroupImage.init(
       sequelize,             // pass the sequelize instance
       modelName: 'GroupImage', // name of the model
       tableName: 'GroupImages', // table name, if different from model name
-      timestamps: false         // do not automatically create createdAt/updatedAt timestamp fields
+      timestamps: true       // do not automatically create createdAt/updatedAt timestamp fields
     }
 );
 return GroupImage;

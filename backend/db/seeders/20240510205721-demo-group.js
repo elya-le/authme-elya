@@ -1,6 +1,6 @@
 'use strict';
 
-const { User } = require("../models");
+const { Group } = require("../models");
 const bcrypt = require("bcryptjs");
 
 let options = {};
@@ -14,8 +14,8 @@ module.exports = {
       [
         {
           organizerId: 1,
-          name: 'Low Rider Limbo',
-          about: "How low can they go? Find out with a limbo contest agility course tailored for those close to the ground.",
+          name: 'Urban Trailblazers',
+          about: "A group for city-dwelling dogs and their owners who love to explore urban landscapes and parks.",
           type: 'In person',
           private: true,
           city: 'New York',
@@ -23,12 +23,12 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
           numMembers: 20,
-          previewImage: 'image url',
+          previewImage: 'http://example.com/path/to/urban-trailblazers.jpg',
         },
         {
-          organizerId: 1,
-          name: '2nd Annual Brush your Chow at the Park day',
-          about: "Welcome the warmer weather with a fluff-fest -Join us to get ahead of the shedding season and keep those fur clouds under control! ",
+          organizerId: 2,
+          name: 'Beachfront Barks',
+          about: "Perfect for dogs who can’t stay away from the water. Meetups include beach games and swimming sessions.",
           type: 'In person',
           private: true,
           city: 'New York',
@@ -36,10 +36,10 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
           numMembers: 30,
-          previewImage: 'image url',
+          previewImage: 'http://example.com/path/to/beachfront-barks.jpg',
         },
         {
-          organizerId: 1,
+          organizerId: 3,
           name: 'Big Pup Socialization Group',
           about: "Help your pony-sized lapdog make friends with other pups they won't accidentally flatten",
           type: 'In person',
@@ -49,7 +49,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
           numMembers: 40,
-          previewImage: 'image url',
+          previewImage: 'http://example.com/path/to/big-pup.jpg',
         },
       ],
       options
