@@ -402,12 +402,12 @@ Creates and returns a new group.
 
     ```json
     {
-      "name": "Evening Tennis on the Water",
-      "about": "Enjoy rounds of tennis with a tight-nit group of people on the water facing the Brooklyn Bridge. Singles or doubles.",
+      "name": "Shih Sass Tzu",
+      "about": "Is your Shih Tzu a little Napoleon? Perfect! Our group loves those with a 'short' temper but a big heart. We promise, the only 'ruff' part of our day will be trying to convince our furry emperors to leave when it's over!",
       "type": "In person",
       "private": true,
-      "city": "New York",
-      "state": "NY",
+      "city": "Domino Park Waterfront",
+      "state": "NY"
     }
     ```
 
@@ -421,12 +421,12 @@ Creates and returns a new group.
     {
       "id": 1,
       "organizerId": 1,
-      "name": "Evening Tennis on the Water",
-      "about": "Enjoy rounds of tennis with a tight-nit group of people on the water facing the Brooklyn Bridge. Singles or doubles.",
+      "name": "Shih Sass Tzu",
+      "about": "Is your Shih Tzu a little Napoleon? Perfect! Our group loves those with a 'short' temper but a big heart. We promise, the only 'ruff' part of our day will be trying to convince our furry emperors to leave when it's over!",
       "type": "In person",
       "private": true,
-      "city": "New York",
-      "state": "NY",
+      "city": "Domino Park Waterfront",
+      "state": "NY"
       "createdAt": "2021-11-19 20:39:36",
       "updatedAt": "2021-11-19 20:39:36"
     }
@@ -467,7 +467,7 @@ Create and return a new image for a group specified by id.
 
     ```json
     {
-      "url": "image url",
+      "url": "http://example.com/path/to/added-image.jpg",
       "preview": true
     }
     ```
@@ -481,7 +481,7 @@ Create and return a new image for a group specified by id.
     ```json
     {
       "id": 1,
-      "url": "image url",
+      "url": "http://example.com/path/to/added-image.jpg",
       "preview": true
     }
     ```
@@ -513,12 +513,12 @@ Updates and returns an existing group.
 
     ```json
     {
-      "name": "Evening Tennis on the Water",
-      "about": "Enjoy rounds of tennis with a tight-nit group of people on the water facing the Brooklyn Bridge. Singles or doubles.",
+      "name": "Sassy Tzu Tzu",
+      "about": "Is your Shih Tzu a little Napoleon? Perfect! Our group loves those with a 'short' temper but a big heart. We promise, the only 'ruff' part of our day will be trying to convince our furry emperors to leave when it's over!",
       "type": "In person",
       "private": true,
-      "city": "New York",
-      "state": "NY",
+      "city": "Domino Park Waterfront",
+      "state": "NY"
     }
     ```
 

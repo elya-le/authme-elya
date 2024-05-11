@@ -22,7 +22,6 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
-
 // GET /api/groups - Gets all groups
 router.get('/', async (req, res, next) => {
     try {
@@ -58,7 +57,7 @@ router.get('/current', authenticated, async (req, res, next) => {
     }
 });
 
-// Validation middleware to check the incoming data
+// validation middleware to check the incoming data for group creation
 const validateGroup = [
     check('name')
         .exists({ checkFalsy: true })
@@ -82,7 +81,7 @@ router.post('/', validateGroup, async (req, res, next) => {
     const { user } = req;
     const { name, about, type, private, city, state } = req.body;
 
-    // Handle validation errors
+    // handle validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -92,7 +91,7 @@ router.post('/', validateGroup, async (req, res, next) => {
     }
 
     try {
-        // Create the new group with the current user as the organizer
+        // create the new group with the current user as the organizer
         const group = await Group.create({
             organizerId: user.id,
             name,
@@ -103,7 +102,7 @@ router.post('/', validateGroup, async (req, res, next) => {
             state,
         });
 
-        // Send a success response
+        // send a success response
         return res.status(201).json(group);
     } catch (error) {
         next(error);
@@ -186,35 +185,61 @@ router.put('/:groupId', authenticated, handleValidationErrors, async (req, res) 
     }
 });
 
+// PUT /api/groups/:groupId - Updates a group
+router.put('/:groupId', authenticated, validateGroup, handleValidationErrors, async (req, res) => {
+    const { groupId } = req.params;
+    const { name, about, type, private, city, state } = req.body;
+
+    try {
+        const group = await Group.findByPk(groupId);  // find the group by id
+        if (!group) {
+            return res.status(404).json({ message: "Group couldn't be found" }); 
+        }
+
+        if (group.organizerId !== req.user.id) { // check if the current user is the organizer of the group
+            return res.status(403).json({ message: "Forbidden. You are not authorized to edit this group." });  
+        }
+
+        const updatedGroup = await group.update({ // update the group with the new data
+            name,
+            about,
+            type,
+            private,
+            city,
+            state,
+        });
+
+        res.status(200).json(updatedGroup); // send the updated group data as the response
+    } catch (error) {
+        console.error('Error updating group:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
 // DELETE /api/groups/:groupId - Deletes a group
 router.delete('/:groupId', async (req, res, next) => {
     const { groupId } = req.params;
     const { user } = req;
 
     try {
-        // find the group with the provided ID
-        const group = await Group.findByPk(groupId);
+        const group = await Group.findByPk(groupId);   // find the group with the provided ID
 
-        // if the group doesn't exist, return a 404 error
-        if (!group) {
+        if (!group) { 
             return res.status(404).json({
                 message: "Group couldn't be found",
             });
         }
 
-        // check if the current user is the organizer of the group
-        if (group.organizerId !== user.id) {
-            // If not, return a 403 error for unauthorized access
+        if (group.organizerId !== user.id) { // check if the current user is the organizer of the group
             return res.status(403).json({
                 message: "Forbidden. You are not authorized to delete this group.",
             });
         }
 
-        // delete the group if the user is authorized
-        await group.destroy();
+        await group.destroy(); // delete the group if the user is authorized
 
-        // send a success response
-        res.json({
+        res.json({ // send a success response
             message: "Successfully deleted",
         });
     } catch (error) {
@@ -222,8 +247,33 @@ router.delete('/:groupId', async (req, res, next) => {
     }
 });
 
+// POST /api/groups/:groupId/images - Adds an image to a group
+router.post('/:groupId/images', authenticated, async (req, res) => {
+    const { groupId } = req.params;
+    const { url, preview } = req.body;
 
+    try {
+        const group = await Group.findByPk(groupId); // find the group by its id
 
+        if (!group) { // check if the group exists
+            return res.status(404).json({ message: "Group couldn't be found" });
+        }
 
+        if (group.organizerId !== req.user.id) { // check if the current user is the organizer of the group
+            return res.status(403).json({ message: "Forbidden. You are not authorized to add an image to this group." });
+        }
+
+        const groupImage = await GroupImage.create({  // create a new group image
+            groupId,
+            url,
+            preview
+        });
+
+        res.json(groupImage);  // send the created group image as the response
+    } catch (error) {
+        console.error('Error adding image to group:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 module.exports = router;
