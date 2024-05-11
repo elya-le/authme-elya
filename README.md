@@ -677,11 +677,21 @@ Creates and returns a new venue for a group specified by its id
 
   ```json
   {
-    "address": "123 Disney Lane",
-    "city": "New York",
+    "address": "Domino Park",
+    "city": "Brooklyn",
     "state": "NY",
     "lat": 37.7645358,
-    "lng": -122.4730327,
+    "lng": -122.4730327
+  }
+  ```
+  or
+  ```json
+  {
+    "address": "Hillside Park",
+    "city": "Brooklyn",
+    "state": "NY",
+    "lat": 37.7645358,
+    "lng": -122.4730327
   }
   ```
 
@@ -695,11 +705,11 @@ Creates and returns a new venue for a group specified by its id
   {
     "id": 1,
     "groupId": 1,
-    "address": "123 Disney Lane",
+    "address": "Domino Park",
     "city": "New York",
     "state": "NY",
     "lat": 37.7645358,
-    "lng": -122.4730327,
+    "lng": -122.4730327
   }
   ```
 

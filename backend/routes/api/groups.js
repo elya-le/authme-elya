@@ -4,14 +4,13 @@ const { Group, User, GroupImage, Venue } = require('../../db/models');
 const { check, validationResult } = require('express-validator');
 const { restoreUser, requireAuth } = require('../../utils/auth');
 
-// use restoreUser globally (or apply only to specific routes)
-router.use(restoreUser);
+router.use(restoreUser); // use restoreUser globally (or apply only to specific routes)
 
-// middleware to require authentication
-const authenticated = [restoreUser, requireAuth];
+const authenticated = [restoreUser, requireAuth]; // middleware to require authentication
 
-// Helper function to handle validation errors
-const handleValidationErrors = (req, res, next) => {
+
+// helper function to handle validation errors
+const handleValidationErrors = (req, res, next) => {  
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -73,7 +72,6 @@ const validateGroup = [
     check('state')
         .exists({ checkFalsy: true }).withMessage('State is required')
         .isLength({ min: 2, max: 2 }).withMessage('State must be 2 characters')
-        .isUppercase().withMessage('State must be uppercase'),
 ];
 
 // POST /api/groups - Create a new group
@@ -127,7 +125,7 @@ router.get('/:groupId', async (req, res) => {
             return res.status(404).json({ message: "Group couldn't be found" });
         }
 
-        // Respond with the group data formatted as specified
+        // respond with the group data formatted as specified
         res.status(200).json({
             id: group.id,
             organizerId: group.organizerId,
@@ -275,5 +273,80 @@ router.post('/:groupId/images', authenticated, async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+// validation middleware for venue data
+const validateVenue = [
+    check('address').exists({ checkFalsy: true }).withMessage('Street address is required'),
+    check('city').exists({ checkFalsy: true }).withMessage('City is required'),
+    check('state').exists({ checkFalsy: true }).withMessage('State is required')
+        .isLength({ min: 2, max: 2 }).withMessage('State must be 2 characters'),
+    check('lat').isFloat({ min: -90, max: 90 }).withMessage('Latitude must be within -90 and 90'),
+    check('lng').isFloat({ min: -180, max: 180 }).withMessage('Longitude must be within -180 and 180'),
+];
+
+// POST /api/groups/:groupId/venues - Creates a new venue for a group
+router.post('/:groupId/venues', authenticated, validateVenue, handleValidationErrors, async (req, res) => {
+    const { groupId } = req.params;  // extract groupId from the URL parameters
+    const { address, city, state, lat, lng } = req.body;  // extract venue details from the request body
+
+    try {
+        const group = await Group.findByPk(groupId);  // find the group by its id
+        
+        if (!group) {  // check if the group exists
+            return res.status(404).json({ message: "Group couldn't be found" });
+        }
+
+        if (group.organizerId !== req.user.id) {  // check if the current user is the organizer of the group
+            return res.status(403).json({ message: "Forbidden. You need to be the organizer to add venues." });
+        }
+
+        const venue = await Venue.create({  // create the new venue
+            groupId,
+            address,
+            city,
+            state,
+            lat,
+            lng
+        });
+
+        res.status(200).json(venue);  // send the created venue as the response
+    } catch (error) {
+        console.error('Error creating venue for group:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// GET /api/groups/:groupId/venues - Returns all venues for a group
+router.get('/:groupId/venues', authenticated, async (req, res) => {
+    const { groupId } = req.params; // extract groupId from URL parameters
+
+    try {
+        const group = await Group.findByPk(groupId, {
+            include: [
+                {
+                    model: User,
+                    as: 'Organizer',
+                    attributes: ['id']
+                }
+            ]
+        });
+
+        // check if the group exists
+        if (!group) {
+            return res.status(404).json({ message: "Group couldn't be found" });
+        }
+
+        // get all venues for the group
+        const venues = await Venue.findAll({
+            where: { groupId: groupId }
+        });
+
+        res.status(200).json({ Venues: venues }); // send the venues as the response
+    } catch (error) {
+        console.error('Error fetching venues for group:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 
 module.exports = router;
