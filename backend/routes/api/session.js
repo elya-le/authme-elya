@@ -1,10 +1,12 @@
 const express = require('express');
 const { Op } = require("sequelize");
+const Sequelize = require('sequelize');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { body, validationResult } = require('express-validator');
 const { User } = require('../../db/models');
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
+
 
 // GET /api/session - Return the current user
 router.get('/', restoreUser, (req, res) => {
@@ -43,11 +45,12 @@ router.post('/',
         }
 
         const { credential, password } = req.body;
+        const normalizedCredential = credential.toLowerCase(); // normalize input to lower case
         const user = await User.findOne({
             where: {
                 [Op.or]: [
-                    { email: credential },
-                    { username: credential }
+                    Sequelize.where(Sequelize.fn('lower', Sequelize.col('email')), normalizedCredential),
+                    Sequelize.where(Sequelize.fn('lower', Sequelize.col('username')), normalizedCredential)
                 ]
             },
             attributes: ['id', 'email', 'username', 'firstName', 'lastName', 'hashedPassword']
@@ -75,6 +78,9 @@ router.post('/',
         }
     }
 );
+
+module.exports = router;
+
 
 module.exports = router;
 
