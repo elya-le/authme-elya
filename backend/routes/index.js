@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const apiRouter = require("./api");
+const venuesRouter = require('./api/venues');
 
 // add a XSRF-TOKEN cookie and return the CSRF token
 router.get('/csrf/restore', (req, res) => {
@@ -11,5 +12,6 @@ router.get('/csrf/restore', (req, res) => {
 });
     
 router.use('/api', apiRouter);
+router.use('/api/venues', venuesRouter);
 
 module.exports = router;

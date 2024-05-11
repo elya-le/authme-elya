@@ -16,6 +16,7 @@ const isProduction = environment === 'production';
 // import routes
 const routes = require('./routes');
 
+
 const app = express();
 
 app.use(morgan('dev'));
@@ -71,6 +72,11 @@ app.use((req, res, next) => {
 
 // use the routes defined in your routes folder
 app.use(routes);
+
+app.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.path}`);
+    next();
+});
 
 // Not Found middleware - catches and forwards to error handler
 app.use((req, res, next) => {
