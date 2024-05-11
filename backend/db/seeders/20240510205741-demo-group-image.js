@@ -1,10 +1,10 @@
 'use strict';
 
-const { GroupImage } = require("../models");
-const bcrypt = require("bcryptjs");
+const { User } = require('../models');
+const bcrypt = require('bcryptjs');
 
 let options = {};
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 }
 
@@ -13,22 +13,22 @@ module.exports = {
     await queryInterface.bulkInsert('GroupImages', 
       [
         {
-          id: 1,
-          url: 'http://example.com/path/to/image1.jpg',
+          groupId: 1,
+          url: 'http://example.com/path/to/group1image.jpg',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          id: 2,
-          url: 'http://example.com/path/to/image2.jpg',
+          groupId: 2,
+          url: 'http://example.com/path/to/group2image.jpg',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          id: 3,
-          url: 'http://example.com/path/to/image3.jpg',
+          groupId: 3,
+          url: 'http://example.com/path/to/group3image.jpg',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date()

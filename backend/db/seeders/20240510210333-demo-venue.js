@@ -13,7 +13,7 @@ module.exports = {
       [
         {
           groupId: 1,
-          address: 'Time Square',
+          address: 'Times Square',
           city: 'Manhattan',
           state: 'NY',
           lat: 40.7580,
@@ -24,7 +24,7 @@ module.exports = {
         {
           groupId: 2,
           address: 'Sheep Meadow E 65th St',
-          city: ' New York',
+          city: 'New York',
           state: 'NY',
           lat: 40.7694,
           lng: -73.9776,

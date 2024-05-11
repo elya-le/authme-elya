@@ -14,21 +14,21 @@ module.exports = {
       [
         {
           id: 1,
-          url: 'http://example.com/path/to/image1.jpg',
+          url: 'http://example.com/path/to/event1image.jpg',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           id: 2,
-          url: 'http://example.com/path/to/image2.jpg',
+          url: 'http://example.com/path/to/event2image.jpg',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           id: 3,
-          url: 'http://example.com/path/to/image3.jpg',
+          url: 'http://example.com/path/to/event3image.jpg',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date()

@@ -40,8 +40,8 @@ module.exports = {
         },
         {
           organizerId: 3,
-          name: 'Big Pup Socialization Group',
-          about: "Help your pony-sized lapdog make friends with other pups they won't accidentally flatten",
+          name: 'Big Pup Mixer',
+          about: "Help your pony-sized lapdog socialize and make friends with other pups they won't accidentally flatten",
           type: 'In person',
           private: true,
           city: 'New York',

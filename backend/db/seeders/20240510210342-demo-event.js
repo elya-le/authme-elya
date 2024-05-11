@@ -40,8 +40,8 @@ module.exports = {
         {
           venueId: 3,
           groupId: 3,
-          name: 'Hound Day - NY Ren Fair',
-          description: "step back in time with your noble hounds at the NY's Renaissance fair extravaganza. Dress your pups in their medieval best to compete in categories such as 'Most Regal Attire', 'Best Historical Duo' (for owners and pets in matching costumes), and 'Court Jester'. Celebrate with us in a day of jousting displays, minstrel music, and feasting fit for a Kings best friend.",
+          name: 'Hound Day - NY Ren Faire',
+          description: "Step back in time with your noble hounds at the NY's Renaissance fair extravaganza. Dress your pups in their medieval best to compete in categories such as 'Most Regal Attire', 'Best Historical Duo' (for owners and pets in matching costumes), and 'Court Jester'. Celebrate with us in a day of jousting displays, minstrel music, and feasting fit for a Kings best friend.",
           type: 'In person',
           capacity: 75,
           price: 15,
