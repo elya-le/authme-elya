@@ -760,11 +760,11 @@ Edit a new venue specified by its id
 
   ```json
   {
-    "address": "123 Disney Lane",
-    "city": "New York",
-    "state": "NY",
-    "lat": 37.7645358,
-    "lng": -122.4730327,
+  "address": "Domino Park - 15 River St",
+  "city": "Brooklyn",
+  "state": "NY",
+  "lat": 40.7132222222,
+  "lng": -73.9685
   }
   ```
 
@@ -778,11 +778,11 @@ Edit a new venue specified by its id
   {
     "id": 1,
     "groupId": 1,
-    "address": "123 Disney Lane",
-    "city": "New York",
+    "address": "Domino Park - 15 River St",
+    "city": "Brooklyn",
     "state": "NY",
-    "lat": 37.7645358,
-    "lng": -122.4730327,
+    "lat": 40.7132222222,
+    "lng": -73.9685
   }
   ```
 
