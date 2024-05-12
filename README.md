@@ -514,10 +514,10 @@ Updates and returns an existing group.
     ```json
     {
       "name": "Sassy Tzu Tzu",
-      "about": "Is your Shih Tzu a little Napoleon? Perfect! Our group loves those with a 'short' temper but a big heart. We promise, the only 'ruff' part of our day will be trying to convince our furry emperors to leave when it's over!",
+      "about": "Got a pint-sized Shih Tzu with a grand Napoleon attitude? Join us! The only 'ruff' part? Convincing these tiny emperors it's time to go home!",
       "type": "In person",
       "private": true,
-      "city": "Domino Park Waterfront",
+      "city": "Brooklyn/Manhattan",
       "state": "NY"
     }
     ```
@@ -530,16 +530,14 @@ Updates and returns an existing group.
 
     ```json
     {
-      "id": 1,
-      "organizerId": 1,
-      "name": "Evening Tennis on the Water",
-      "about": "Enjoy rounds of tennis with a tight-nit group of people on the water facing the Brooklyn Bridge. Singles or doubles.",
+      "id": 5,
+      "organizerId": 3,
+      "name": "Sassy Tzu Tzu",
+      "about": "Got a pint-sized Shih Tzu with a grand Napoleon attitude? Join us! The only 'ruff' part? Convincing these tiny emperors it's time to go home!",
       "type": "In person",
       "private": true,
-      "city": "New York",
-      "state": "NY",
-      "createdAt": "2021-11-19 20:39:36",
-      "updatedAt": "2021-11-20 10:06:40"
+      "city": "Brooklyn/Manhattan",
+      "state": "NY"
     }
     ```
 

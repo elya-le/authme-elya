@@ -153,30 +153,31 @@ router.get('/:groupId', async (req, res) => {
 });
 
 // PUT /api/groups/:groupId - Updates a group
-router.put('/:groupId', authenticated, handleValidationErrors, async (req, res) => {
+router.put('/:groupId', authenticated, validateGroup, handleValidationErrors, async (req, res) => {
     const { groupId } = req.params;
-    const { name, about, type, private: isPrivate, city, state } = req.body;
+    const { name, about, type, private, city, state } = req.body;
 
     try {
-        const group = await Group.findByPk(groupId);
-        if (!group) {
+        const group = await Group.findByPk(groupId); // find the group by ID first to check if it exists
+
+        if (!group) { // if the group doesn't exist, return a 404 error
             return res.status(404).json({ message: "Group couldn't be found" });
         }
 
-        if (group.organizerId !== req.user.id) {
+        if (group.organizerId !== req.user.id) { // check if the current user is the organizer of the group
             return res.status(403).json({ message: "Forbidden. You are not authorized to edit this group." });
         }
 
-        const updatedGroup = await group.update({
+        const updatedGroup = await group.update({ // Update the group with the new data
             name,
             about,
             type,
-            private: isPrivate,
+            private,
             city,
             state,
         });
 
-        res.json(updatedGroup);
+        res.status(200).json(updatedGroup); // respond with the updated group data
     } catch (error) {
         console.error('Error updating group:', error);
         res.status(500).json({ message: 'Internal server error' });
