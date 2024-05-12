@@ -1,5 +1,4 @@
-"use strict";
-
+'use strict';
 let options = {};
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA;
@@ -7,8 +6,7 @@ if (process.env.NODE_ENV === "production") {
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable(
-      "Groups",
+    await queryInterface.createTable('Groups',
       {
         id: {
           allowNull: false,
@@ -21,7 +19,7 @@ module.exports = {
           allowNull: false,
           references: {
             model: {
-              tableName: "Users",
+              tableName: 'Users',
             },
             key: 'id',
           },
@@ -79,7 +77,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = "Groups";
+    options.tableName = 'Groups';
     return queryInterface.dropTable(options);
   },
 };

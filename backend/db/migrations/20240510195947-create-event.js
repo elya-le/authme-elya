@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
 let options = {};
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA;
 }
 module.exports = {
@@ -72,7 +72,7 @@ module.exports = {
   );
 },
 async down(queryInterface, Sequelize) {
-  options.tableName = "Events";
+  options.tableName = 'Events';
   return queryInterface.dropTable(options);
   },
 };

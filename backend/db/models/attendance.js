@@ -1,48 +1,48 @@
 'use strict';
 
-const { Model } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class Membership extends Model {
-        static associate(models) { // define associations 
-            Membership.belongsTo(models.User, {
+    class Attendance extends Model {
+        static associate(models) {
+            // Define associations here
+            Attendance.belongsTo(models.User, {
                 foreignKey: 'userId',
                 as: 'User'
             });
-            Membership.belongsTo(models.Group, {
-                foreignKey: 'groupId',
-                as: 'Group'
+            Attendance.belongsTo(models.Event, {
+                foreignKey: 'eventId',
+                as: 'Event'
             });
         }
     }
 
-    Membership.init({
+    Attendance.init({
         id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            primaryKey: true,
             autoIncrement: true,
-            primaryKey: true
+            allowNull: false
+        },
+        eventId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Events',
+                key: 'id',
+            }
         },
         userId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'Users', 
-                key: 'id',
-            }
-        },
-        groupId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'Groups', 
+                model: 'Users',
                 key: 'id',
             }
         },
         status: {
-          type: DataTypes.ENUM,
-          values: ['active', 'inactive', 'pending'],
-          allowNull: false
+            type: DataTypes.ENUM('confirmed', 'canceled', 'pending'), // Adjust these statuses as needed for your application logic
+            allowNull: false,
         },
         createdAt: {
             type: DataTypes.DATE,
@@ -56,8 +56,8 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         sequelize,
-        modelName: 'Membership',
+        modelName: 'Attendance',
     });
 
-    return Membership;
+    return Attendance;
 };
