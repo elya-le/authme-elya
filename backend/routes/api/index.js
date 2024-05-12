@@ -4,7 +4,7 @@ const router = express.Router();
 const sessionRouter = require("./session");
 const usersRouter = require("./users");
 const groupsRouter = require("./groups");
-// const venueRouter = require("./venues");
+const venueRouter = require("./venues");
 // const eventsRouter = require("./events");
 
 
@@ -17,7 +17,7 @@ router.use(restoreUser);
 router.use("/session", sessionRouter);
 router.use("/users", usersRouter);
 router.use("/groups", groupsRouter);
-// router.use("/venues", venueRouter);
+router.use("/venues", venueRouter);
 // router.use("/events", eventsRouter);
 
 

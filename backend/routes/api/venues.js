@@ -1,20 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const { Venue, Group, Membership } = require('../../db/models');
+const { Venue, Group } = require('../../db/models');
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { check, validationResult } = require('express-validator');
 const { Op } = require('sequelize');
 
+// validation rules for updating a venue
 const validateVenue = [
     check('address').exists({ checkFalsy: true }).withMessage('Street address is required'),
     check('city').exists({ checkFalsy: true }).withMessage('City is required'),
     check('state').exists({ checkFalsy: true }).withMessage('State is required')
-        .isLength({ min: 2, max: 2 }).withMessage('State must be 2 characters')
-        .isUppercase().withMessage('State must be uppercase'),
+        .isLength({ min: 2, max: 2 }).withMessage('State must be 2 characters'),
     check('lat').isFloat({ min: -90, max: 90 }).withMessage('Latitude must be within -90 and 90'),
     check('lng').isFloat({ min: -180, max: 180 }).withMessage('Longitude must be within -180 and 180'),
 ];
 
+// middleware for validation errors
 const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -26,22 +27,17 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
+// PUT /api/venues/:venueId - Edits a venue specified by its id
 router.put('/:venueId', restoreUser, requireAuth, validateVenue, handleValidationErrors, async (req, res) => {
     const { venueId } = req.params;
     const { address, city, state, lat, lng } = req.body;
 
     try {
         const venue = await Venue.findByPk(venueId, {
-            include: [{
+            include: {
                 model: Group,
-                as: 'Group',
-                include: [{
-                    model: Membership,
-                    as: 'Memberships',
-                    where: { userId: req.user.id },
-                    required: false
-                }]
-            }]
+                as: 'Group'
+            }
         });
 
         if (!venue) {
@@ -49,15 +45,34 @@ router.put('/:venueId', restoreUser, requireAuth, validateVenue, handleValidatio
         }
 
         const group = venue.Group;
-        const isOrganizer = group.organizerId === req.user.id;
-        const isCoHost = group.Memberships.some(membership => membership.userId === req.user.id && membership.status === 'co-host');
-
-        if (!isOrganizer && !isCoHost) {
-            return res.status(403).json({ message: "Forbidden. You need to be the organizer or a co-host to edit venues." });
+        if (!group) {
+            return res.status(404).json({ message: "Group couldn't be found" });
         }
 
-        const updatedVenue = await venue.update({ address, city, state, lat, lng });
-        res.status(200).json(updatedVenue);
+        if (group.organizerId !== req.user.id) {
+            return res.status(403).json({ message: "Forbidden. You need to be the organizer to edit venues." });
+        }
+
+        const updatedVenue = await venue.update({
+            address,
+            city,
+            state,
+            lat,
+            lng
+        });
+
+        const response = {
+            id: updatedVenue.id,
+            groupId: updatedVenue.groupId,
+            address: updatedVenue.address,
+            city: updatedVenue.city,
+            state: updatedVenue.state,
+            lat: updatedVenue.lat,
+            lng: updatedVenue.lng
+        };
+
+        res.status(200).json(response);
+
     } catch (error) {
         console.error('Error updating venue:', error);
         res.status(500).json({ message: 'Internal server error' });
