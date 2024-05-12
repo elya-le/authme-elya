@@ -530,7 +530,7 @@ Updates and returns an existing group.
 
     ```json
     {
-      "id": 5,
+      "id": 4,
       "organizerId": 3,
       "name": "Sassy Tzu Tzu",
       "about": "Got a pint-sized Shih Tzu with a grand Napoleon attitude? Join us! The only 'ruff' part? Convincing these tiny emperors it's time to go home!",

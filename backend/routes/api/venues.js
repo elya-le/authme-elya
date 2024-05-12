@@ -50,7 +50,7 @@ router.put('/:venueId', restoreUser, requireAuth, validateVenue, handleValidatio
         }
 
         if (group.organizerId !== req.user.id) {
-            return res.status(403).json({ message: "Forbidden. You need to be the organizer to edit venues." });
+            return res.status(403).json({ message: "Forbidden. You need to be the group organizer to edit venues." });
         }
 
         const updatedVenue = await venue.update({

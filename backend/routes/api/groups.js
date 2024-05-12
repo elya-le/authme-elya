@@ -168,7 +168,7 @@ router.put('/:groupId', authenticated, validateGroup, handleValidationErrors, as
             return res.status(403).json({ message: "Forbidden. You are not authorized to edit this group." });
         }
 
-        const updatedGroup = await group.update({ // Update the group with the new data
+        const updatedGroup = await group.update({ // update the group with the new data
             name,
             about,
             type,
