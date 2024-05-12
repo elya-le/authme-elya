@@ -1,11 +1,12 @@
 const express = require('express');
-const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { body, validationResult } = require('express-validator');
 const { User, sequelize } = require('../../db/models'); 
+const { setTokenCookie } = require('../../utils/auth'); 
 
-// apply middleware to parse JSON bodies
-router.use(express.json());
+const router = express.Router();
+
+router.use(express.json()); // apply middleware to parse JSON bodies
 
 // POST endpoint for user registration with input validations
 router.post('/',
@@ -17,11 +18,9 @@ router.post('/',
         body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
     ],
     async (req, res) => {
-        // handle validation results
-        const errors = validationResult(req);
+        const errors = validationResult(req);  // handle validation results
         if (!errors.isEmpty()) {
-            //return if validation errors
-            return res.status(400).json({
+            return res.status(400).json({ // return if validation errors
                 message: "Bad Request",
                 errors: errors.array().reduce((acc, error) => ({
                     ...acc,
@@ -32,7 +31,6 @@ router.post('/',
 
         try { // details from request body
             const { firstName, lastName, email, username, password } = req.body;
-
             const emailExists = await User.findOne({ where: { email } });
             if (emailExists) {
                 return res.status(500).json({
@@ -43,8 +41,7 @@ router.post('/',
 
             const usernameExists = await User.findOne({
                 where: {
-                    // case-insensitive username check
-                    username: sequelize.where(
+                    username: sequelize.where(  // case-insensitive username check
                         sequelize.fn('LOWER', sequelize.col('username')), 
                         sequelize.fn('LOWER', username)
                     )
@@ -68,8 +65,9 @@ router.post('/',
                 hashedPassword
             });
 
-            // respond with newly create details
-            res.status(200).json({
+            setTokenCookie(res, user); // set JWT cookie
+
+            res.status(200).json({ // respond with newly create details
                 user: {
                     id: user.id,
                     firstName: user.firstName,
@@ -80,15 +78,13 @@ router.post('/',
             });
 
         } catch (error) {
-            // error handling differentiate validation errors
-            if (error.name === 'SequelizeValidationError') {
+            if (error.name === 'SequelizeValidationError') { // error handling differentiate validation errors
                 return res.status(400).json({
                     message: "Validation error",
                     errors: error.errors.map(e => ({ [e.path]: e.message }))
                 });
             } else {
-                // log the error for debugging
-                console.error(error);
+                console.error(error); // log the error for debugging
                 return res.status(500).json({
                     message: "An unexpected error occurred",
                     errors: { general: "An unexpected error occurred, please try again" }
