@@ -5,14 +5,13 @@ const { Model, DataTypes } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Attendance extends Model {
         static associate(models) {
-            // Define associations here
-            Attendance.belongsTo(models.User, {
-                foreignKey: 'userId',
-                as: 'User'
-            });
             Attendance.belongsTo(models.Event, {
                 foreignKey: 'eventId',
-                as: 'Event'
+                as: 'Event', 
+            });
+            Attendance.belongsTo(models.User, {
+                foreignKey: 'userId',
+                as: 'User', 
             });
         }
     }

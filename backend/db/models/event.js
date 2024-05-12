@@ -14,20 +14,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'venueId',
         as: 'Venue'
       });
-       // Event belongs to a Group
-      Event.belongsTo(models.Group, {
+      Event.belongsTo(models.Group, {  // event belongs to a Group
         foreignKey: 'groupId', // ensure foreignKey is set according to the schema
         as: 'Group' // using 'Group' as an alias for the association
       });
-
-      // Assuming Event has many images (if applicable)
       Event.hasMany(models.EventImage, {
         foreignKey: 'eventId', // match foreign key with column name in EventImages table
         as: 'EventImage' // using 'EventImages' as an alias for the association
       });
-
-
-    
+      Event.hasMany(models.Attendance, {
+        foreignKey: 'eventId',
+        as: 'Attendances',
+      });
     }
   }
   Event.init({
@@ -73,6 +71,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true // assuming price might be nullable or free events
     },
+    // In models/event.js
+    previewImage: {
+      type: DataTypes.STRING,
+      allowNull: true,  // or false, depending on schema requirements
+    },
     startDate: {
       type: DataTypes.DATE,
       allowNull: false
@@ -84,7 +87,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Event',
-    timestamps: true, // assuming you want Sequelize to automatically manage createdAt and updatedAt
+    timestamps: true, // assuming we want Sequelize to automatically manage createdAt and updatedAt
   });
   return Event;
 };
