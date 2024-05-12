@@ -1,9 +1,10 @@
 'use strict';
 
-const { Event } = require("../models");
+const { Event } = require('../models');
+const bcrypt = require('bcryptjs');
 
 let options = {};
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 }
 
@@ -56,7 +57,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = "Events";
+    options.tableName = 'Events';
     return queryInterface.bulkDelete(options);
   },
 };

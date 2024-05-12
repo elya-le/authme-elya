@@ -1,10 +1,10 @@
 'use strict';
 
-const { User } = require("../models");
-const bcrypt = require("bcryptjs");
+const { User } = require('../models');
+const bcrypt = require('bcryptjs');
 
 let options = {};
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 }
 
