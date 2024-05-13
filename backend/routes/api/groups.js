@@ -349,6 +349,38 @@ router.get('/:groupId/venues', authenticated, async (req, res) => {
     }
 });
 
+// GET /api/groups/:groupId/events - Returns all events for a specified group
+router.get('/:groupId/events', async (req, res) => {
+    const { groupId } = req.params;
 
+    try {
+        const group = await Group.findByPk(groupId);
+        if (!group) {
+            return res.status(404).json({ message: "Group couldn't be found" });
+        }
+
+        const events = await Event.findAll({
+            where: { groupId: groupId },
+            include: [
+            {
+                model: Venue,
+                as: 'Venue',
+                attributes: ['id', 'city', 'state']
+            },
+            {
+                model: Attendance,
+                as: 'Attendances',
+                attributes: []
+            }
+        ],
+        attributes: ['id', 'groupId', 'venueId', 'name', 'type', 'startDate', 'endDate', 'previewImage', [sequelize.fn('COUNT', sequelize.col('Attendances.id')), 'numAttending']]
+    });
+    
+    res.status(200).json({ Events: events });
+} catch (error) {
+    console.error('Failed to fetch events for the group:', error);
+    res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 module.exports = router;

@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
     // In models/event.js
     previewImage: {
       type: DataTypes.STRING,
-      allowNull: true,  // or false, depending on schema requirements
+      allowNull: true,  // or false, based on your schema requirements
     },
     startDate: {
       type: DataTypes.DATE,
