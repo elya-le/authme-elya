@@ -8,10 +8,14 @@ module.exports = (sequelize, DataTypes) => {
             Attendance.belongsTo(models.Event, {
                 foreignKey: 'eventId',
                 as: 'Event', 
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE' 
             });
             Attendance.belongsTo(models.User, {
                 foreignKey: 'userId',
                 as: 'User', 
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE' 
             });
         }
     }

@@ -1,7 +1,14 @@
 'use strict';
 
+const { sequelize } = require("../models");
+
+let options = {};
+if (process.env.NODE_ENV === "production") {
+  options.schema = process.env.SCHEMA;
+}
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('GroupImages', {
       id: {
         allowNull: false,
@@ -10,34 +17,40 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       groupId: {
-        allowNull: false,
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
-          model: 'Groups', 
-          key: 'id',
+          model: 'Groups', // references the Groups table
+          key: 'id'
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE', // add onDelete cascade
+        onUpdate: 'CASCADE' // add onUpdate cascade
       },
       url: {
+        type: Sequelize.STRING,
         allowNull: false,
-        type: Sequelize.STRING
+        validate: {
+          isUrl: true // ensure the url is a valid URL
+        }
       },
       preview: {
+        type: Sequelize.BOOLEAN,
         allowNull: false,
-        type: Sequelize.BOOLEAN
+        defaultValue: false // default value for preview is false
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },
-  async down(queryInterface, Sequelize) {
+  down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('GroupImages');
   }
 };

@@ -12,19 +12,27 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Event.belongsTo(models.Venue, {
         foreignKey: 'venueId',
-        as: 'Venue'
+        as: 'Venue',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE' 
       });
       Event.belongsTo(models.Group, {  // event belongs to a Group
         foreignKey: 'groupId', // ensure foreignKey is set according to the schema
-        as: 'Group' // using 'Group' as an alias for the association
+        as: 'Group', // using 'Group' as an alias for the association
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE' 
       });
       Event.hasMany(models.EventImage, {
         foreignKey: 'eventId', // match foreign key with column name in EventImages table
-        as: 'EventImages' // using 'EventImages' as an alias for the association
+        as: 'EventImages',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'  // using 'EventImages' as an alias for the association
       });
       Event.hasMany(models.Attendance, {
         foreignKey: 'eventId',
         as: 'Attendances',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE' 
       });
     }
   }

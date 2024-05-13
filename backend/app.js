@@ -16,7 +16,6 @@ const isProduction = environment === 'production';
 // import routes
 const routes = require('./routes');
 
-
 const app = express();
 
 app.use(morgan('dev'));
