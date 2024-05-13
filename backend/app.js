@@ -30,6 +30,8 @@ if (!isProduction) {
     }));
 }
 
+app.use(express.json());
+
 app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
     contentSecurityPolicy: false,

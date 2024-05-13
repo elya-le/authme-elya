@@ -410,6 +410,16 @@ Creates and returns a new group.
       "state": "NY"
     }
     ```
+    or 
+    ```json
+    {
+    "name": "Downtown Doxies",
+    "about": "Low to the ground but high on life! Join us to celebrate our feisty little hotdogs. After all, great things come in small packages!",
+    "type": "In person",
+    "private": true,
+    "city": "Brooklyn/Manhattan",
+    "state": "NY"
+    }
 
 * Successful Response
   * Status Code: 201
@@ -1043,13 +1053,13 @@ Creates and returns a new event for a group specified by its id
     ```json
     {
       "venueId": 1,
-      "name": "Tennis Group First Meet and Greet",
-      "type": "Online",
-      "capacity": 10,
-      "price": 18.50,
+      "name": "Downtown Doxies - First Meet and Greet",
+      "type": "In Person",
+      "capacity": 250,
+      "price": 0,
       "description": "The first meet and greet for our group! Come say hello!",
-      "startDate": "2021-11-19 20:00:00",
-      "endDate": "2021-11-19 22:00:00",
+      "startDate": "2024-05-19 20:00:00",
+      "endDate": "2024-05-19 22:00:00"
     }
     ```
 
@@ -1064,13 +1074,13 @@ Creates and returns a new event for a group specified by its id
       "id": 1,
       "groupId": 1,
       "venueId": 1,
-      "name": "Tennis Group First Meet and Greet",
-      "type": "Online",
-      "capacity": 10,
-      "price": 18.50,
+      "name": "Downtown Doxies - First Meet and Greet",
+      "type": "In Person",
+      "capacity": 250,
+      "price": 0,
       "description": "The first meet and greet for our group! Come say hello!",
-      "startDate": "2021-11-19 20:00:00",
-      "endDate": "2021-11-19 22:00:00",
+      "startDate": "2024-05-19 20:00:00",
+      "endDate": "2024-05-19 22:00:00"
     }
     ```
 
@@ -1134,7 +1144,7 @@ Create and return a new image for an event specified by id.
 
     ```json
     {
-      "url": "image url",
+      "url": "http://example.com/path/to/add-event-image.jpg",
       "preview": false
     }
     ```
@@ -1148,7 +1158,7 @@ Create and return a new image for an event specified by id.
     ```json
     {
       "id": 1,
-      "url": "image url",
+      "url": "http://example.com/path/to/add-event-image.jpg",
       "preview": false
     }
     ```
