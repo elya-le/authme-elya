@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       Event.hasMany(models.EventImage, {
         foreignKey: 'eventId', // match foreign key with column name in EventImages table
-        as: 'EventImage' // using 'EventImages' as an alias for the association
+        as: 'EventImages' // using 'EventImages' as an alias for the association
       });
       Event.hasMany(models.Attendance, {
         foreignKey: 'eventId',

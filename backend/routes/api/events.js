@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Event, Group, Venue, Attendance } = require('../../db/models');
+const { Event, Group, Venue, Attendance, EventImage } = require('../../db/models');
 const { check, validationResult } = require('express-validator');
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { sequelize } = require('../../db/models');

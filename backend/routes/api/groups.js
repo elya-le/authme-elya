@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { Group, User, GroupImage, Venue } = require('../../db/models');
+const { Group, User, GroupImage, Venue, Event, Attendance } = require('../../db/models');
 const { check, validationResult } = require('express-validator');
 const { restoreUser, requireAuth } = require('../../utils/auth');
+const { sequelize } = require('../../db/models');
+
 
 router.use(restoreUser); // use restoreUser globally (or apply only to specific routes)
 
@@ -370,7 +372,7 @@ router.get('/:groupId/events', async (req, res) => {
             {
                 model: Attendance,
                 as: 'Attendances',
-                attributes: []
+                attributes: ['userID', 'status' ]
             }
         ],
         attributes: ['id', 'groupId', 'venueId', 'name', 'type', 'startDate', 'endDate', 'previewImage', [sequelize.fn('COUNT', sequelize.col('Attendances.id')), 'numAttending']]
