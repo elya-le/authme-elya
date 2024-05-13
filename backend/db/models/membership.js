@@ -40,9 +40,9 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         status: {
-          type: DataTypes.ENUM,
-          values: ['active', 'inactive', 'pending'],
-          allowNull: false
+            type: DataTypes.ENUM,
+            values: ['member', 'inactive', 'pending'],
+            allowNull: false
         },
         createdAt: {
             type: DataTypes.DATE,

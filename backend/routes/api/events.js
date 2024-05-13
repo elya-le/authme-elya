@@ -217,4 +217,57 @@ router.put('/:eventId', authenticated, checkEventPermission, validateEvent, hand
     }
 });
 
+// check if the current user can delete the event
+const checkEventDeletionPermission = async (req, res, next) => {
+    const { eventId } = req.params;
+    try {
+        const event = await Event.findByPk(eventId, {
+            include: [{
+                model: Group,
+                as: 'Group',
+                include: [
+                    { model: User, as: 'Organizer' },
+                    { model: Membership, as: 'Memberships' }
+                ]
+            }]
+        });
+
+        if (!event) {
+            return res.status(404).json({ message: "Event couldn't be found" });
+        }
+
+        if (req.user.id === event.Group.Organizer.id || 
+            event.Group.Memberships.some(membership => membership.userId === req.user.id && membership.status === 'co-host')) {
+            return next();
+        }
+
+        return res.status(403).json({ message: "Forbidden: You are not authorized to delete this event" });
+    } catch (error) {
+        console.error('Error checking event deletion permission:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
+
+// DELETE /api/events/:eventId - Deletes an event
+router.delete('/:eventId', restoreUser, requireAuth, checkEventDeletionPermission, async (req, res) => {
+    const { eventId } = req.params;
+
+    try {
+        const event = await Event.findByPk(eventId);
+        if (!event) {
+            return res.status(404).json({ message: "Event couldn't be found" });
+        }
+
+        await event.destroy();
+        return res.status(200).json({ message: "Successfully deleted" });
+    } catch (error) {
+        console.error('Failed to delete event:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+module.exports = router;
+
 module.exports = router;
