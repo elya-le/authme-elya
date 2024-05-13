@@ -13,22 +13,29 @@ module.exports = (sequelize, DataTypes) => {
         });
         Group.hasMany(models.GroupImage, {
             foreignKey: "groupId",
-            as: "GroupImages"
+            as: "GroupImages",
+            onDelete: 'CASCADE', 
         });
         Group.hasMany(models.Venue, {
             foreignKey: "groupId",
+            as: "Venues",
+            onDelete: 'CASCADE', 
         });
         Group.belongsToMany(models.User, {
-        through: models.Membership,
-        foreignKey: "groupId",
-        otherKey: "userId",
-        as: "Member",
+            through: models.Membership,
+            foreignKey: "groupId",
+            otherKey: "userId",
+            as: "Members",
         });
         Group.hasMany(models.Event, {
             foreignKey: "groupId",
+            as: "Events",
+            onDelete: 'CASCADE', 
         });
         Group.hasMany(models.Membership, {
             foreignKey: "groupId",
+            as: "Memberships",
+            onDelete: 'CASCADE', 
         });
     }
 };

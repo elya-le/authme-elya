@@ -424,32 +424,27 @@ router.put('/:groupId', authenticated, validateGroup, handleValidationErrors, as
 
 
 // DELETE /api/groups/:groupId - Deletes a group
-router.delete('/:groupId', async (req, res, next) => {
+router.delete('/:groupId', restoreUser, requireAuth, async (req, res) => {
     const { groupId } = req.params;
-    const { user } = req;
 
     try {
-        const group = await Group.findByPk(groupId);   // find the group with the provided ID
-
-        if (!group) { 
-            return res.status(404).json({
-                message: "Group couldn't be found",
-            });
+        const group = await Group.findByPk(groupId);
+        if (!group) {
+            return res.status(404).json({ message: "Group couldn't be found" });
         }
 
-        if (group.organizerId !== user.id) { // check if the current user is the organizer of the group
-            return res.status(403).json({
-                message: "Forbidden. You are not authorized to delete this group.",
-            });
+        // Check if the current user is the organizer of the group
+        if (req.user.id !== group.organizerId) {
+            return res.status(403).json({ message: "Forbidden: You are not allowed to delete this group" });
         }
 
-        await group.destroy(); // delete the group if the user is authorized
+        // Delete the group (cascading delete will remove related events)
+        await group.destroy();
 
-        res.json({ // send a success response
-            message: "Successfully deleted",
-        });
+        return res.status(200).json({ message: "Successfully deleted" });
     } catch (error) {
-        next(error);
+        console.error('Failed to delete group:', error);
+        return res.status(500).json({ message: 'Internal server error', errors: error.errors.map(e => e.message) });
     }
 });
 

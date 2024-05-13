@@ -170,7 +170,7 @@ user's information.
       "lastName": "Smith",
       "email": "john.smith@gmail.com",
       "username": "JohnSmith",
-      "password": "secret password"
+      "password": "JohnSmithPassword"
     }
     ```
 
@@ -420,6 +420,18 @@ Creates and returns a new group.
     "city": "Brooklyn/Manhattan",
     "state": "NY"
     }
+    ```
+    or
+     ```json
+    {
+    "name": "Test Group - To be DELETED in testing",
+    "about": "Wow how many time can I accidentally break the code?",
+    "type": "In person",
+    "private": true,
+    "city": "Brooklyn/Manhattan",
+    "state": "NY"
+    }
+    ```
 
 * Successful Response
   * Status Code: 201
@@ -1192,13 +1204,13 @@ Edit and returns an event specified by its id
     ```json
     {
       "venueId": 1,
-      "name": "Tennis Group First Meet and Greet",
-      "type": "Online",
-      "capacity": 10,
-      "price": 18.50,
-      "description": "The first meet and greet for our group! Come say hello!",
-      "startDate": "2021-11-19 20:00:00",
-      "endDate": "2021-11-19 22:00:00",
+      "name": "Downtown Doxies - First Meet and Greet",
+      "type": "In person",
+      "capacity": 250,
+      "price": 5.00,
+      "description": "The first paw-ty for our Doxie devotees! Come wag along and let your dachshunds dash and socialize!",
+      "startDate": "2024-30-19 20:00:00",
+      "endDate": "2024-30-19 22:00:00",
     }
     ```
 
@@ -1210,16 +1222,16 @@ Edit and returns an event specified by its id
 
     ```json
     {
-      "id": 1,
-      "groupId": 1,
-      "venueId": 1,
-      "name": "Tennis Group First Meet and Greet",
-      "type": "Online",
-      "capacity": 10,
-      "price": 18.50,
-      "description": "The first meet and greet for our group! Come say hello!",
-      "startDate": "2021-11-19 20:00:00",
-      "endDate": "2021-11-19 22:00:00",
+      "id": 4,
+      "groupId": 5,
+      "venueId": 4,
+      "name": "Downtown Doxies - First Meet and Greet",
+      "type": "In person",
+      "capacity": 250,
+      "price": 5.00,
+      "description": "The first paw-ty for our Doxie devotees! Come wag along and let your dachshunds dash and socialize!",
+      "startDate": "2024-30-19 20:00:00",
+      "endDate": "2024-30-19 22:00:00"
     }
     ```
 
@@ -1239,7 +1251,7 @@ Edit and returns an event specified by its id
         "price": "Price is invalid",
         "description": "Description is required",
         "startDate": "Start date must be in the future",
-        "endDate": "End date is less than start date",
+        "endDate": "End date is less than start date"
       }
     }
     ```
