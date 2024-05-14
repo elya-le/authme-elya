@@ -100,6 +100,60 @@ router.get('/:groupId', async (req, res) => {
     }
 });
 
+// GET /api/groups/:groupId/events
+router.get('/:groupId/events', async (req, res) => {
+    const { groupId } = req.params;
+    // Find the group by id
+    const group = await Group.findByPk(groupId, {
+        include: [
+            {
+                model: Event,
+                as: 'Events', // specify the alias
+                include: [
+                    {
+                    model: Venue,
+                    as: 'Venue',
+                    attributes: ['id', 'city', 'state']
+                    },
+                    {
+                    model: Attendance,
+                    as: 'Attendances',
+                    attributes: ['id']
+                }
+                ]
+            }
+        ]
+    });
+
+    if (!group) {
+    return res.status(404).json({ message: "Group couldn't be found" }); // send 404 if group not found
+    }
+    const events = group.Events.map(event => ({ // transform events to include additional fields
+        id: event.id,
+        groupId: event.groupId,
+        venueId: event.venueId,
+        name: event.name,
+        type: event.type,
+        startDate: event.startDate,
+        endDate: event.endDate,
+          numAttending: event.Attendances.length, // count the number of attendances
+        previewImage: event.previewImage || null,
+        Group: {
+            id: group.id,
+            name: group.name,
+            city: group.city,
+            state: group.state
+        },
+        Venue: event.Venue ? {
+            id: event.Venue.id,
+            city: event.Venue.city,
+            state: event.Venue.state
+        } : null
+    }));
+res.status(200).json({ Events: events }); // send the events in response
+});
+
+
 // GET /api/groups/:groupId/venues - Returns all venues for a group
 router.get('/:groupId/venues', authenticated, async (req, res) => {
     const { groupId } = req.params; // extract groupId from URL parameters

@@ -63,12 +63,12 @@ Returns the information about the current user that is logged in.
 
     ```json
     {
-      "user": {
-        "id": 2,
-        "firstName": "John",
-        "lastName": "Smith",
-        "email": "john.smith@gmail.com",
-        "username": "JohnSmith"
+      {
+        "firstName": "Elya",
+        "lastName": "Le",
+        "email": "e.l@gmail.com",
+        "username": "elya",
+        "password": "password"
       }
     }
     ```
@@ -100,8 +100,8 @@ information.
 
     ```json
     {
-      "credential": "john.smith@gmail.com",
-      "password": "secret password"
+      "credential": "demo-user",
+      "password": "password"
     }
     ```
 
@@ -114,11 +114,11 @@ information.
     ```json
     {
       "user": {
-        "id": 1,
-        "firstName": "John",
-        "lastName": "Smith",
-        "email": "john.smith@gmail.com",
-        "username": "JohnSmith"
+      "id": 1,
+        "firstName": "Demo",
+        "lastName": "User",
+        "email": "demo@user.io",
+        "username": "Demo-User"
       } 
     }
     ```
@@ -166,11 +166,11 @@ user's information.
 
     ```json
     {
-      "firstName": "John",
-      "lastName": "Smith",
-      "email": "john.smith@gmail.com",
-      "username": "JohnSmith",
-      "password": "JohnSmithPassword"
+      "firstName": "Elya",
+      "lastName": "Le",
+      "email": "e.l@gmail.com",
+      "username": "elya",
+      "password": "password"
     }
     ```
 
@@ -183,11 +183,11 @@ user's information.
     ```json
     {
       "user": {
-        "id": 1,
-        "firstName": "John",
-        "lastName": "Smith",
-        "email": "john.smith@gmail.com",
-        "username": "JohnSmith"
+        "id": 4,
+        "firstName": "Elya",
+        "lastName": "Le",
+        "email": "e.l@gmail.com",
+        "username": "elya"
       }
     }
     ```
@@ -262,18 +262,61 @@ Returns all the groups.
     {
       "Groups": [
         {
-          "id": 1,
-          "organizerId": 1,
-          "name": "Evening Tennis on the Water",
-          "about": "Enjoy rounds of tennis with a tight-nit group of people on the water facing the Brooklyn Bridge. Singles or doubles.",
-          "type": "In person",
-          "private": true,
-          "city": "New York",
-          "state": "NY",
-          "createdAt": "2021-11-19 20:39:36",
-          "updatedAt": "2021-11-19 20:39:36",
-          "numMembers": 10,
-          "previewImage": "image url",
+            "id": 1,
+            "organizerId": 1,
+            "name": "Urban Trailblazers",
+            "about": "A group for city-dwelling dogs and their owners who love to explore urban landscapes and parks.",
+            "type": "In person",
+            "private": true,
+            "city": "New York",
+            "state": "NY",
+            "numMembers": 1000,
+            "previewImage": "http://example.com/path/to/urban-trailblazers.jpg",
+            "createdAt": "2024-05-14T18:41:10.470Z",
+            "updatedAt": "2024-05-14T18:41:10.470Z",
+            "Organizer": {
+                "id": 1,
+                "firstName": "Demo",
+                "lastName": "User"
+            }
+        },
+        {
+            "id": 2,
+            "organizerId": 2,
+            "name": "Beachfront Barks",
+            "about": "Perfect for dogs who can’t stay away from the water. Meetups include beach games and swimming sessions.",
+            "type": "In person",
+            "private": true,
+            "city": "New York",
+            "state": "NY",
+            "numMembers": 200,
+            "previewImage": "http://example.com/path/to/beachfront-barks.jpg",
+            "createdAt": "2024-05-14T18:41:10.470Z",
+            "updatedAt": "2024-05-14T18:41:10.470Z",
+            "Organizer": {
+                "id": 2,
+                "firstName": "Demo",
+                "lastName": "User2"
+            }
+        },
+        {
+            "id": 3,
+            "organizerId": 3,
+            "name": "Big Pup",
+            "about": "Help your pony-sized lapdog socialize and make friends with other pups they won't accidentally flatten",
+            "type": "In person",
+            "private": true,
+            "city": "New York",
+            "state": "NY",
+            "numMembers": 300,
+            "previewImage": "http://example.com/path/to/big-pup.jpg",
+            "createdAt": "2024-05-14T18:41:10.470Z",
+            "updatedAt": "2024-05-14T18:41:10.470Z",
+            "Organizer": {
+                "id": 3,
+                "firstName": "Demo",
+                "lastName": "User3"
+            }
         }
       ]
     }
@@ -299,18 +342,23 @@ Returns all the groups.
     {
       "Groups": [
         {
-          "id": 1,
-          "organizerId": 1,
-          "name": "Evening Tennis on the Water",
-          "about": "Enjoy rounds of tennis with a tight-nit group of people on the water facing the Brooklyn Bridge. Singles or doubles.",
-          "type": "In person",
-          "private": true,
-          "city": "New York",
-          "state": "NY",
-          "createdAt": "2021-11-19 20:39:36",
-          "updatedAt": "2021-11-19 20:39:36",
-          "numMembers": 10,
-          "previewImage": "image url",
+            "id": 1,
+            "organizerId": 1,
+            "name": "Urban Trailblazers",
+            "about": "A group for city-dwelling dogs and their owners who love to explore urban landscapes and parks.",
+            "type": "In person",
+            "private": true,
+            "city": "New York",
+            "state": "NY",
+            "numMembers": 1000,
+            "previewImage": "http://example.com/path/to/urban-trailblazers.jpg",
+            "createdAt": "2024-05-14T18:41:10.470Z",
+            "updatedAt": "2024-05-14T18:41:10.470Z",
+            "Organizer": {
+                "id": 1,
+                "firstName": "Demo",
+                "lastName": "User"
+            }
         }
       ]
     }
@@ -336,41 +384,35 @@ Returns the details of a group specified by its id.
     {
       "id": 1,
       "organizerId": 1,
-      "name": "Evening Tennis on the Water",
-      "about": "Enjoy rounds of tennis with a tight-nit group of people on the water facing the Brooklyn Bridge. Singles or doubles.",
+      "name": "Urban Trailblazers",
+      "about": "A group for city-dwelling dogs and their owners who love to explore urban landscapes and parks.",
       "type": "In person",
       "private": true,
       "city": "New York",
       "state": "NY",
-      "createdAt": "2021-11-19 20:39:36",
-      "updatedAt": "2021-11-19 20:39:36",
-      "numMembers": 10,
+      "createdAt": "2024-05-14T18:41:10.470Z",
+      "updatedAt": "2024-05-14T18:41:10.470Z",
+      "numMembers": 1000,
       "GroupImages": [
         {
-          "id": 1,
-          "url": "image url",
-          "preview": true
-        },
-        {
-          "id": 2,
-          "url": "image url",
-          "preview": false
+            "id": 1,
+            "url": "http://example.com/path/to/group1image.jpg",
+            "preview": true
         }
       ],
       "Organizer": {
         "id": 1,
-        "firstName": "John",
-        "lastName": "Smith"
+        "firstName": "Demo",
+        "lastName": "User"
       },
       "Venues": [
         {
-          "id": 1,
-          "groupId": 1,
-          "address": "123 Disney Lane",
-          "city": "New York",
-          "state": "NY",
-          "lat": 37.7645358,
-          "lng": -122.4730327
+            "id": 1,
+            "address": "Times Square",
+            "city": "Manhattan",
+            "state": "NY",
+            "lat": 40.757946,
+            "lng": -73.985535
         }
       ]
     }
@@ -502,7 +544,7 @@ Create and return a new image for a group specified by id.
 
     ```json
     {
-      "id": 1,
+      "id": 4,
       "url": "http://example.com/path/to/added-image.jpg",
       "preview": true
     }
@@ -553,7 +595,7 @@ Updates and returns an existing group.
     ```json
     {
       "id": 4,
-      "organizerId": 3,
+      "organizerId": 1,
       "name": "Sassy Tzu Tzu",
       "about": "Got a pint-sized Shih Tzu with a grand Napoleon attitude? Join us! The only 'ruff' part? Convincing these tiny emperors it's time to go home!",
       "type": "In person",
@@ -707,13 +749,14 @@ Creates and returns a new venue for a group specified by its id
   or
   ```json
   {
-    "address": "Hillside Park",
-    "city": "Brooklyn",
-    "state": "NY",
-    "lat": 37.7645358,
-    "lng": -122.4730327
+  "address": "Hillside Dog Park - Vine St",
+  "city": "Brooklyn",
+  "state": "NY",
+  "lat": 40.701430, 
+  "lng": -73.994425
   }
   ```
+
 
 * Successful Response
   * Status Code: 200
@@ -787,7 +830,7 @@ Edit a new venue specified by its id
   "lng": -73.9685
   }
   ```
-
+ 
 * Successful Response
   * Status Code: 200
   * Headers:
@@ -856,50 +899,76 @@ Returns all the events.
   * Body:
 
     ```json
-    {
-      "Events": [
+   {
+    "Events": [
         {
-          "id": 1,
-          "groupId": 1,
-          "venueId": null,
-          "name": "Tennis Group First Meet and Greet",
-          "type": "Online",
-          "startDate": "2021-11-19 20:00:00",
-          "endDate": "2021-11-19 22:00:00",
-          "numAttending": 8,
-          "previewImage": "image url",
-          "Group": {
             "id": 1,
-            "name": "Evening Tennis on the Water",
-            "city": "New York",
-            "state": "NY"
-          },
-          "Venue": null,
+            "groupId": 1,
+            "venueId": 1,
+            "name": "Low Rider Limbo",
+            "type": "In person",
+            "startDate": "2024-05-14T18:41:10.481Z",
+            "endDate": "2024-05-14T21:41:10.481Z",
+            "previewImage": null,
+            "numAttending": 2,
+            "Group": {
+                "id": 1,
+                "name": "Urban Trailblazers",
+                "city": "New York",
+                "state": "NY"
+            },
+            "Venue": {
+                "id": 1,
+                "city": "Manhattan",
+                "state": "NY"
+            }
         },
         {
-          "id": 1,
-          "groupId": 1,
-          "venueId": 1,
-          "name": "Tennis Singles",
-          "type": "In Person",
-          "startDate": "2021-11-20 20:00:00",
-          "endDate": "2021-11-19 22:00:00",
-          "numAttending": 4,
-          "previewImage": "image url",
-          "Group": {
-            "id": 1,
-            "name": "Evening Tennis on the Water",
-            "city": "New York",
-            "state": "NY"
-          },
-          "Venue": {
-            "id": 1,
-            "city": "New York",
-            "state": "NY",
-          },
+            "id": 2,
+            "groupId": 2,
+            "venueId": 2,
+            "name": "Brush Your Chow Day",
+            "type": "In person",
+            "startDate": "2024-05-14T18:41:10.482Z",
+            "endDate": "2024-05-14T20:41:10.482Z",
+            "previewImage": null,
+            "numAttending": 1,
+            "Group": {
+                "id": 2,
+                "name": "Beachfront Barks",
+                "city": "New York",
+                "state": "NY"
+            },
+            "Venue": {
+                "id": 2,
+                "city": "New York",
+                "state": "NY"
+            }
         },
-      ]
-    }
+        {
+            "id": 3,
+            "groupId": 3,
+            "venueId": 3,
+            "name": "Hound Day - NY Ren Faire",
+            "type": "In person",
+            "startDate": "2024-05-14T18:41:10.482Z",
+            "endDate": "2024-05-14T22:41:10.482Z",
+            "previewImage": null,
+            "numAttending": 0,
+            "Group": {
+                "id": 3,
+                "name": "Big Pup",
+                "city": "New York",
+                "state": "NY"
+            },
+            "Venue": {
+                "id": 3,
+                "city": "Brooklyn",
+                "state": "NY"
+            }
+        }
+    ]
+  }
     ```
 
 ### Get all Events of a Group specified by its id
@@ -925,37 +994,19 @@ Returns all the events of a group specified by its id
           "id": 1,
           "groupId": 1,
           "venueId": null,
-          "name": "Tennis Group First Meet and Greet",
-          "type": "Online",
-          "startDate": "2021-11-19 20:00:00",
-          "endDate": "2021-11-19 22:00:00",
-          "numAttending": 8,
-          "previewImage": "image url",
+          "name": "Low Rider Limbo",
+          "type": "In person",
+          "startDate": "2024-05-14T18:41:10.481Z",
+          "endDate": "2024-05-14T21:41:10.481Z",
+          "numAttending": 2,
+          "previewImage": "null",
           "Group": {
             "id": 1,
             "name": "Evening Tennis on the Water",
             "city": "New York",
             "state": "NY"
           },
-          "Venue": null,
-        },
-        {
-          "id": 1,
-          "groupId": 1,
-          "venueId": 1,
-          "name": "Tennis Singles",
-          "type": "In Person",
-          "startDate": "2021-11-20 20:00:00",
-          "endDate": "2021-11-19 22:00:00",
-          "numAttending": 4,
-          "previewImage": "image url",
-          "Group": {
-            "id": 1,
-            "name": "Evening Tennis on the Water",
-            "city": "New York",
-            "state": "NY"
-          },
-          "Venue": {
+           "Venue": {
             "id": 1,
             "city": "New York",
             "state": "NY",

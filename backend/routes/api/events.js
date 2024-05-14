@@ -248,6 +248,7 @@ const checkEventDeletionPermission = async (req, res, next) => {
     }
 };
 
+
 // DELETE /api/events/:eventId - Deletes an event
 router.delete('/:eventId', restoreUser, requireAuth, checkEventDeletionPermission, async (req, res) => {
     const { eventId } = req.params;
