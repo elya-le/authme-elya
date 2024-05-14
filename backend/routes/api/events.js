@@ -5,6 +5,7 @@ const { check, validationResult } = require('express-validator');
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { sequelize } = require('../../db/models');
 const { handleValidationErrors } = require('../../utils/validation'); 
+const { where } = require('sequelize');
 
 router.use(restoreUser); 
 
@@ -123,7 +124,64 @@ const checkEventPermission = async (req, res, next) => {
     next(); // if allowed, move to the next middleware/function
 };
 
-// Event validation
+// Get /api/events/:eventID/attendees
+router.get('/:eventId/attendees', async (req, res) => {
+    const { eventId } = req.params;
+    const userId = req.user ? req.user.id : null;
+
+    const event = await Event.findByPk(eventId, { // find the event by id
+        include: {
+            model: Group,
+            as: 'Group', // specify the alias
+            include: {
+                model: Membership,
+                as: 'Memberships',
+                where: {
+                    userId: userId,
+                    status: ['member', 'inactive', 'pending']
+                    },
+            required: false
+            }
+        }
+    });
+    if (!event) {
+        return res.status(404).json({ message: "Event couldn't be found" }); // event not found
+    }
+    
+    const attendees = await Attendance.findAll({ // get the attendees
+        where: { eventId },
+        include: {
+            model: User,
+            as: 'User',
+            attributes: ['id', 'firstName', 'lastName']
+        }
+    });
+    let responseAttendees;
+    const isAuthorized = event.Group && event.Group.Memberships && event.Group.Memberships.length > 0; // check if the user is an organizer or co-host
+
+    if (isAuthorized) {
+        responseAttendees = attendees.map(att => ({ // show all attendees including those with a status of "pending"
+            id: att.User.id,
+            firstName: att.User.firstName,
+            lastName: att.User.lastName,
+            Attendance: { status: att.status }
+        }));
+    } 
+    else {
+    responseAttendees = attendees // show all attendees excluding those with a status of "pending"
+        .filter(att => att.status !== 'pending')
+        .map(att => ({
+            id: att.User.id,
+            firstName: att.User.firstName,
+            lastName: att.User.lastName,
+            Attendance: { status: att.status }
+        }));
+    }
+    res.status(200).json({ Attendees: responseAttendees });
+});
+
+
+// event validation
 const validateEvent = [
     check('name', 'Name must be at least 5 characters long').isLength({ min: 5 }),
     check('type', "Type must be 'Online' or 'In person'").isIn(['Online', 'In person', 'online', 'in person']),
