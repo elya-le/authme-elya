@@ -180,6 +180,22 @@ router.get('/:eventId/attendees', async (req, res) => {
     res.status(200).json({ Attendees: responseAttendees });
 });
 
+// Event validation
+const validateEvent = [
+    check('name', 'Name must be at least 5 characters long').isLength({ min: 5 }),
+    check('type', "Type must be 'Online' or 'In person'").isIn(['Online', 'In person', 'online', 'in person']),
+    check('capacity', 'Capacity must be an integer').isInt({ min: 1 }),
+    check('price', 'Price must be a non-negative number').isFloat({ min: 0 }),
+    check('description', 'Description is required').not().isEmpty(),
+    check('startDate', 'Start date must be in the format YYYY-MM-DD HH:mm:ss')
+    .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
+    .custom((value, { req }) => new Date(value) > new Date()),
+check('endDate', 'End date must be in the format YYYY-MM-DD HH:mm:ss and after start date')
+    .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
+    .custom((value, { req }) => new Date(value) > new Date(req.body.startDate)),
+    check('venueId', 'Venue ID must be an integer').isInt()
+];
+
 // POST /api/events/:eventId/attendance
 router.post('/:eventId/attendance', requireAuth, async (req, res) => {
     const { eventId } = req.params;
@@ -222,25 +238,6 @@ router.post('/:eventId/attendance', requireAuth, async (req, res) => {
         status: attendance.status
     });
 });
-
-
-
-
-// event validation
-const validateEvent = [
-    check('name', 'Name must be at least 5 characters long').isLength({ min: 5 }),
-    check('type', "Type must be 'Online' or 'In person'").isIn(['Online', 'In person', 'online', 'in person']),
-    check('capacity', 'Capacity must be an integer').isInt({ min: 1 }),
-    check('price', 'Price must be a non-negative number').isFloat({ min: 0 }),
-    check('description', 'Description is required').not().isEmpty(),
-    check('startDate', 'Start date must be in the format YYYY-MM-DD HH:mm:ss')
-    .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
-    .custom((value, { req }) => new Date(value) > new Date()),
-check('endDate', 'End date must be in the format YYYY-MM-DD HH:mm:ss and after start date')
-    .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
-    .custom((value, { req }) => new Date(value) > new Date(req.body.startDate)),
-    check('venueId', 'Venue ID must be an integer').isInt()
-];
 
 // POST /api/events/:eventId/images - Add an image to an event
 router.post('/:eventId/images', restoreUser, requireAuth, [
