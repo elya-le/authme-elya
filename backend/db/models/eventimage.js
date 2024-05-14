@@ -1,14 +1,9 @@
 'use strict';
 
-const { Model, DataTypes } = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class EventImage extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       EventImage.belongsTo(models.EventImage, { 
         foreignKey: 'eventId', 
@@ -40,7 +35,6 @@ module.exports = (sequelize, DataTypes) => {
     preview: {
         type: DataTypes.BOOLEAN
     },
-    // createdAt and updatedAt can be automatically added by enabling timestamps
   }, {
     sequelize,
     modelName: 'EventImage',

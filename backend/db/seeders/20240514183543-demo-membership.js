@@ -1,8 +1,5 @@
 'use strict';
 
-const { Membership } = require('../models');
-const bcrypt = require('bcryptjs');
-
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
@@ -34,9 +31,11 @@ module.exports = {
       }
     ]);
   },
-
   async down(queryInterface, Sequelize) {
     options.tableName = 'Memberships';
-    return queryInterface.bulkDelete(options);
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete( options, {
+      userId: { [Op.in]: [ 1, 2, 3] },
+      }, {} );
   },
 };

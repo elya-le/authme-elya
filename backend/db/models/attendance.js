@@ -1,6 +1,6 @@
 'use strict';
 
-const { Model, DataTypes } = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class Attendance extends Model {
@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         status: {
-            type: DataTypes.ENUM('confirmed', 'canceled', 'pending'), // Adjust these statuses as needed for your application logic
+            type: DataTypes.ENUM('confirmed', 'canceled', 'pending'), // adjust these statuses as needed for the application logic
             allowNull: false,
         },
         createdAt: {

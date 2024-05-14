@@ -1,15 +1,14 @@
 'use strict';
 
-const { sequelize } = require("../models");
-
 let options = {};
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 }
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Groups', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Groups', 
+    {
       id: {
         allowNull: false,
         autoIncrement: true,

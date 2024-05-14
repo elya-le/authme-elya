@@ -1,15 +1,12 @@
 'use strict';
 
-const { User } = require('../models');
-const bcrypt = require('bcryptjs');
-
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 }
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up (queryInterface) {
     await queryInterface.bulkInsert('EventImages', 
       [
         {
@@ -36,8 +33,11 @@ module.exports = {
       ]
     );
   },
-
-  async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('EventImages', null, {});
+  async down(queryInterface, Sequelize) {
+    options.tableName = 'EventImages';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete( options, {
+      id: { [Op.in]: [ 1, 2, 3] },
+      }, {} );
   },
 };

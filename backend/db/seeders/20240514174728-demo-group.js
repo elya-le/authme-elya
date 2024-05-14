@@ -1,15 +1,12 @@
 'use strict';
 
-const { Group } = require('../models');
-const bcrypt = require('bcryptjs');
-
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 }
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up ( queryInterface ) {
     await queryInterface.bulkInsert('Groups',
       [
         {
@@ -22,7 +19,7 @@ module.exports = {
           state: 'NY',
           createdAt: new Date(),
           updatedAt: new Date(),
-          numMembers: 20,
+          numMembers: 1000,
           previewImage: 'http://example.com/path/to/urban-trailblazers.jpg',
         },
         {
@@ -35,12 +32,12 @@ module.exports = {
           state: 'NY',
           createdAt: new Date(),
           updatedAt: new Date(),
-          numMembers: 30,
+          numMembers: 200,
           previewImage: 'http://example.com/path/to/beachfront-barks.jpg',
         },
         {
           organizerId: 3,
-          name: 'Big Pup Mixer',
+          name: 'Big Pup',
           about: "Help your pony-sized lapdog socialize and make friends with other pups they won't accidentally flatten",
           type: 'In person',
           private: true,
@@ -48,16 +45,18 @@ module.exports = {
           state: 'NY',
           createdAt: new Date(),
           updatedAt: new Date(),
-          numMembers: 40,
+          numMembers: 300,
           previewImage: 'http://example.com/path/to/big-pup.jpg',
         },
       ],
       options
     );
   },
-
   async down(queryInterface, Sequelize) {
     options.tableName = 'Groups';
-    return queryInterface.bulkDelete(options);
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete( options, {
+      name: { [Op.in]: ['Urban Trailblazers', 'Beachfront Barks', 'Big Pup'] },
+      }, {} );
   },
 };

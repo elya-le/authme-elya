@@ -1,8 +1,5 @@
 'use strict';
 
-const { Venue } = require('../models');
-const bcrypt = require('bcryptjs');
-
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
@@ -17,8 +14,8 @@ module.exports = {
           address: 'Times Square',
           city: 'Manhattan',
           state: 'NY',
-          lat: 40.7580,
-          lng: -73.9855,
+          lat: 40.757946, 
+          lng: -73.985535,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -34,11 +31,11 @@ module.exports = {
         },
         {
           groupId: 3,
-          address: 'Tuxedo 600 Route 17a',
-          city: 'Tuxedo Park',
+          address: 'Domino Park',
+          city: 'Brooklyn',
           state: 'NY',
-          lat: 41.2009,
-          lng: -74.2400,
+          lat: 40.713197,
+          lng: -73.968591,
           createdAt: new Date(),
           updatedAt: new Date(),
         }
@@ -46,9 +43,11 @@ module.exports = {
       options
     );
   },
-
   async down(queryInterface, Sequelize) {
     options.tableName = 'Venues';
-    return queryInterface.bulkDelete(options);
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete( options, {
+      groupId: { [Op.in]: [ 1, 2, 3] },
+      }, {} );
   },
 };

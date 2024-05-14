@@ -5,11 +5,26 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // define association here
+      User.hasMany(models.Group, {
+        foreignKey: 'organizerId', // foreign key in the Group model
+        as: 'Organizer' // alias for this association
+      });
+      User.belongsToMany(models.Group, {
+        through: models.Membership, // through the Membership model
+        foreignKey: 'userId', // foreign key in the Membership model
+        otherKey: 'groupId', // other key in the Membership model
+        as: 'Member' // alias for this association
+      });
+      User.belongsToMany(models.Event, {
+        through: models.Attendance, // through the Attendance model
+        foreignKey: 'userId', // foreign key in the Attendance model
+        otherKey: 'eventId', // other key in the Attendance model
+        as: 'Attended' // alias for this association
+      });
     }
-  };
+  }
 
-  User.init(
+User.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -56,9 +71,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'User',
-      // excludes from sending this infomation to user
-      defaultScope: {
-        attributes: {
+      defaultScope: { 
+        attributes: { // excludes from sending this infomation to user
           exclude: ['hashedPassword', 'firstName', 'lastName', 'email', "createdAt", "updatedAt"],
         },
       },

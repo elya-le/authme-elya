@@ -1,8 +1,8 @@
 'use strict';
 
-const { Model, DataTypes } = require('sequelize');
+const { Model } = require('sequelize');
 
-module.exports = (sequelize) => {
+module.exports = (sequelize, DataTypes) =>  {
     class GroupImage extends Model {
         static associate(models) {
             GroupImage.belongsTo(models.Group, { // define a many-to-one relationship with Group

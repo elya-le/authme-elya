@@ -64,7 +64,7 @@ Returns the information about the current user that is logged in.
     ```json
     {
       "user": {
-        "id": 1,
+        "id": 2,
         "firstName": "John",
         "lastName": "Smith",
         "email": "john.smith@gmail.com",
@@ -780,7 +780,7 @@ Edit a new venue specified by its id
 
   ```json
   {
-  "address": "Domino Park - 15 River St",
+  "address": "Domino Park Dog Run - 15 River St",
   "city": "Brooklyn",
   "state": "NY",
   "lat": 40.7132222222,
@@ -797,8 +797,8 @@ Edit a new venue specified by its id
   ```json
   {
     "id": 1,
-    "groupId": 1,
-    "address": "Domino Park - 15 River St",
+    "groupId": 3,
+    "address": "Domino Park Dog Run - 15 River St",
     "city": "Brooklyn",
     "state": "NY",
     "lat": 40.7132222222,

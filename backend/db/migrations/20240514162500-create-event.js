@@ -1,15 +1,13 @@
 'use strict';
 
-const { sequelize } = require("../models");
-
 let options = {};
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 }
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Venues', 
+    await queryInterface.createTable('Events', 
     {
       id: {
         allowNull: false,
@@ -17,33 +15,53 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      venueId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Venues",
+          key: "id",
+        },
+      },
       groupId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: "Groups",
           key: "id",
         },
-        onDelete: "SET NULL",
+        onDelete: "CASCADE",
       },
-      address: {
+      name: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      city: {
+      description: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      state: {
+      type: {
         allowNull: false,
+        type: Sequelize.STRING, // ENUM("value", "otherValue"),,
+      },
+      capacity: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      price: {
+        // allowNull: false,
+        type: Sequelize.DECIMAL(6, 2),
+      },
+      startDate: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      endDate: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      previewImage: {
         type: Sequelize.STRING,
-      },
-      lat: {
-        allowNull: false,
-        type: Sequelize.FLOAT,
-      },
-      lng: {
-        allowNull: false,
-        type: Sequelize.FLOAT,
+        allowNull: true, 
       },
       createdAt: {
         allowNull: false,
@@ -60,7 +78,7 @@ module.exports = {
   );
 },
 async down(queryInterface, Sequelize) {
-  options.tableName = 'Venues';
+  options.tableName = 'Events';
   return queryInterface.dropTable(options);
   },
 };

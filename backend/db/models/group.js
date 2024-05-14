@@ -5,46 +5,44 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Group extends Model {
         static associate(models) {
-        // can define association here
-        // i.e. Group.belongsTo(models.User, { foreignKey: 'organizerId', as: 'organizer' });
-        Group.belongsTo(models.User, {
-            foreignKey: "organizerId",
-            as: "Organizer",
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE' 
-        });
-        Group.hasMany(models.GroupImage, {
-            foreignKey: "groupId",
-            as: "GroupImages",
-            onDelete: 'CASCADE', 
-            onUpdate: 'CASCADE' 
-        });
-        Group.hasMany(models.Venue, {
-            foreignKey: "groupId",
-            as: "Venues",
-            onDelete: 'CASCADE', 
-            onUpdate: 'CASCADE' 
-        });
-        Group.belongsToMany(models.User, {
-            through: models.Membership,
-            foreignKey: "groupId",
-            otherKey: "userId",
-            as: "Members",
-            onDelete: 'CASCADE', 
-            onUpdate: 'CASCADE' 
-        });
-        Group.hasMany(models.Event, {
-            foreignKey: "groupId",
-            as: "Events",
-            onDelete: 'CASCADE', 
-            onUpdate: 'CASCADE' 
-        });
-        Group.hasMany(models.Membership, {
-            foreignKey: "groupId",
-            as: "Memberships",
-            onDelete: 'CASCADE', 
-            onUpdate: 'CASCADE' 
-        });
+            Group.belongsTo(models.User, {
+                foreignKey: "organizerId",
+                as: "Organizer",
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE' 
+            });
+            Group.hasMany(models.GroupImage, {
+                foreignKey: "groupId",
+                as: "GroupImages",
+                onDelete: 'CASCADE', 
+                onUpdate: 'CASCADE' 
+            });
+            Group.hasMany(models.Venue, {
+                foreignKey: "groupId",
+                as: "Venues",
+                onDelete: 'CASCADE', 
+                onUpdate: 'CASCADE' 
+            });
+            Group.belongsToMany(models.User, {
+                through: models.Membership,
+                foreignKey: "groupId",
+                otherKey: "userId",
+                as: "Members",
+                onDelete: 'CASCADE', 
+                onUpdate: 'CASCADE' 
+            });
+            Group.hasMany(models.Event, {
+                foreignKey: "groupId",
+                as: "Events",
+                onDelete: 'CASCADE', 
+                onUpdate: 'CASCADE' 
+            });
+            Group.hasMany(models.Membership, {
+                foreignKey: "groupId",
+                as: "Memberships",
+                onDelete: 'CASCADE', 
+                onUpdate: 'CASCADE' 
+            });
     }
 };
     Group.init(
