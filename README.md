@@ -989,30 +989,30 @@ Returns all the events of a group specified by its id
 
     ```json
     {
-      "Events": [
-        {
-          "id": 1,
-          "groupId": 1,
-          "venueId": null,
-          "name": "Low Rider Limbo",
-          "type": "In person",
-          "startDate": "2024-05-14T18:41:10.481Z",
-          "endDate": "2024-05-14T21:41:10.481Z",
-          "numAttending": 2,
-          "previewImage": "null",
-          "Group": {
-            "id": 1,
-            "name": "Evening Tennis on the Water",
-            "city": "New York",
-            "state": "NY"
-          },
-           "Venue": {
-            "id": 1,
-            "city": "New York",
-            "state": "NY",
-          },
-        },
-      ]
+        "Events": [
+            {
+                "id": 1,
+                "groupId": 1,
+                "venueId": 1,
+                "name": "Low Rider Limbo",
+                "type": "In person",
+                "startDate": "2024-05-14T18:41:10.481Z",
+                "endDate": "2024-05-14T21:41:10.481Z",
+                "numAttending": 2,
+                "previewImage": null,
+                "Group": {
+                    "id": 1,
+                    "name": "Urban Trailblazers",
+                    "city": "New York",
+                    "state": "NY"
+                },
+                "Venue": {
+                    "id": 1,
+                    "city": "Manhattan",
+                    "state": "NY"
+                }
+            }
+        ]
     }
     ```
 
@@ -1047,44 +1047,44 @@ Returns the details of an event specified by its id.
     ```json
     {
       "id": 1,
-      "groupId": 1,
       "venueId": 1,
-      "name": "Tennis Group First Meet and Greet",
-      "description": "First meet and greet event for the evening tennis on the water group! Join us online for happy times!",
-      "type": "Online",
-      "capacity": 10,
-      "price": 18.50,
-      "startDate": "2021-11-19 20:00:00",
-      "endDate": "2021-11-19 22:00:00",
-      "numAttending": 8,
+      "groupId": 1,
+      "name": "Low Rider Limbo",
+      "description": "Join our low-to-the-ground limbo contest agility    course.",
+      "type": "In person",
+      "capacity": 50,
+      "price": 10,
+      "previewImage": null,
+      "startDate": "2024-05-14T18:41:10.481Z",
+      "endDate": "2024-05-14T21:41:10.481Z",
+      "createdAt": "2024-05-14T18:41:10.482Z",
+      "updatedAt": "2024-05-14T18:41:10.482Z",
       "Group": {
-        "id": 1,
-        "name": "Evening Tennis on the Water",
-        "private": true,
-        "city": "New York",
-        "state": "NY"
+          "id": 1,
+          "name": "Urban Trailblazers",
+          "city": "New York",
+          "state": "NY",
+          "private": true
       },
       "Venue": {
-        "id": 1,
-        "address": "123 Disney Lane",
-        "city": "New York",
-        "state": "NY",
-        "lat": 37.7645358,
-        "lng": -122.4730327,
-      },
-      "EventImages": [
-        {
           "id": 1,
-          "url": "image url",
-          "preview": true
-        },
-        {
-          "id": 2,
-          "url": "image url",
-          "preview": false
-        }
+          "address": "Times Square",
+          "city": "Manhattan",
+          "state": "NY",
+          "lat": 40.757946,
+          "lng": -73.985535
+      },
+      "Attendances": [
+          {
+              "id": 1
+          },
+          {
+              "id": 2
+          }
       ],
-    }
+      "EventImages": [],
+      "numAttending": 2
+  }
     ```
 
 * Error response: Couldn't find an Event with the specified id
@@ -1115,7 +1115,7 @@ Creates and returns a new event for a group specified by its id
 
     ```json
     {
-      "venueId": 1,
+      "venueId": 3,
       "name": "Downtown Doxies - First Meet and Greet",
       "type": "In Person",
       "capacity": 250,
@@ -1388,32 +1388,24 @@ Returns the members of a group specified by its id.
 
     ```json
     {
-      "Members": [
-        {
-          "id": 2,
-          "firstName": "Clark",
-          "lastName": "Adams",
-          "Membership": {
-            "status": "co-host"
-          },
-        },
-        {
-          "id": 3,
-          "firstName": "John",
-          "lastName": "Smith",
-          "Membership": {
-            "status": "member"
-          },
-        },
-        {
-          "id": 4,
-          "firstName": "Jane",
-          "lastName": "Doe",
-          "Membership": {
-            "status": "pending"
-          },
-        },
-      ]
+        "Members": [
+            {
+                "id": 1,
+                "firstName": "Demo",
+                "lastName": "User",
+                "Membership": {
+                    "status": "active"
+                }
+            },
+            {
+                "id": 2,
+                "firstName": "Demo",
+                "lastName": "User2",
+                "Membership": {
+                    "status": "pending"
+                }
+            }
+        ]
     }
     ```
 
@@ -1428,21 +1420,13 @@ Returns the members of a group specified by its id.
     {
       "Members": [
         {
-          "id": 2,
-          "firstName": "Clark",
-          "lastName": "Adams",
-          "Membership": {
-            "status": "co-host"
-          },
-        },
-        {
-          "id": 3,
-          "firstName": "John",
-          "lastName": "Smith",
-          "Membership": {
-            "status": "member"
-          },
-        },
+          "id": 1,
+            "firstName": "Demo",
+            "lastName": "User",
+            "Membership": {
+                "status": "active"
+            }
+        }    
       ]
     }
     ```

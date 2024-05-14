@@ -100,7 +100,7 @@ router.get('/:groupId', async (req, res) => {
     }
 });
 
-// GET /api/groups/:groupId/events
+// GET /api/groups/:groupId/events  - returns all events for a group
 router.get('/:groupId/events', async (req, res) => {
     const { groupId } = req.params;
     // Find the group by id
@@ -563,6 +563,12 @@ router.put('/:groupId/membership', restoreUser, requireAuth, async (req, res) =>
         if (!group) {
             return res.status(404).json({ message: "Group couldn't be found" });
         }
+
+        const user = await User.findByPk(memberId);
+        if (!user) {
+            return res.status(404).json({ message: "User couldn't be found" }); // user not found
+        }
+
 
         const membership = group.Memberships.find(m => m.userId === memberId); // find the membership that is going to be updated
         if (!membership) {
