@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         status: {
-            type: DataTypes.ENUM('confirmed', 'canceled', 'pending'), // adjust these statuses as needed for the application logic
+            type: DataTypes.ENUM('attending', 'canceled', 'pending'), // adjust these statuses as needed for the application logic
             allowNull: false,
         },
         createdAt: {

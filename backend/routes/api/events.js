@@ -180,6 +180,51 @@ router.get('/:eventId/attendees', async (req, res) => {
     res.status(200).json({ Attendees: responseAttendees });
 });
 
+// POST /api/events/:eventId/attendance
+router.post('/:eventId/attendance', requireAuth, async (req, res) => {
+    const { eventId } = req.params;
+    const userId = req.user.id;
+
+    const event = await Event.findByPk(eventId, { // find the event by id
+        include: {
+            model: Group,
+            as: 'Group'
+        }
+    });
+
+    if (!event) {
+      return res.status(404).json({ message: "Event couldn't be found" }); // event not found
+    }
+
+    const membership = await Membership.findOne({ where: { groupId: event.groupId, userId } }); // check if the user is a member of the group
+    if (!membership) {
+      return res.status(403).json({ message: "You must be a member of the group to request attendance" }); // user not a member of the group
+    }
+
+    const existingAttendance = await Attendance.findOne({ where: { eventId, userId } }); // check if the user already has a pending attendance or is already an attendee
+    if (existingAttendance) {
+        if (existingAttendance.status === 'pending') {
+            return res.status(400).json({ message: "Attendance has already been requested" }); // already requested
+        }
+    if (existingAttendance.status === 'attending') {
+        return res.status(400).json({ message: "User is already an attendee of the event" }); // already attending
+        }
+    }
+
+    const attendance = await Attendance.create({ // create a new attendance with status "pending"
+        eventId,
+        userId,
+        status: 'pending'
+    });
+
+    res.status(200).json({
+        userId: attendance.userId,
+        status: attendance.status
+    });
+});
+
+
+
 
 // event validation
 const validateEvent = [
@@ -305,6 +350,96 @@ const checkEventDeletionPermission = async (req, res, next) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+// PUT /api/events/:eventId/attendance
+router.put('/:eventId/attendance', requireAuth, async (req, res) => {
+    const { eventId } = req.params;
+    const { userId, status } = req.body;
+    const currentUserId = req.user.id;
+
+    if (status === 'pending') { // validate new status
+        return res.status(400).json({
+            message: "Bad Request",
+            errors: { status: "Cannot change an attendance status to pending" }
+        });
+    }
+    
+    const event = await Event.findByPk(eventId, { // find the event by id
+        include: {
+            model: Group,
+            as: 'Group'
+        }
+    });
+
+    if (!event) {
+      return res.status(404).json({ message: "Event couldn't be found" }); // event not found
+    }
+
+    const user = await User.findByPk(userId); // check if the user to be updated exists
+    if (!user) {
+      return res.status(404).json({ message: "User couldn't be found" }); // user not found
+    }
+
+    const attendance = await Attendance.findOne({ where: { eventId, userId } }); // check if the attendance exists
+    if (!attendance) {
+      return res.status(404).json({ message: "Attendance between the user and the event does not exist" }); // attendance not found
+    }
+
+    const membership = await Membership.findOne({ where: { groupId: event.groupId, userId: currentUserId } }); // check authorization
+    const isAuthorized = event.Group.organizerId === currentUserId || (membership && membership.status === 'co-host');
+    if (!isAuthorized) {
+      return res.status(403).json({ message: "Forbidden" }); // not authorized
+    }
+
+    attendance.status = status; // update the attendance status
+    await attendance.save();
+
+    res.status(200).json({
+        id: attendance.id,
+        eventId: attendance.eventId,
+        userId: attendance.userId,
+        status: attendance.status
+    });
+});
+
+// DELETE /api/events/:eventId/attendance/:userId
+router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res) => {
+    const { eventId, userId } = req.params;
+    const currentUserId = req.user.id;
+
+    const event = await Event.findByPk(eventId, { // find the event by id
+        include: {
+            model: Group,
+            as: 'Group'
+        }
+    });
+
+    if (!event) {
+      return res.status(404).json({ message: "Event couldn't be found" }); // event not found
+    }
+
+    const user = await User.findByPk(userId); // check if the user to be deleted exists
+    if (!user) {
+      return res.status(404).json({ message: "User couldn't be found" }); // user not found
+    }
+
+    const attendance = await Attendance.findOne({ where: { eventId, userId } }); // check if the attendance exists
+    if (!attendance) {
+      return res.status(404).json({ message: "Attendance does not exist for this User" }); // attendance not found
+    }
+
+    // check authorization
+    const isHost = event.Group.organizerId === currentUserId; // check if current user is the host
+    const isSelf = userId == currentUserId; // check if current user is the one being deleted
+
+    if (!isHost && !isSelf) {
+      return res.status(403).json({ message: "Forbidden" }); // not authorized
+    }
+
+    await attendance.destroy(); // delete the attendance
+
+    res.status(200).json({ message: "Successfully deleted attendance from event" }); // success response
+});
 
 
 // DELETE /api/events/:eventId - Deletes an event
