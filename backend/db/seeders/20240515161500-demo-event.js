@@ -6,11 +6,12 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('Events',
+  async up(queryInterface) {
+    await queryInterface.bulkInsert(
+      'Events',
       [
         {
-          id: 1,
+          id: 1,  // Ensure these IDs are unique and consistent
           venueId: 1,
           groupId: 1,
           name: 'Low Rider Limbo',
@@ -22,7 +23,7 @@ module.exports = {
           endDate: new Date(new Date().setHours(new Date().getHours() + 3)),
           createdAt: new Date(),
           updatedAt: new Date(),
-        },        
+        },
         {
           id: 2,
           venueId: 2,
@@ -36,7 +37,7 @@ module.exports = {
           endDate: new Date(new Date().setHours(new Date().getHours() + 2)),
           createdAt: new Date(),
           updatedAt: new Date(),
-        },        
+        },
         {
           id: 3,
           venueId: 3,
@@ -58,8 +59,8 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     options.tableName = 'Events';
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete( options, {
-      venueId: { [Op.in]: [ 1, 2, 3] },
-      }, {} );
+    return queryInterface.bulkDelete(options, {
+      id: { [Op.in]: [1, 2, 3] },
+    });
   },
 };

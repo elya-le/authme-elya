@@ -6,20 +6,23 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('Venues',
+  async up(queryInterface) {
+    await queryInterface.bulkInsert(
+      'Venues',
       [
         {
+          id: 1,  // Ensure these IDs are unique and consistent
           groupId: 1,
           address: 'Times Square',
           city: 'Manhattan',
           state: 'NY',
-          lat: 40.757946, 
+          lat: 40.757946,
           lng: -73.985535,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
+          id: 2,
           groupId: 2,
           address: 'Sheep Meadow E 65th St',
           city: 'New York',
@@ -30,6 +33,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
+          id: 3,
           groupId: 3,
           address: 'Domino Park',
           city: 'Brooklyn',
@@ -46,8 +50,8 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     options.tableName = 'Venues';
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete( options, {
-      groupId: { [Op.in]: [ 1, 2, 3] },
-      }, {} );
+    return queryInterface.bulkDelete(options, {
+      groupId: { [Op.in]: [1, 2, 3] },
+    });
   },
 };
