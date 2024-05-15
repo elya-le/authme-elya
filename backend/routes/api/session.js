@@ -8,7 +8,7 @@ const { User } = require('../../db/models');
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 
 
-// GET /api/session - Return the current user
+// GET /api/session - return the current user
 router.get('/', restoreUser, (req, res) => {
     if (req.user) {
         return res.json({
@@ -25,8 +25,7 @@ router.get('/', restoreUser, (req, res) => {
     }
 });
 
-
-// POST route for logging in a user
+// POST - logging in a user
 router.post('/',
     [
         body('credential').not().isEmpty().withMessage('Email or username is required'),
@@ -45,7 +44,7 @@ router.post('/',
         }
 
         const { credential, password } = req.body;
-        const normalizedCredential = credential.toLowerCase(); // normalize input to lower case
+        const normalizedCredential = credential.toLowerCase(); 
         const user = await User.findOne({
             where: {
                 [Op.or]: [
@@ -55,12 +54,9 @@ router.post('/',
             },
             attributes: ['id', 'email', 'username', 'firstName', 'lastName', 'hashedPassword']
         });
-
-        console.log("Password:", password);
-        console.log("Hashed Password:", user ? user.hashedPassword : "No user found");
-
+    
         if (user && bcrypt.compareSync(password, user.hashedPassword)) {
-            setTokenCookie(res, user);  // ensure this is called
+            setTokenCookie(res, user); 
 
             return res.json({
                 user: {

@@ -5,7 +5,6 @@ const { restoreUser, requireAuth } = require('../../utils/auth');
 const { check, validationResult } = require('express-validator');
 const { Op } = require('sequelize');
 
-// validation rules for updating a venue
 const validateVenue = [
     check('address').exists({ checkFalsy: true }).withMessage('Street address is required'),
     check('city').exists({ checkFalsy: true }).withMessage('City is required'),
@@ -14,7 +13,6 @@ const validateVenue = [
     check('lat').isFloat({ min: -90, max: 90 }).withMessage('Latitude must be within -90 and 90'),
     check('lng').isFloat({ min: -180, max: 180 }).withMessage('Longitude must be within -180 and 180'),
 ];
-
 // middleware for validation errors
 const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
@@ -27,7 +25,7 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
-// PUT /api/venues/:venueId - Edits a venue specified by its id
+// PUT /api/venues/:venueId - edits a venue specified by its id
 router.put('/:venueId', restoreUser, requireAuth, validateVenue, handleValidationErrors, async (req, res) => {
     const { venueId } = req.params;
     const { address, city, state, lat, lng } = req.body;

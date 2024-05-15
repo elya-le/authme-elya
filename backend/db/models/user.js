@@ -6,20 +6,20 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       User.hasMany(models.Group, {
-        foreignKey: 'organizerId', // foreign key in the Group model
-        as: 'Organizer' // alias for this association
+        foreignKey: 'organizerId', 
+        as: 'Organizer' 
       });
       User.belongsToMany(models.Group, {
-        through: models.Membership, // through the Membership model
-        foreignKey: 'userId', // foreign key in the Membership model
-        otherKey: 'groupId', // other key in the Membership model
-        as: 'Member' // alias for this association
+        through: models.Membership, 
+        foreignKey: 'userId', 
+        otherKey: 'groupId', 
+        as: 'Member' 
       });
       User.belongsToMany(models.Event, {
-        through: models.Attendance, // through the Attendance model
-        foreignKey: 'userId', // foreign key in the Attendance model
-        otherKey: 'eventId', // other key in the Attendance model
-        as: 'Attended' // alias for this association
+        through: models.Attendance, 
+        foreignKey: 'userId', 
+        otherKey: 'eventId', 
+        as: 'Attended' 
       });
     }
   }
@@ -72,7 +72,7 @@ User.init(
       sequelize,
       modelName: 'User',
       defaultScope: { 
-        attributes: { // excludes from sending this infomation to user
+        attributes: { 
           exclude: ['hashedPassword', 'firstName', 'lastName', 'email', "createdAt", "updatedAt"],
         },
       },

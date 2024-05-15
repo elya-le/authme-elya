@@ -1,25 +1,25 @@
-const config = require("./index");
+const config = require('./index');
 
 module.exports = {
   development: {
-    storage: config.dbFile, // specifies SQLite db file
-    dialect: "sqlite", // uses SQLite as db dialect
-    seederStorage: "sequelize", // tracks seed file executed
-    logQueryParameters: true, // enables logging of query parameters
-    typeValidation: true, // validates datatypes before querying the db
+    storage: config.dbFile, 
+    dialect: 'sqlite', 
+    seederStorage: 'sequelize', 
+    logQueryParameters: true, 
+    typeValidation: true, 
   },
   production: {
-    use_env_variable: 'DATABASE_URL', // db connection string from environment variable
-    dialect: "postgres", // use PostgreSQL as the database dialect
-    seederStorage: "sequelize", // tracks seed file executed by Sequelize
+    use_env_variable: 'DATABASE_URL', 
+    dialect: 'postgres', 
+    seederStorage: 'sequelize', 
     dialectOptions: {
       ssl: {
-        require: true, // requires SSL connection
-        rejectUnauthorized: false, // ignores SSL certificate validation errors
+        require: true, 
+        rejectUnauthorized: false, 
       },
     },
     define: {
-      schema: process.env.SCHEMA, // sets schema from environment variable for PostgreSQL
+      schema: process.env.SCHEMA, 
     },
   },
 };

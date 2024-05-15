@@ -19,23 +19,23 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Groups', // references the Groups table
+          model: 'Groups', 
           key: 'id'
         },
-        onDelete: 'CASCADE', // add onDelete cascade
-        onUpdate: 'CASCADE' // add onUpdate cascade
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       url: {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-          isUrl: true // ensure the url is a valid URL
+          isUrl: true 
         }
       },
       preview: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: false // default value for preview is false
+        defaultValue: false 
       },
       createdAt: {
         allowNull: false,

@@ -67,7 +67,6 @@ app.get('/api/csrf/restore', (req, res) => {
 
 // add a log to show incoming cookies
 app.use((req, res, next) => {
-    console.log('Incoming cookies:', req.cookies);
     next();
 });
 
@@ -75,7 +74,6 @@ app.use((req, res, next) => {
 app.use(routes);
 
 app.use((req, res, next) => {
-    console.log(`Incoming request: ${req.method} ${req.path}`);
     next();
 });
 

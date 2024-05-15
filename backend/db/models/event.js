@@ -5,9 +5,9 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
     static associate(models) {
-      Event.belongsTo(models.Group, {  // event belongs to a Group
-        foreignKey: 'groupId', // ensure foreignKey is set according to the schema
-        as: 'Group', // using 'Group' as an alias for the association
+      Event.belongsTo(models.Group, {  
+        foreignKey: 'groupId', 
+        as: 'Group', 
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE' 
       });
@@ -15,14 +15,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'venueId',
         as: 'Venue',
       });
-      Event.hasMany(models.Attendance, { // associate Event with Attendance
+      Event.hasMany(models.Attendance, { 
         foreignKey: 'eventId',
         as: 'Attendances', }); 
       Event.hasMany(models.EventImage, {
-        foreignKey: 'eventId', // match foreign key with column name in EventImages table
+        foreignKey: 'eventId', 
         as: 'EventImages',
         onDelete: 'CASCADE',
-        onUpdate: 'CASCADE'  // using 'EventImages' as an alias for the association
+        onUpdate: 'CASCADE' 
       });
     }
   }
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Venues', // this should match the table name of the model it references
+        model: 'Venues', 
         key: 'id'
       }
     },
@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Groups', // this should match the table name of the model it references
+        model: 'Groups', 
         key: 'id'
       }
     },
@@ -58,20 +58,20 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     type: {
-      type: DataTypes.ENUM('Online', 'In person'), // specifying the enum options as per your schema
+      type: DataTypes.ENUM('Online', 'In person'), 
       allowNull: false
     },
     capacity: {
       type: DataTypes.INTEGER,
-      allowNull: true // assuming capacity might be nullable based on event type
+      allowNull: true 
     },
     price: {
       type: DataTypes.INTEGER,
-      allowNull: true // assuming price might be nullable or free events
+      allowNull: true 
     },
     previewImage: {
       type: DataTypes.STRING,
-      allowNull: true,  // or false, based on your schema requirements
+      allowNull: true,  
     },
     startDate: {
       type: DataTypes.DATE,
@@ -84,7 +84,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Event',
-    timestamps: true, // assuming we want Sequelize to automatically manage createdAt and updatedAt
+    timestamps: true, 
   });
   return Event;
 };

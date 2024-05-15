@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'EventImage',
       tableName: 'EventImages',
-      timestamps: true, // enable timestamp fields (createdAt and updatedAt)  
+      timestamps: true, 
   });
 return EventImage;
 };

@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
             organizerId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                references: { // user hasMany Groups
+                references: { 
                     model: 'Users',
                     key: 'id',
                 }
@@ -65,52 +65,52 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate: {
-                    notEmpty: true, // don't allow empty strings
+                    notEmpty: true, 
                 }
             },
             about: {
                 type: DataTypes.TEXT,
                 allowNull: false,
                 validate: {
-                    notEmpty: true, // don't allow empty strings
-                    len: [10, 2000], // only allow values with length between 10 and 2000
+                    notEmpty: true, 
+                    len: [10, 2000], 
                 }
             },
             type: {
                 type: DataTypes.ENUM('Online', 'In person'),
                 allowNull: false,
                 validate: {
-                  isIn: [['Online', 'In person']], // value must be within these options
+                    isIn: [['Online', 'In person']], 
                 }
             },
             private: {
                 type: DataTypes.BOOLEAN,
-                defaultValue: false, // set default value
+                defaultValue: false, 
             },
             city: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate: {
-                    notEmpty: true, // don't allow empty strings
+                    notEmpty: true, 
                 }
             },
             state: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate: {
-                    notEmpty: true, // don't allow empty strings
-                    len: [2, 2], // assuming state is in two-letter format
-                    isUppercase: true, // must be uppercase letters
+                    notEmpty: true, 
+                    len: [2, 2], 
+                    isUppercase: true, 
                 }
             },
             numMembers: {
                 type: DataTypes.INTEGER,
-                defaultValue: 0,  // default number of members when a group is created
+                defaultValue: 0,  
                 allowNull: false
             },
             previewImage: {
                 type: DataTypes.STRING,
-                allowNull: true  // preview image is optional
+                allowNull: true  
             }
         }, {
             sequelize,

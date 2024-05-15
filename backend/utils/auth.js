@@ -7,14 +7,12 @@ const { secret, expiresIn } = jwtConfig;
 // helper function
 // sends a JWT Cookie
 const setTokenCookie = (res, user) => {
-    // console.log("Called setTokenCookie"); // check if this function is entered
 
     const safeUser = {
         id: user.id,
         email: user.email,
         username: user.username,
     };
-    // console.log("Safe User Data:", safeUser); // check the user data processed
 
     const token = jwt.sign(
         { data: safeUser },
@@ -22,10 +20,7 @@ const setTokenCookie = (res, user) => {
         { expiresIn: parseInt(expiresIn) }
     );
 
-    // console.log("JWT Token generated:", token); // check the token
-
     const isProduction = process.env.NODE_ENV === "production";
-    // console.log("Is Production:", isProduction); // check the environment mode
 
     res.cookie('token', token, {
         maxAge: expiresIn * 1000,
@@ -34,17 +29,12 @@ const setTokenCookie = (res, user) => {
         sameSite: isProduction ? 'Lax' : 'Strict'
     });
 
-    // console.log("JWT Token set in cookie:", token); // this should be logged
-
     return token;
 };
 
 // middleware
 const restoreUser = (req, res, next) => {
-    // console.log('Entered restoreUser middleware');
     const { token } = req.cookies;
-
-    // console.log('Token:', token);
 
     if (!token) {
         console.log('No token found');
@@ -61,7 +51,6 @@ const restoreUser = (req, res, next) => {
             const { id } = jwtPayload.data;
             const user = await User.findByPk(id);
             if (user) {
-                console.log('User found:', user.id);
                 req.user = user;
             } else {
                 console.log('No user found for token');
@@ -82,7 +71,6 @@ const requireAuth = (req, res, next) => {
         return next();
     }
 
-    console.log("User not authenticated, blocking access"); // debug: Log access blocking
     res.status(401).json({
         message: 'Authentication required'
     });
