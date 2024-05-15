@@ -5,16 +5,19 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
     static associate(models) {
-      Event.belongsTo(models.Venue, {
-        foreignKey: 'venueId',
-        as: 'Venue',
-      });
       Event.belongsTo(models.Group, {  // event belongs to a Group
         foreignKey: 'groupId', // ensure foreignKey is set according to the schema
         as: 'Group', // using 'Group' as an alias for the association
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE' 
       });
+      Event.belongsTo(models.Venue, {
+        foreignKey: 'venueId',
+        as: 'Venue',
+      });
+      Event.hasMany(models.Attendance, { // associate Event with Attendance
+        foreignKey: 'eventId',
+        as: 'Attendances', }); 
       Event.hasMany(models.EventImage, {
         foreignKey: 'eventId', // match foreign key with column name in EventImages table
         as: 'EventImages',

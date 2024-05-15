@@ -87,6 +87,46 @@ router.get('/:eventId', async (req, res) => {
     }
 });
 
+// GET /api/events
+router.get('/', async (req, res) => {
+    const { page = 1, size = 20, name, type, startDate } = req.query; // parse query parameters with defaults
+
+    // validate query parameters
+    const errors = {};
+    if (isNaN(page) || page < 1 || page > 10) errors.page = 'Page must be between 1 and 10';
+    if (isNaN(size) || size < 1 || size > 20) errors.size = 'Size must be between 1 and 20';
+    if (name && typeof name !== 'string') errors.name = 'Name must be a string';
+    if (type && !['Online', 'In Person'].includes(type)) errors.type = "Type must be 'Online' or 'In Person'";
+    if (startDate && isNaN(Date.parse(startDate))) errors.startDate = 'Start date must be a valid datetime';
+
+    if (Object.keys(errors).length) return res.status(400).json({ message: 'Bad Request', errors }); // return validation errors if any
+
+    const where = {}; // build the where clause for filters
+    if (name) where.name = { [Op.iLike]: `%${name}%` }; // filter by name
+    if (type) where.type = type; // filter by type
+    if (startDate) where.startDate = { [Op.gte]: new Date(startDate) }; // filter by start date
+
+    const limit = parseInt(size); // convert size to integer
+    const offset = (parseInt(page) - 1) * limit; // calculate offset
+
+    try {
+        const events = await Event.findAll({
+            where,
+            include: [
+                { model: Group, attributes: ['id', 'name', 'city', 'state'] }, // include group details
+                { model: Venue, attributes: ['id', 'city', 'state'] }, // include venue details
+                { model: Attendance, attributes: ['id'] }, // include attendance details
+        ],
+        limit,
+        offset,
+      }); // fetch filtered events from the database
+
+      return res.json({ Events: events }); // return the events as JSON
+    } catch (err) {
+      return res.status(500).json({ error: err.message }); // return an error response if something goes wrong
+    }
+});
+
 // middleware to check if the current user can edit the event
 const checkEventPermission = async (req, res, next) => {
     const { eventId } = req.params;
