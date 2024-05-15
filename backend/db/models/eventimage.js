@@ -5,9 +5,9 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class EventImage extends Model {
     static associate(models) {
-      EventImage.belongsTo(models.EventImage, { 
+      EventImage.belongsTo(models.Event, { 
         foreignKey: 'eventId', 
-        as: 'Event',           
+        as: 'Event',       
         onDelete: 'CASCADE',  
         onUpdate: 'CASCADE'   
     });
@@ -21,26 +21,32 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
     },
     eventId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'Events',
-            key: 'id',
-        }
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Events',
+        key: 'id'
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
     },
     url: {
-        type: DataTypes.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isUrl: true
+      }
     },
     preview: {
-        type: DataTypes.BOOLEAN
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     },
-  }, {
-    sequelize,
-    modelName: 'EventImage',
-    tableName: 'EventImages',
-    timestamps: true, // enable timestamp fields (createdAt and updatedAt)
-});
-
+    }, {
+      sequelize,
+      modelName: 'EventImage',
+      tableName: 'EventImages',
+      timestamps: true, // enable timestamp fields (createdAt and updatedAt)  
+  });
 return EventImage;
 };

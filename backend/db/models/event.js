@@ -21,12 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'  // using 'EventImages' as an alias for the association
       });
-      Event.hasMany(models.Attendance, {
-        foreignKey: 'eventId',
-        as: 'Attendances',
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE' 
-      });
     }
   }
   Event.init({
@@ -72,7 +66,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true // assuming price might be nullable or free events
     },
-    // In models/event.js
     previewImage: {
       type: DataTypes.STRING,
       allowNull: true,  // or false, based on your schema requirements

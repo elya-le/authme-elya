@@ -10,6 +10,7 @@ module.exports = {
     await queryInterface.bulkInsert('Events',
       [
         {
+          id: 1,
           venueId: 1,
           groupId: 1,
           name: 'Low Rider Limbo',
@@ -23,6 +24,7 @@ module.exports = {
           updatedAt: new Date(),
         },        
         {
+          id: 2,
           venueId: 2,
           groupId: 2,
           name: 'Brush Your Chow Day',
@@ -36,6 +38,7 @@ module.exports = {
           updatedAt: new Date(),
         },        
         {
+          id: 3,
           venueId: 3,
           groupId: 3,
           name: 'Hound Day - NY Ren Faire',

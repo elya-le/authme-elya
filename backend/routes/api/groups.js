@@ -365,16 +365,16 @@ router.post('/:groupId/images', authenticated, async (req, res) => {
             return res.status(403).json({ message: "Forbidden. You are not authorized to add an image to this group." });
         }
         
-        const groupImage = await GroupImage.create({  // create a new group image
+        const groupImage = await GroupImage.create({ // create a new group image
             groupId,
             url,
             preview
         });
         
-        res.json(groupImage);  // send the created group image as the response
+        res.status(201).json(groupImage);  // send the created group image as the response
     } catch (error) {
         console.error('Error adding image to group:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error', errors: error.errors ? error.errors.map(e => e.message) : [error.message] });
     }
 });
 
