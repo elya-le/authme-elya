@@ -16,5 +16,6 @@
   "license": "ISC",
   "dependencies": {
     "express-session": "^1.18.0"
-  }
+  },
+  "devDependencies": {}
 }
