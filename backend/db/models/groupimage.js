@@ -47,6 +47,7 @@ module.exports = (sequelize, DataTypes) =>  {
             sequelize, 
             modelName: 'GroupImage', 
             tableName: 'GroupImages', 
+            schema: process.env.SCHEMA,
             timestamps: true 
         }
     );

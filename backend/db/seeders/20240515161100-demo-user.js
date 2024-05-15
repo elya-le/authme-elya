@@ -13,7 +13,7 @@ module.exports = {
       'Users',
       [
         {
-          id: 1,  // Ensure these IDs are unique and consistent
+          id: 1,  
           firstName: 'Demo',
           lastName: 'User',
           email: 'demo@user.io',

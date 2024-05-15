@@ -63,7 +63,8 @@ module.exports = (sequelize) => {
         {
             sequelize,            
             modelName: 'Venue',    
-            tableName: 'Venues',    
+            tableName: 'Venues',
+            schema: process.env.SCHEMA,   
             timestamps: false      
         }
     );

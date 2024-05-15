@@ -46,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'EventImage',
       tableName: 'EventImages',
+      schema: process.env.SCHEMA,
       timestamps: true, 
   });
 return EventImage;

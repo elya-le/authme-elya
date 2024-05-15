@@ -115,6 +115,7 @@ module.exports = (sequelize, DataTypes) => {
         }, {
             sequelize,
             modelName: 'Group',
+            schema: process.env.SCHEMA,
         }
     );
     return Group;
