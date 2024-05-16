@@ -387,49 +387,60 @@ router.put('/:eventId/attendance', requireAuth, async (req, res) => {
     const { userId, status } = req.body;
     const currentUserId = req.user.id;
 
-    if (status === 'pending') {
+    if (status === 'pending') {  // validate the new status
         return res.status(400).json({
             message: "Bad Request",
             errors: { status: "Cannot change an attendance status to pending" }
         });
     }
 
-    const event = await Event.findByPk(eventId, {
-        include: {
-            model: Group,
-            as: 'Group'
+    try {
+        const event = await Event.findByPk(eventId, { // fetch the event along with its associated group and organizer
+            include: {
+                model: Group,
+                as: 'Group',
+                include: {
+                    model: User,
+                    as: 'Organizer'
+                }
+            }
+        });
+
+        if (!event) { // check if the event exists
+            return res.status(404).json({ message: "Event couldn't be found" });
         }
-    });
 
-    if (!event) {
-        return res.status(404).json({ message: "Event couldn't be found" });
+        const user = await User.findByPk(userId); // fetch the user to ensure they exist
+        if (!user) {
+            return res.status(404).json({ message: "User couldn't be found" });
+        }
+
+        const attendance = await Attendance.findOne({ where: { eventId, userId } }); // fetch the attendance record
+        if (!attendance) {
+            return res.status(404).json({ message: "Attendance between the user and the event does not exist" });
+        }
+        const membership = await Membership.findOne({ where: { groupId: event.groupId, userId: currentUserId } }); // fetch the current user's membership in the group
+
+        const isOrganizer = currentUserId === event.Group.organizerId; // check if the current user is authorized to update the attendance
+        const isCoHost = membership && membership.status === 'co-host';
+
+        if (!isOrganizer && !isCoHost) {
+            return res.status(403).json({ message: "Forbidden" });
+        }
+
+        attendance.status = status; // update the attendance status
+        await attendance.save();
+
+        return res.status(200).json({ // return the updated attendance details
+            id: attendance.id,
+            eventId: attendance.eventId,
+            userId: attendance.userId,
+            status: attendance.status
+        });
+    } catch (error) {
+        console.error('Failed to change attendance status:', error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
-
-    const user = await User.findByPk(userId);
-    if (!user) {
-        return res.status(404).json({ message: "User couldn't be found" });
-    }
-
-    const attendance = await Attendance.findOne({ where: { eventId, userId } });
-    if (!attendance) {
-        return res.status(404).json({ message: "Attendance between the user and the event does not exist" });
-    }
-
-    const membership = await Membership.findOne({ where: { groupId: event.groupId, userId: currentUserId } });
-    const isAuthorized = event.Group.organizerId === currentUserId || (membership && membership.status === 'co-host');
-    if (!isAuthorized) {
-        return res.status(403).json({ message: "Forbidden" }); // not authorized
-    }
-
-    attendance.status = status;
-    await attendance.save();
-
-    res.status(200).json({
-        id: attendance.id,
-        eventId: attendance.eventId,
-        userId: attendance.userId,
-        status: attendance.status
-    });
 });
 
 // DELETE /api/events/:eventId/attendance/:userId - delete attendance to an event
