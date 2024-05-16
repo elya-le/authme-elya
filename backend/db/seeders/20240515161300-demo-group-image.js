@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert(
-      'GroupImages',
+      { tableName: 'GroupImages', schema: options.schema }, 
       [
         {
           id: 1,  

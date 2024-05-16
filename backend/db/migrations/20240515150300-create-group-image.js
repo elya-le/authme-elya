@@ -23,9 +23,6 @@ module.exports = {
       url: {
         type: Sequelize.STRING,
         allowNull: false,
-        validate: {
-          isUrl: true,
-        },
       },
       preview: {
         type: Sequelize.BOOLEAN,
