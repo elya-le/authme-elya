@@ -24,7 +24,7 @@ router.delete('/group/:imageId', requireAuth, async (req, res) => {
     const isCoHost = membership !== null; 
 
     if (!isOrganizer && !isCoHost) {
-      return res.status(403).json({ message: "Forbidden" }); 
+      return res.status(403).json({ message: "Forbidden - You must be the group organizer or co-host to delete images" }); 
     }
 
   await groupImage.destroy(); 

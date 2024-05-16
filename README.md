@@ -1831,7 +1831,7 @@ Change the status of an attendance for an event specified by id.
 
     ```json
     {
-      "userId": 2,
+      "userId": 1,
       "status": "attending"
     }
     ```
@@ -1845,7 +1845,7 @@ Change the status of an attendance for an event specified by id.
     ```json
     {
       "id": 1,
-      "eventId": 1,
+      "eventId": 3,
       "userId": 2,
       "status": "attending"
     }
