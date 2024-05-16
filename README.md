@@ -1254,14 +1254,14 @@ Edit and returns an event specified by its id
 
     ```json
     {
-      "venueId": 1,
+      "venueId": 3,
       "name": "Downtown Doxies - First Meet and Greet",
       "type": "In person",
       "capacity": 250,
       "price": 5.00,
       "description": "The first paw-ty for our Doxie devotees! Come wag along and let your dachshunds dash and socialize!",
-      "startDate": "2024-30-19 20:00:00",
-      "endDate": "2024-30-19 22:00:00",
+      "startDate": "2024-05-19 20:00:00",
+      "endDate": "2024-05-19 22:00:00"
     }
     ```
 

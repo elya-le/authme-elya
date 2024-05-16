@@ -4,43 +4,42 @@ const { Event, Group, User, Membership, Attendance, EventImage, Venue } = requir
 const { check, validationResult } = require('express-validator');
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { sequelize } = require('../../db/models');
-const { handleValidationErrors } = require('../../utils/validation'); 
+const { handleValidationErrors } = require('../../utils/validation');
 const { where } = require('sequelize');
 
-router.use(restoreUser); 
+router.use(restoreUser);
 
-const authenticated = [restoreUser, requireAuth]; 
+const authenticated = [restoreUser, requireAuth];
 
 // GET /api/events - returns all events
 router.get('/', async (req, res) => {
     try {
         const events = await Event.findAll({
             include: [
-            {
-                model: Group,
-                as: 'Group',
-                attributes: ['id', 'name', 'city', 'state']
-            },
-            {
-                model: Venue,
-                as: 'Venue',
-                attributes: ['id', 'city', 'state']
-            },
-            {
-                model: Attendance,
-                as: 'Attendances',
-                attributes: []
-            }
+                {
+                    model: Group,
+                    as: 'Group',
+                    attributes: ['id', 'name', 'city', 'state']
+                },
+                {
+                    model: Venue,
+                    as: 'Venue',
+                    attributes: ['id', 'city', 'state']
+                },
+                {
+                    model: Attendance,
+                    as: 'Attendances',
+                    attributes: []
+                }
             ],
             attributes: ['id', 'groupId', 'venueId', 'name', 'type', 'startDate', 'endDate', 'previewImage', [sequelize.fn('COUNT', sequelize.col('Attendances.id')), 'numAttending']],
             group: ['Event.id', 'Group.id', 'Venue.id']
-        
-    });
-    
-    res.status(200).json({ Events: events });
-} catch (error) {
-    console.error('Failed to fetch events:', error);
-    res.status(500).json({ message: 'Internal server error' });
+        });
+
+        res.status(200).json({ Events: events });
+    } catch (error) {
+        console.error('Failed to fetch events:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
@@ -51,45 +50,45 @@ router.get('/:eventId', async (req, res) => {
     try {
         const event = await Event.findByPk(eventId, {
             include: [
-            {
-                model: Group,
-                as: 'Group',
-                attributes: ['id', 'name', 'city', 'state', 'private']
-            },
-            {
-                model: Venue,
-                as: 'Venue',
-                attributes: ['id', 'address', 'city', 'state', 'lat', 'lng']
-            },
-            {
-                model: Attendance,
-                as: 'Attendances',
-                attributes: ['id']
-            },
-            {
-                model: EventImage,
-                as: 'EventImages',
-                attributes: ['id', 'url', 'preview']
-            }
-        ]
-    });
+                {
+                    model: Group,
+                    as: 'Group',
+                    attributes: ['id', 'name', 'city', 'state', 'private']
+                },
+                {
+                    model: Venue,
+                    as: 'Venue',
+                    attributes: ['id', 'address', 'city', 'state', 'lat', 'lng']
+                },
+                {
+                    model: Attendance,
+                    as: 'Attendances',
+                    attributes: ['id']
+                },
+                {
+                    model: EventImage,
+                    as: 'EventImages',
+                    attributes: ['id', 'url', 'preview']
+                }
+            ]
+        });
 
-    if (!event) {
-        return res.status(404).json({ message: "Event couldn't be found" });
-    }
-    
-    event.dataValues.numAttending = event.Attendances.length;
-    
-    res.status(200).json(event);
-} catch (error) {
-    console.error('Failed to fetch event details:', error);
-    res.status(500).json({ message: 'Internal server error' });
+        if (!event) {
+            return res.status(404).json({ message: "Event couldn't be found" });
+        }
+
+        event.dataValues.numAttending = event.Attendances.length;
+
+        res.status(200).json(event);
+    } catch (error) {
+        console.error('Failed to fetch event details:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
-// GET /api/events - add query filters 
+// GET /api/events - add query filters
 router.get('/', async (req, res) => {
-    const { page = 1, size = 20, name, type, startDate } = req.query; 
+    const { page = 1, size = 20, name, type, startDate } = req.query;
 
     const errors = {};
     if (isNaN(page) || page < 1 || page > 10) errors.page = 'Page must be between 1 and 10';
@@ -100,29 +99,29 @@ router.get('/', async (req, res) => {
 
     if (Object.keys(errors).length) return res.status(400).json({ message: 'Bad Request', errors });
 
-    const where = {}; 
-    if (name) where.name = { [Op.iLike]: `%${name}%` }; 
-    if (type) where.type = type; 
-    if (startDate) where.startDate = { [Op.gte]: new Date(startDate) }; 
+    const where = {};
+    if (name) where.name = { [Op.iLike]: `%${name}%` };
+    if (type) where.type = type;
+    if (startDate) where.startDate = { [Op.gte]: new Date(startDate) };
 
     const limit = parseInt(size);
-    const offset = (parseInt(page) - 1) * limit; 
+    const offset = (parseInt(page) - 1) * limit;
 
     try {
         const events = await Event.findAll({
             where,
             include: [
                 { model: Group, attributes: ['id', 'name', 'city', 'state'] },
-                { model: Venue, attributes: ['id', 'city', 'state'] }, 
-                { model: Attendance, attributes: ['id'] }, 
-        ],
-        limit,
-        offset,
-    }); 
+                { model: Venue, attributes: ['id', 'city', 'state'] },
+                { model: Attendance, attributes: ['id'] },
+            ],
+            limit,
+            offset,
+        });
 
-    return res.json({ Events: events }); 
+        return res.json({ Events: events });
     } catch (err) {
-      return res.status(500).json({ error: err.message }); 
+        return res.status(500).json({ error: err.message });
     }
 });
 
@@ -160,15 +159,15 @@ const checkEventPermission = async (req, res, next) => {
     if (!isOrganizer && !isCoHost) {
         return res.status(403).json({ message: "Forbidden: You are not allowed to edit this event" });
     }
-    next(); 
+    next();
 };
 
-// Get /api/events/:eventID/attendees - get all Attendees specified by id
+// GET /api/events/:eventId/attendees - get all attendees for an event
 router.get('/:eventId/attendees', async (req, res) => {
     const { eventId } = req.params;
     const userId = req.user ? req.user.id : null;
 
-    const event = await Event.findByPk(eventId, { 
+    const event = await Event.findByPk(eventId, {
         include: {
             model: Group,
             as: 'Group',
@@ -178,16 +177,16 @@ router.get('/:eventId/attendees', async (req, res) => {
                 where: {
                     userId: userId,
                     status: ['member', 'inactive', 'pending']
-                    },
-            required: false
+                },
+                required: false
             }
         }
     });
     if (!event) {
-        return res.status(404).json({ message: "Event couldn't be found" }); 
+        return res.status(404).json({ message: "Event couldn't be found" });
     }
-    
-    const attendees = await Attendance.findAll({ 
+
+    const attendees = await Attendance.findAll({
         where: { eventId },
         include: {
             model: User,
@@ -196,25 +195,24 @@ router.get('/:eventId/attendees', async (req, res) => {
         }
     });
     let responseAttendees;
-    const isAuthorized = event.Group && event.Group.Memberships && event.Group.Memberships.length > 0; 
+    const isAuthorized = event.Group && event.Group.Memberships && event.Group.Memberships.length > 0;
 
     if (isAuthorized) {
-        responseAttendees = attendees.map(att => ({ 
+        responseAttendees = attendees.map(att => ({
             id: att.User.id,
             firstName: att.User.firstName,
             lastName: att.User.lastName,
             Attendance: { status: att.status }
         }));
-    } 
-    else {
-    responseAttendees = attendees 
-        .filter(att => att.status !== 'pending')
-        .map(att => ({
-            id: att.User.id,
-            firstName: att.User.firstName,
-            lastName: att.User.lastName,
-            Attendance: { status: att.status }
-        }));
+    } else {
+        responseAttendees = attendees
+            .filter(att => att.status !== 'pending')
+            .map(att => ({
+                id: att.User.id,
+                firstName: att.User.firstName,
+                lastName: att.User.lastName,
+                Attendance: { status: att.status }
+            }));
     }
     res.status(200).json({ Attendees: responseAttendees });
 });
@@ -227,20 +225,20 @@ const validateEvent = [
     check('price', 'Price must be a non-negative number').isFloat({ min: 0 }),
     check('description', 'Description is required').not().isEmpty(),
     check('startDate', 'Start date must be in the format YYYY-MM-DD HH:mm:ss')
-    .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
-    .custom((value, { req }) => new Date(value) > new Date()),
-check('endDate', 'End date must be in the format YYYY-MM-DD HH:mm:ss and after start date')
-    .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
-    .custom((value, { req }) => new Date(value) > new Date(req.body.startDate)),
+        .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
+        .custom((value, { req }) => new Date(value) > new Date()),
+    check('endDate', 'End date must be in the format YYYY-MM-DD HH:mm:ss and after start date')
+        .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
+        .custom((value, { req }) => new Date(value) > new Date(req.body.startDate)),
     check('venueId', 'Venue ID must be an integer').isInt()
 ];
 
-// POST /api/events/:eventId/attendance - attend an event based event id
+// POST /api/events/:eventId/attendance - attend an event based on event id
 router.post('/:eventId/attendance', requireAuth, async (req, res) => {
     const { eventId } = req.params;
     const userId = req.user.id;
 
-    const event = await Event.findByPk(eventId, { 
+    const event = await Event.findByPk(eventId, {
         include: {
             model: Group,
             as: 'Group'
@@ -251,22 +249,22 @@ router.post('/:eventId/attendance', requireAuth, async (req, res) => {
         return res.status(404).json({ message: "Event couldn't be found" });
     }
 
-    const membership = await Membership.findOne({ where: { groupId: event.groupId, userId } }); 
+    const membership = await Membership.findOne({ where: { groupId: event.groupId, userId } });
     if (!membership) {
-        return res.status(403).json({ message: "You must be a member of the group to request attendance" }); 
+        return res.status(403).json({ message: "You must be a member of the group to request attendance" });
     }
 
-    const existingAttendance = await Attendance.findOne({ where: { eventId, userId } }); 
+    const existingAttendance = await Attendance.findOne({ where: { eventId, userId } });
     if (existingAttendance) {
         if (existingAttendance.status === 'pending') {
-            return res.status(400).json({ message: "Attendance has already been requested" }); 
+            return res.status(400).json({ message: "Attendance has already been requested" });
         }
-    if (existingAttendance.status === 'attending') {
-        return res.status(400).json({ message: "User is already an attendee of the event" }); 
+        if (existingAttendance.status === 'attending') {
+            return res.status(400).json({ message: "User is already an attendee of the event" });
         }
     }
 
-    const attendance = await Attendance.create({ 
+    const attendance = await Attendance.create({
         eventId,
         userId,
         status: 'pending'
@@ -318,13 +316,13 @@ router.put('/:eventId', authenticated, checkEventPermission, validateEvent, hand
         if (!event) {
             return res.status(404).json({ message: "Event couldn't be found" });
         }
-        const venue = await Venue.findByPk(venueId); 
+        const venue = await Venue.findByPk(venueId);
         if (!venue) {
             return res.status(404).json({ message: "Venue couldn't be found" });
         }
-        const start = new Date(startDate); 
+        const start = new Date(startDate);
         const end = new Date(endDate);
-        if (isNaN(start.getTime()) || isNaN(end.getTime())) { 
+        if (isNaN(start.getTime()) || isNaN(end.getTime())) {
             return res.status(400).json({ message: "Invalid date format" });
         }
         if (start >= end) {
@@ -334,7 +332,7 @@ router.put('/:eventId', authenticated, checkEventPermission, validateEvent, hand
             return res.status(400).json({ message: "Start date must be in the future" });
         }
 
-        await event.update({  
+        await event.update({
             venueId,
             name,
             type,
@@ -371,7 +369,7 @@ const checkEventDeletionPermission = async (req, res, next) => {
             return res.status(404).json({ message: "Event couldn't be found" });
         }
 
-        if (req.user.id === event.Group.Organizer.id || 
+        if (req.user.id === event.Group.Organizer.id ||
             event.Group.Memberships.some(membership => membership.userId === req.user.id && membership.status === 'co-host')) {
             return next();
         }
@@ -389,14 +387,14 @@ router.put('/:eventId/attendance', requireAuth, async (req, res) => {
     const { userId, status } = req.body;
     const currentUserId = req.user.id;
 
-    if (status === 'pending') { 
+    if (status === 'pending') {
         return res.status(400).json({
             message: "Bad Request",
             errors: { status: "Cannot change an attendance status to pending" }
         });
     }
-    
-    const event = await Event.findByPk(eventId, { 
+
+    const event = await Event.findByPk(eventId, {
         include: {
             model: Group,
             as: 'Group'
@@ -404,26 +402,26 @@ router.put('/:eventId/attendance', requireAuth, async (req, res) => {
     });
 
     if (!event) {
-        return res.status(404).json({ message: "Event couldn't be found" }); 
+        return res.status(404).json({ message: "Event couldn't be found" });
     }
 
-    const user = await User.findByPk(userId); 
+    const user = await User.findByPk(userId);
     if (!user) {
-        return res.status(404).json({ message: "User couldn't be found" }); 
+        return res.status(404).json({ message: "User couldn't be found" });
     }
 
-    const attendance = await Attendance.findOne({ where: { eventId, userId } }); 
+    const attendance = await Attendance.findOne({ where: { eventId, userId } });
     if (!attendance) {
-        return res.status(404).json({ message: "Attendance between the user and the event does not exist" }); 
+        return res.status(404).json({ message: "Attendance between the user and the event does not exist" });
     }
 
-    const membership = await Membership.findOne({ where: { groupId: event.groupId, userId: currentUserId } }); 
+    const membership = await Membership.findOne({ where: { groupId: event.groupId, userId: currentUserId } });
     const isAuthorized = event.Group.organizerId === currentUserId || (membership && membership.status === 'co-host');
     if (!isAuthorized) {
-      return res.status(403).json({ message: "Forbidden" }); // not authorized
+        return res.status(403).json({ message: "Forbidden" }); // not authorized
     }
 
-    attendance.status = status; 
+    attendance.status = status;
     await attendance.save();
 
     res.status(200).json({
@@ -434,12 +432,12 @@ router.put('/:eventId/attendance', requireAuth, async (req, res) => {
     });
 });
 
-// DELETE /api/events/:eventId/attendance/:userId - delete attendance to an event 
+// DELETE /api/events/:eventId/attendance/:userId - delete attendance to an event
 router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res) => {
     const { eventId, userId } = req.params;
     const currentUserId = req.user.id;
 
-    const event = await Event.findByPk(eventId, { 
+    const event = await Event.findByPk(eventId, {
         include: {
             model: Group,
             as: 'Group'
@@ -447,29 +445,29 @@ router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res) => {
     });
 
     if (!event) {
-        return res.status(404).json({ message: "Event couldn't be found" }); 
+        return res.status(404).json({ message: "Event couldn't be found" });
     }
 
-    const user = await User.findByPk(userId); 
+    const user = await User.findByPk(userId);
     if (!user) {
-        return res.status(404).json({ message: "User couldn't be found" }); 
+        return res.status(404).json({ message: "User couldn't be found" });
     }
 
-    const attendance = await Attendance.findOne({ where: { eventId, userId } }); 
+    const attendance = await Attendance.findOne({ where: { eventId, userId } });
     if (!attendance) {
-        return res.status(404).json({ message: "Attendance does not exist for this User" }); 
+        return res.status(404).json({ message: "Attendance does not exist for this User" });
     }
 
-    const isHost = event.Group.organizerId === currentUserId; 
-    const isSelf = userId == currentUserId; 
+    const isHost = event.Group.organizerId === currentUserId;
+    const isSelf = userId == currentUserId;
 
     if (!isHost && !isSelf) {
-        return res.status(403).json({ message: "Forbidden" }); 
+        return res.status(403).json({ message: "Forbidden" });
     }
 
-    await attendance.destroy(); 
+    await attendance.destroy();
 
-    res.status(200).json({ message: "Successfully deleted attendance from event" }); 
+    res.status(200).json({ message: "Successfully deleted attendance from event" });
 });
 
 // DELETE /api/events/:eventId - deletes an event
