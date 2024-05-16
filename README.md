@@ -899,76 +899,76 @@ Returns all the events.
   * Body:
 
     ```json
-   {
-    "Events": [
-        {
-            "id": 1,
-            "groupId": 1,
-            "venueId": 1,
-            "name": "Low Rider Limbo",
-            "type": "In person",
-            "startDate": "2024-05-14T18:41:10.481Z",
-            "endDate": "2024-05-14T21:41:10.481Z",
-            "previewImage": null,
-            "numAttending": 2,
-            "Group": {
-                "id": 1,
-                "name": "Urban Trailblazers",
-                "city": "New York",
-                "state": "NY"
-            },
-            "Venue": {
-                "id": 1,
-                "city": "Manhattan",
-                "state": "NY"
-            }
-        },
-        {
-            "id": 2,
-            "groupId": 2,
-            "venueId": 2,
-            "name": "Brush Your Chow Day",
-            "type": "In person",
-            "startDate": "2024-05-14T18:41:10.482Z",
-            "endDate": "2024-05-14T20:41:10.482Z",
-            "previewImage": null,
-            "numAttending": 1,
-            "Group": {
-                "id": 2,
-                "name": "Beachfront Barks",
-                "city": "New York",
-                "state": "NY"
-            },
-            "Venue": {
-                "id": 2,
-                "city": "New York",
-                "state": "NY"
-            }
-        },
-        {
-            "id": 3,
-            "groupId": 3,
-            "venueId": 3,
-            "name": "Hound Day - NY Ren Faire",
-            "type": "In person",
-            "startDate": "2024-05-14T18:41:10.482Z",
-            "endDate": "2024-05-14T22:41:10.482Z",
-            "previewImage": null,
-            "numAttending": 0,
-            "Group": {
-                "id": 3,
-                "name": "Big Pup",
-                "city": "New York",
-                "state": "NY"
-            },
-            "Venue": {
-                "id": 3,
-                "city": "Brooklyn",
-                "state": "NY"
-            }
-        }
-    ]
-  }
+    {
+     "Events": [
+         {
+             "id": 1,
+             "groupId": 1,
+             "venueId": 1,
+             "name": "Low Rider Limbo",
+             "type": "In person",
+             "startDate": "2024-05-14T18:41:10.481Z",
+             "endDate": "2024-05-14T21:41:10.481Z",
+             "previewImage": null,
+             "numAttending": 2,
+             "Group": {
+                 "id": 1,
+                 "name": "Urban Trailblazers",
+                 "city": "New York",
+                 "state": "NY"
+             },
+             "Venue": {
+                 "id": 1,
+                 "city": "Manhattan",
+                 "state": "NY"
+             }
+         },
+         {
+             "id": 2,
+             "groupId": 2,
+             "venueId": 2,
+             "name": "Brush Your Chow Day",
+             "type": "In person",
+             "startDate": "2024-05-14T18:41:10.482Z",
+             "endDate": "2024-05-14T20:41:10.482Z",
+             "previewImage": null,
+             "numAttending": 1,
+             "Group": {
+                 "id": 2,
+                 "name": "Beachfront Barks",
+                 "city": "New York",
+                 "state": "NY"
+             },
+             "Venue": {
+                 "id": 2,
+                 "city": "New York",
+                 "state": "NY"
+             }
+         },
+         {
+             "id": 3,
+             "groupId": 3,
+             "venueId": 3,
+             "name": "Hound Day - NY Ren Faire",
+             "type": "In person",
+             "startDate": "2024-05-14T18:41:10.482Z",
+             "endDate": "2024-05-14T22:41:10.482Z",
+             "previewImage": null,
+             "numAttending": 0,
+             "Group": {
+                 "id": 3,
+                 "name": "Big Pup",
+                 "city": "New York",
+                 "state": "NY"
+             },
+             "Venue": {
+                 "id": 3,
+                 "city": "Brooklyn",
+                 "state": "NY"
+             }
+         }
+     ]
+    
     ```
 
 ### Get all Events of a Group specified by its id
@@ -1084,7 +1084,7 @@ Returns the details of an event specified by its id.
       ],
       "EventImages": [],
       "numAttending": 2
-  }
+    }
     ```
 
 * Error response: Couldn't find an Event with the specified id

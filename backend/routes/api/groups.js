@@ -406,43 +406,45 @@ router.post('/:groupId/venues', authenticated, validateVenue, handleValidationEr
 });
 
 // POST /api/groups/:groupId/events - create an event for a specific group
-router.post('/:groupId/events', authenticated, async (req, res) => {
+router.post('/:groupId/events', authenticated, validateEvent, handleValidationErrors, async (req, res) => {
     const { groupId } = req.params;
     const { name, type, startDate, endDate, venueId, description, capacity, price } = req.body;
 
     try {
-        const group = await Group.findByPk(groupId);  
-    if (!group) {
-        return res.status(404).json({ message: "Group couldn't be found" });
-    }
-    const venue = await Venue.findByPk(venueId); 
-    if (!venueId) {
-        return res.status(400).json({ message: "Venue ID is required" });
-    }
-    if (!venue) return res.status(404).json({ message: "Venue couldn't be found" });
+        const group = await Group.findByPk(groupId);
+        if (!group) {
+            return res.status(404).json({ message: "Group couldn't be found" });
+        }
+        const venue = await Venue.findByPk(venueId);
+        if (!venueId) {
+            return res.status(400).json({ message: "Venue ID is required" });
+        }
+        if (!venue) {
+            return res.status(404).json({ message: "Venue couldn't be found" });
+        }
+        if (req.user.id !== group.organizerId) {
+            return res.status(403).json({ message: "Forbidden: You are not allowed to create events for this group" });
+        }
 
-    if (req.user.id !== group.organizerId) { 
-        return res.status(403).json({ message: "Forbidden: You are not allowed to create events for this group" });
-    }
-    const event = await Event.create({
-        venueId,
-        groupId,
-        name,
-        type,
-        capacity,
-        price,
-        description,
-        startDate,
-        endDate
-    });
-    
-    res.status(201).json(event);
-} catch (error) {
-    console.error('Failed to create event:', error);
-    if (error.name === 'SequelizeValidationError') {
-        return res.status(400).json({ message: 'Validation error', errors: error.errors.map(e => e.message) });
-    }
-    res.status(500).json({ message: 'Internal server error' });
+        const event = await Event.create({
+            venueId,
+            groupId,
+            name,
+            type,
+            capacity,
+            price,
+            description,
+            startDate,
+            endDate
+        });
+
+        res.status(201).json(event);
+    } catch (error) {
+        console.error('Failed to create event:', error);
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({ message: 'Validation error', errors: error.errors.map(e => e.message) });
+        }
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
