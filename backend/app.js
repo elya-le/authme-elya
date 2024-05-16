@@ -9,6 +9,8 @@ const csurf = require('csurf');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
+const { Pool } = require('pg');
 
 const { environment } = require('./config');
 const isProduction = environment === 'production';
@@ -36,13 +38,26 @@ app.use(helmet({
     contentSecurityPolicy: false,
 }));
 
+// Set up PostgreSQL connection pool
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        require: true,
+        rejectUnauthorized: false,
+    },
+});
+
 app.use(session({
+    store: new pgSession({
+        pool: pool, // Connection pool
+        tableName: 'session' // Use another table-name than the default "session"
+    }),
     secret: 'secret-key',
     resave: false,
     saveUninitialized: false,
     cookie: {
         secure: isProduction,
-        maxAge: 1000 * 60 * 60 * 24,
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
         httpOnly: true,
         sameSite: isProduction ? 'None' : 'Lax',
     }
@@ -67,6 +82,7 @@ app.get('/api/csrf/restore', (req, res) => {
 
 // add a log to show incoming cookies
 app.use((req, res, next) => {
+    console.log('Cookies: ', req.cookies); // log incoming cookies
     next();
 });
 
