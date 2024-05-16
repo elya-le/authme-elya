@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert(
-      'Groups',
+      { tableName: 'Groups', schema: options.schema }, 
       [
         {
           id: 1,  // Ensure these IDs are unique and consistent
@@ -50,10 +50,13 @@ module.exports = {
     );
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Groups';
-    const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
-      name: { [Op.in]: ['Urban Trailblazers', 'Beachfront Barks', 'Big Pup'] },
-    });
+    await queryInterface.bulkDelete(
+      { tableName: 'Groups', schema: options.schema }, 
+      {
+        name: {
+          [Sequelize.Op.in]: ['Group 1', 'Group 2'],
+        },
+      }
+    );
   },
 };

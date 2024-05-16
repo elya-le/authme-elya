@@ -1,13 +1,14 @@
 'use strict';
+
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;
+  options.schema = process.env.SCHEMA; 
 }
 
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert(
-      'Events',
+      { tableName: 'Events', schema: options.schema }, 
       [
         {
           id: 1,  // Ensure these IDs are unique and consistent
@@ -52,14 +53,17 @@ module.exports = {
           updatedAt: new Date(),
         }
       ],
-      options
+      { validate: true } 
     );
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Events';
-    const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
-      id: { [Op.in]: [1, 2, 3] },
-    });
+    await queryInterface.bulkDelete(
+      { tableName: 'Events', schema: options.schema }, 
+      {
+        name: {
+          [Sequelize.Op.in]: ['Low Rider Limbo', 'Brush Your Chow Day', 'Hound Day - NY Ren Faire'],
+        },
+      }
+    );
   },
 };

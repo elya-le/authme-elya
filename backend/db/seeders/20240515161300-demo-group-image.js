@@ -10,7 +10,7 @@ module.exports = {
       'GroupImages',
       [
         {
-          id: 1,  // Ensure these IDs are unique and consistent
+          id: 1,  
           groupId: 1,
           url: 'http://example.com/path/to/group1image.jpg',
           preview: true,
@@ -39,10 +39,13 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = 'GroupImages';
-    const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
-      groupId: { [Op.in]: [1, 2, 3] },
-    });
+    await queryInterface.bulkDelete(
+      { tableName: 'GroupImages', schema: options.schema }, 
+      {
+        url: {
+          [Sequelize.Op.in]: ['http://example.com/path/to/group1image.jpg', 'http://example.com/path/to/group2image.jpg', 'http://example.com/path/to/group3image.jpg'],
+        },
+      }
+    );
   },
 };

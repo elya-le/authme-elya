@@ -42,10 +42,10 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
-    }, options);
+    }, options); 
   },
   async down(queryInterface, Sequelize) {
     options.tableName = 'GroupImages';
-    return queryInterface.dropTable(options);
+    return queryInterface.dropTable(options); 
   },
 };

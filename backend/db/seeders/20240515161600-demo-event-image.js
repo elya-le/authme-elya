@@ -1,13 +1,13 @@
 'use strict';
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;
+  options.schema = process.env.SCHEMA; 
 }
 
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert(
-      'EventImages',
+      { tableName: 'EventImages', schema: options.schema }, 
       [
         {
           id: 1,  // Ensure these IDs are unique and consistent
@@ -34,14 +34,18 @@ module.exports = {
           updatedAt: new Date(),
         },
       ],
-      options
+      { validate: true } 
     );
   },
+
   async down(queryInterface, Sequelize) {
-    options.tableName = 'EventImages';
-    const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
-      id: { [Op.in]: [1, 2, 3] },
-    });
+    await queryInterface.bulkDelete(
+      { tableName: 'EventImages', schema: options.schema }, 
+      {
+        url: {
+          [Sequelize.Op.in]: ['http://example.com/path/to/event1image.jpg', 'http://example.com/path/to/event2image.jpg','http://example.com/path/to/event3image.jpg',],
+        },
+      }
+    );
   },
 };

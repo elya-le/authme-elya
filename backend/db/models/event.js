@@ -83,7 +83,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Event',
-    schema: process.env.SCHEMA,
+    schema: process.env.SCHEMA, 
     timestamps: true, 
   });
   return Event;

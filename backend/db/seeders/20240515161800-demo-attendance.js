@@ -1,13 +1,12 @@
 'use strict';
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;
+  options.schema = process.env.SCHEMA; 
 }
-
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert(
-      'Attendances',
+      { tableName: 'Attendances', schema: options.schema }, 
       [
         {
           id: 1,  
@@ -34,14 +33,18 @@ module.exports = {
           updatedAt: new Date(),
         }
       ],
-      options
+      { validate: true } 
     );
   },
+
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Attendances';
-    const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
-      id: { [Op.in]: [1, 2, 3] },
-    });
+    await queryInterface.bulkDelete(
+      { tableName: 'Attendances', schema: options.schema }, 
+      {
+        status: {
+          [Sequelize.Op.in]: ['attending'],
+        },
+      }
+    );
   },
 };

@@ -59,8 +59,7 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         sequelize,
         modelName: 'Attendance',
-        schema: process.env.SCHEMA,
+        schema: process.env.SCHEMA, 
     });
-
     return Attendance;
 };

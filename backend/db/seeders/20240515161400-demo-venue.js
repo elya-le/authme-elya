@@ -1,16 +1,16 @@
 'use strict';
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;
+  options.schema = process.env.SCHEMA; 
 }
 
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert(
-      'Venues',
+      { tableName: 'Venues', schema: options.schema }, 
       [
         {
-          id: 1,  // Ensure these IDs are unique and consistent
+          id: 1,  
           groupId: 1,
           address: 'Times Square',
           city: 'Manhattan',
@@ -43,14 +43,18 @@ module.exports = {
           updatedAt: new Date(),
         }
       ],
-      options
+      { validate: true } 
     );
   },
+
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Venues';
-    const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
-      groupId: { [Op.in]: [1, 2, 3] },
-    });
+    await queryInterface.bulkDelete(
+      { tableName: 'Venues', schema: options.schema }, 
+      {
+        address: {
+          [Sequelize.Op.in]: ['Times Square', 'Sheep Meadow E 65th St', 'Domino Park'],
+        },
+      }
+    );
   },
 };

@@ -42,8 +42,8 @@ module.exports = (sequelize, DataTypes) => {
                 onDelete: 'CASCADE', 
                 onUpdate: 'CASCADE' 
             });
+        }
     }
-};
     Group.init(
         {
             id: {
@@ -110,12 +110,11 @@ module.exports = (sequelize, DataTypes) => {
             previewImage: {
                 type: DataTypes.STRING,
                 allowNull: true  
-            }
+            },
         }, {
             sequelize,
             modelName: 'Group',
-            schema: process.env.SCHEMA,
-        }
-    );
+            schema: process.env.SCHEMA, 
+        });
     return Group;
 };

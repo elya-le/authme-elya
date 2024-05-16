@@ -1,9 +1,9 @@
 'use strict';
-const { Model, DataTypes } = require('sequelize');
+const { Model } = require('sequelize');
 
-module.exports = (sequelize) => { 
-    class Venue extends Model { 
-        static associate(models) { 
+module.exports = (sequelize, DataTypes) => {
+    class Venue extends Model {
+        static associate(models) {
             Venue.belongsTo(models.Group, {
                 foreignKey: 'groupId', 
                 as: 'Group', 
@@ -58,14 +58,10 @@ module.exports = (sequelize) => {
                     isFloat: true  
                 }
             }
-        },
-        {
-            sequelize,            
-            modelName: 'Venue',    
-            tableName: 'Venues',
-            schema: process.env.SCHEMA,   
-            timestamps: false      
-        }
-    );
+        }, {
+            sequelize,
+            modelName: 'Venue',
+            schema: process.env.SCHEMA, 
+        });
     return Venue;
 };

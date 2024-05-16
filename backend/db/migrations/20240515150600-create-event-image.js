@@ -1,7 +1,7 @@
 'use strict';
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA; // use schema in production
+  options.schema = process.env.SCHEMA; 
 }
 
 module.exports = {
@@ -42,10 +42,10 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
-    }, options);
+    }, options); 
   },
   async down(queryInterface, Sequelize) {
     options.tableName = 'EventImages';
-    return queryInterface.dropTable(options);
+    return queryInterface.dropTable(options); 
   },
 };
