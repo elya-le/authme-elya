@@ -20,7 +20,7 @@ module.exports = {
           id: 2,
           eventId: 1,
           userId: 2,
-          status: 'attending',
+          status: 'waitlist',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -28,7 +28,7 @@ module.exports = {
           id: 3,
           eventId: 2,
           userId: 2,
-          status: 'pending',
+          status: 'attending',
           createdAt: new Date(),
           updatedAt: new Date(),
         }
@@ -42,7 +42,7 @@ module.exports = {
       { tableName: 'Attendances', schema: options.schema }, 
       {
         status: {
-          [Sequelize.Op.in]: ['pending', 'attending', 'pending'],
+          [Sequelize.Op.in]: ['pending', 'waitlist', 'attending', 'canceled'],
         },
       }
     );

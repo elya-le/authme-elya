@@ -42,7 +42,7 @@ module.exports = {
       { tableName: 'Memberships', schema: options.schema }, 
       {
         status: {
-          [Sequelize.Op.in]: ['active', 'inactive', 'pending'],
+          [Sequelize.Op.in]: ['pending', 'member', 'co-host', 'inactive'],
         },
       }
     );

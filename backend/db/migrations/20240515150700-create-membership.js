@@ -28,7 +28,7 @@ module.exports = {
         onUpdate: 'CASCADE',
       },
       status: {
-        type: Sequelize.ENUM('active', 'inactive', 'pending'),
+        type: Sequelize.ENUM('pending', 'member', 'co-host', 'inactive'),
         allowNull: false,
       },
       createdAt: {
