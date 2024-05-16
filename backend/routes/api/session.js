@@ -7,7 +7,6 @@ const { body, validationResult } = require('express-validator');
 const { User } = require('../../db/models');
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 
-
 // GET /api/session - return the current user
 router.get('/', restoreUser, (req, res) => {
     if (req.user) {
@@ -25,14 +24,15 @@ router.get('/', restoreUser, (req, res) => {
     }
 });
 
+
 // POST - logging in a user
 router.post('/',
     [
-        body('credential').not().isEmpty().withMessage('Email or username is required'),
-        body('password').not().isEmpty().withMessage('Password is required')
+        body('credential').not().isEmpty().withMessage('Email or username is required'), 
+        body('password').not().isEmpty().withMessage('Password is required') 
     ],
     async (req, res) => {
-        const errors = validationResult(req);
+        const errors = validationResult(req); 
         if (!errors.isEmpty()) {
             return res.status(400).json({
                 message: "Bad Request",
@@ -44,7 +44,7 @@ router.post('/',
         }
 
         const { credential, password } = req.body;
-        const normalizedCredential = credential.toLowerCase(); 
+        const normalizedCredential = credential.toLowerCase(); // normalize credential to lower case
         const user = await User.findOne({
             where: {
                 [Op.or]: [
@@ -54,9 +54,13 @@ router.post('/',
             },
             attributes: ['id', 'email', 'username', 'firstName', 'lastName', 'hashedPassword']
         });
-    
-        if (user && bcrypt.compareSync(password, user.hashedPassword)) {
-            setTokenCookie(res, user); 
+
+        // debugging logs
+        console.log("User found:", user); 
+        console.log("Password provided:", password); 
+
+        if (user && bcrypt.compareSync(password, user.hashedPassword)) { // compare provided password with stored hashed password
+            setTokenCookie(res, user); // set the token cookie for the user
 
             return res.json({
                 user: {
