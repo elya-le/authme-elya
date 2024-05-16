@@ -70,6 +70,11 @@ app.use((req, res, next) => {
     next();
 });
 
+// Root URL route
+app.get('/', (req, res) => {
+    res.send('Welcome to the MeetUp Clone API');
+});
+
 // use the routes defined in your routes folder
 app.use(routes);
 
