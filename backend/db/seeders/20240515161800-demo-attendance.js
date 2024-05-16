@@ -9,7 +9,6 @@ module.exports = {
       { tableName: 'Attendances', schema: options.schema }, 
       [
         {
-          id: 1,  
           eventId: 1,
           userId: 1,
           status: 'pending',
@@ -25,7 +24,6 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          id: 3,
           eventId: 2,
           userId: 2,
           status: 'attending',

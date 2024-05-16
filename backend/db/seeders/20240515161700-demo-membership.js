@@ -9,7 +9,6 @@ module.exports = {
       { tableName: 'Memberships', schema: options.schema }, 
       [
         {
-          id: 1,  
           userId: 1,
           groupId: 1,
           status: 'pending',
@@ -17,7 +16,6 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          id: 2,
           userId: 2,
           groupId: 1,
           status: 'member',
@@ -25,7 +23,6 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          id: 3,
           userId: 1,
           groupId: 2,
           status: 'co-host',

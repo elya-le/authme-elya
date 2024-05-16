@@ -10,7 +10,6 @@ module.exports = {
       { tableName: 'EventImages', schema: options.schema }, 
       [
         {
-          id: 1,  // Ensure these IDs are unique and consistent
           eventId: 1,
           url: 'http://example.com/path/to/event1image.jpg',
           preview: true,
@@ -18,7 +17,6 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          id: 2,
           eventId: 2,
           url: 'http://example.com/path/to/event2image.jpg',
           preview: true,
@@ -26,7 +24,6 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          id: 3,
           eventId: 3,
           url: 'http://example.com/path/to/event3image.jpg',
           preview: true,
