@@ -328,6 +328,8 @@ router.post('/', validateGroup, async (req, res, next) => {
         });
     }
 
+    const t = await sequelize.transaction(); 
+
     try {
         const group = await Group.create({
             organizerId: user.id,
@@ -337,13 +339,24 @@ router.post('/', validateGroup, async (req, res, next) => {
             private,
             city,
             state,
-        });
+        }, { transaction: t });
+
+        // Create a membership for the organizer
+        await Membership.create({
+            userId: user.id,
+            groupId: group.id,
+            status: 'co-host' // or 'organizer' depending on your logic
+        }, { transaction: t });
+
+        await t.commit(); 
 
         return res.status(201).json(group);
     } catch (error) {
+        await t.rollback(); 
         next(error);
     }
 });
+
 
 // POST /api/groups/:groupId/images - adds an image to a group
 router.post('/:groupId/images', authenticated, async (req, res) => {
@@ -579,7 +592,7 @@ router.put('/:groupId/membership', restoreUser, requireAuth, async (req, res) =>
 
         if (membership.status === 'pending' && status === 'member') {
             if (!(userId === group.organizerId || group.Memberships.some(m => m.userId === userId && m.status === 'co-host'))) {
-                return res.status(403).json({ message: "Forbidden: You are not allowed to change the membership status" });
+                return res.status(403).json({ message: "Forbidden: You are not authorized to change the membership status" });
             }
         }
 
