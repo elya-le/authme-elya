@@ -1,12 +1,12 @@
 'use strict';
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA; 
+  options.schema = process.env.SCHEMA;
 }
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert(
-      { tableName: 'Attendances', schema: options.schema }, 
+      { tableName: 'Attendances', schema: options.schema },
       [
         {
           eventId: 1,
@@ -16,7 +16,6 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          id: 2,
           eventId: 1,
           userId: 2,
           status: 'waitlist',
@@ -31,13 +30,13 @@ module.exports = {
           updatedAt: new Date(),
         }
       ],
-      { validate: true } 
+      { validate: true }
     );
   },
 
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete(
-      { tableName: 'Attendances', schema: options.schema }, 
+      { tableName: 'Attendances', schema: options.schema },
       {
         status: {
           [Sequelize.Op.in]: ['pending', 'waitlist', 'attending', 'canceled'],
@@ -46,3 +45,4 @@ module.exports = {
     );
   },
 };
+
