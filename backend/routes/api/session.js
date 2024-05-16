@@ -44,7 +44,7 @@ router.post('/',
         }
 
         const { credential, password } = req.body;
-        const normalizedCredential = credential.toLowerCase(); // normalize credential to lower case
+        const normalizedCredential = credential.toLowerCase(); 
         const user = await User.findOne({
             where: {
                 [Op.or]: [
@@ -56,31 +56,33 @@ router.post('/',
         });
 
         // debugging logs
-        console.log("User found:", user); 
-        console.log("Password provided:", password); 
+        console.log("User found:", user); // log the user object
+        console.log("Password provided:", password); // log the provided password
 
-        if (user && bcrypt.compareSync(password, user.hashedPassword)) { // compare provided password with stored hashed password
-            setTokenCookie(res, user); // set the token cookie for the user
+        if (user) {
+            const hashedPassword = user.hashedPassword.toString(); // convert hashedPassword from Buffer to string
+            if (bcrypt.compareSync(password, hashedPassword)) { // compare provided password with stored hashed password
+                setTokenCookie(res, user); // set the token cookie for the user
 
-            return res.json({
-                user: {
-                    id: user.id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    username: user.username
-                }
-            });
-        } else {
-            return res.status(401).json({
-                message: "Invalid credentials"
-            });
+                return res.json({
+                    user: {
+                        id: user.id,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email,
+                        username: user.username
+                    }
+                });
+            }
         }
+        
+        return res.status(401).json({
+            message: "Invalid credentials"
+        });
     }
 );
 
 module.exports = router;
-
 
 
 
