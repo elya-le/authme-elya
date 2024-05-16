@@ -318,7 +318,7 @@ const validateEvent = [
 router.post('/', validateGroup, async (req, res, next) => {
     const { user } = req;
     const { name, about, type, private, city, state } = req.body;
-    
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -326,7 +326,7 @@ router.post('/', validateGroup, async (req, res, next) => {
             errors: errors.mapped()
         });
     }
-    
+
     try {
         const group = await Group.create({
             organizerId: user.id,
@@ -337,7 +337,7 @@ router.post('/', validateGroup, async (req, res, next) => {
             city,
             state,
         });
-        
+
         return res.status(201).json(group);
     } catch (error) {
         next(error);
