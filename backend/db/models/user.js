@@ -1,5 +1,4 @@
 'use strict';
-
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -71,11 +70,6 @@ User.init(
     {
       sequelize,
       modelName: 'User',
-      defaultScope: { 
-        attributes: { 
-          exclude: ['hashedPassword', 'firstName', 'lastName', 'email', "createdAt", "updatedAt"],
-        },
-      },
       schema: process.env.SCHEMA
     }
   );

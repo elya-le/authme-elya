@@ -8,12 +8,12 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up(queryInterface, Sequelize) {
     if (process.env.NODE_ENV === 'production') {
-      await queryInterface.createSchema(process.env.SCHEMA); 
+      await queryInterface.createSchema(options.schema); 
     }
   },
   async down(queryInterface, Sequelize) {
     if (process.env.NODE_ENV === 'production') {
-      await queryInterface.dropSchema(process.env.SCHEMA); 
+      await queryInterface.dropSchema(options.schema); 
     }
   }
 };

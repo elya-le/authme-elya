@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert(
-      'Users',
+      { tableName: 'Users', schema: options.schema }, 
       [
         {
           id: 1,  
@@ -43,15 +43,18 @@ module.exports = {
           updatedAt: new Date(),
         },
       ],
-      { ...options, validate: true } 
+      { validate: true } 
     );
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Users';
-    const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
-      username: { [Op.in]: ['Demo-User', 'Demo-User2', 'Demo-User3'] },
-    });
+    await queryInterface.bulkDelete(
+      { tableName: 'Users', schema: options.schema }, 
+      {
+        username: {
+          [Sequelize.Op.in]: ['Demo-User', 'Demo-User2', 'Demo-User3'],
+        },
+      }
+    );
   },
 };
