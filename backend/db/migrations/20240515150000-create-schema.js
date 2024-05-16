@@ -12,7 +12,7 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     if (process.env.NODE_ENV === 'production') {
-      await queryInterface.dropSchema(options.schema); // drop schema if in production
+      await queryInterface.dropSchema(options.schema, { ifExists: true }); // drop schema if it exists
     }
   }
 };
