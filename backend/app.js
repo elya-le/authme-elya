@@ -88,7 +88,7 @@ app.use((req, res, next) => {
 
 // Root URL route
 app.get('/', (req, res) => {
-    res.send('Welcome to the MeetUp Clone API');
+    res.send('Hello World!');
 });
 
 // use the routes defined in your routes folder
