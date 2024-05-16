@@ -27,7 +27,7 @@ module.exports = {
         onUpdate: 'CASCADE',
       },
       status: {
-        type: Sequelize.ENUM('confirmed', 'canceled', 'pending'),
+        type: Sequelize.ENUM('pending', 'attending', 'pending'),
         allowNull: false,
       },
       createdAt: {
