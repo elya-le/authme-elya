@@ -55,10 +55,6 @@ router.post('/',
             attributes: ['id', 'email', 'username', 'firstName', 'lastName', 'hashedPassword']
         });
 
-        // debugging logs
-        console.log("User found:", user); // log the user object
-        console.log("Password provided:", password); // log the provided password
-
         if (user) {
             const hashedPassword = user.hashedPassword.toString(); // convert hashedPassword from Buffer to string
             if (bcrypt.compareSync(password, hashedPassword)) { // compare provided password with stored hashed password
