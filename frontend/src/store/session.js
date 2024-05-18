@@ -1,5 +1,6 @@
 import { csrfFetch } from './csrf.js';
 
+// action Types
 const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
 
