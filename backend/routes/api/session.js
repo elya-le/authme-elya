@@ -1,5 +1,5 @@
 const express = require('express');
-const { Op } = require("sequelize");
+const { Op } = require('sequelize');
 const Sequelize = require('sequelize');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
@@ -9,7 +9,7 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 
 // GET /api/session - return the current user
 router.get('/', restoreUser, (req, res) => {
-    if (req.user) {
+    if (req.user) { // if user is authenticated
         return res.json({
             user: {
                 id: req.user.id,
@@ -19,23 +19,25 @@ router.get('/', restoreUser, (req, res) => {
                 username: req.user.username
             }
         });
-    } else {
+    } else { // if user is not authenticated
         return res.json({ user: null });
     }
 });
 
-
-// POST - logging in a user
+// POST /api/session - logging in a user
 router.post('/',
-    [
-        body('credential').not().isEmpty().withMessage('Email or username is required'), 
-        body('password').not().isEmpty().withMessage('Password is required') 
-    ],
-    async (req, res) => {
-        const errors = validationResult(req); 
+[
+    body('credential').not().isEmpty().withMessage('Email or username is required'), // validate credential
+    body('password').not().isEmpty().withMessage('Password is required') // validate password
+],
+async (req, res) => {
+    try {
+        console.log('POST /api/session request body:', req.body);
+        const errors = validationResult(req); // validate request
         if (!errors.isEmpty()) {
+            console.log('Validation errors:', errors.array());
             return res.status(400).json({
-                message: "Bad Request",
+                message: 'Bad Request',
                 errors: errors.array().reduce((acc, error) => ({
                     ...acc,
                     [error.param]: error.msg
@@ -44,7 +46,8 @@ router.post('/',
         }
 
         const { credential, password } = req.body;
-        const normalizedCredential = credential.toLowerCase(); 
+        console.log('Received login request with credential:', credential);
+        const normalizedCredential = credential.toLowerCase(); // normalize credential to lowercase
         const user = await User.findOne({
             where: {
                 [Op.or]: [
@@ -55,9 +58,11 @@ router.post('/',
             attributes: ['id', 'email', 'username', 'firstName', 'lastName', 'hashedPassword']
         });
 
-        if (user) {
+        if (user) { // if user is found
+            console.log('User found:', user);
             const hashedPassword = user.hashedPassword.toString(); // convert hashedPassword from Buffer to string
             if (bcrypt.compareSync(password, hashedPassword)) { // compare provided password with stored hashed password
+                console.log('Password match for user:', user);
                 setTokenCookie(res, user); // set the token cookie for the user
 
                 return res.json({
@@ -69,16 +74,22 @@ router.post('/',
                         username: user.username
                     }
                 });
+            } else {
+                console.log('Password mismatch for user:', user);
             }
+        } else {
+            console.log('User not found for credential:', credential);
         }
-        
+
         return res.status(401).json({
-            message: "Invalid credentials"
+            message: 'Invalid credentials' // if credentials are invalid
+        });
+    } catch (error) {
+        console.error('Error in POST /api/session:', error);
+        return res.status(500).json({
+            message: 'Internal Server Error'
         });
     }
-);
+});
 
 module.exports = router;
-
-
-
