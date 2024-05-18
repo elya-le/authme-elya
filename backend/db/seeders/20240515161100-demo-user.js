@@ -3,20 +3,20 @@ const bcrypt = require('bcryptjs');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA; // Use schema only in production
+  options.schema = process.env.SCHEMA;
 }
 
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert(
-      { tableName: 'Users', schema: options.schema }, // Use schema if available
+      { tableName: 'Users', schema: options.schema },
       [
         {
           firstName: 'Demo',
           lastName: 'User',
           email: 'demo@user.io',
           username: 'Demo-User',
-          hashedPassword: bcrypt.hashSync('password', 10),
+          hashedPassword: bcrypt.hashSync('password'),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -45,7 +45,7 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete(
-      { tableName: 'Users', schema: options.schema }, // Use schema if available
+      { tableName: 'Users', schema: options.schema },
       {
         username: {
           [Sequelize.Op.in]: ['Demo-User', 'Demo-User2', 'Demo-User3'],

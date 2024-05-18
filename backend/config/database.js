@@ -4,7 +4,7 @@ module.exports = {
   development: {
     storage: config.dbFile,
     dialect: 'sqlite',
-    seederStorage: 'sequelize',
+    seederStorage: "sequelize",
     logQueryParameters: true,
     typeValidation: true,
   },
@@ -19,7 +19,7 @@ module.exports = {
       },
     },
     define: {
-      schema: process.env.SCHEMA, 
+      schema: process.env.SCHEMA,
     },
   },
 };
