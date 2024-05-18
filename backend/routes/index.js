@@ -40,4 +40,9 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
+// test route for CSRF
+router.post('/api/test', (req, res) => {
+    res.json({ requestBody: req.body });
+});
+
 module.exports = router;
