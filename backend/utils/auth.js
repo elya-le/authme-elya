@@ -3,7 +3,7 @@ const { jwtConfig } = require('../config');
 const { secret, expiresIn } = jwtConfig;
 const { User } = require('../db/models');
 
-console.log('JWT secret used in auth.js:', secret); // debug log the secret
+// console.log('JWT secret used in auth.js:', secret); // debug log the secret
 
 const setTokenCookie = (res, user) => {
     const safeUser = {

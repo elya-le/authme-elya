@@ -18,7 +18,7 @@ const { environment } = require('./config');
 const isProduction = environment === 'production';
 
 // check if JWT_SECRET is loaded
-console.log('JWT_SECRET:', process.env.JWT_SECRET); // temporary log to check the secret
+// console.log('JWT_SECRET:', process.env.JWT_SECRET); // temporary log to check the secret
 
 // import routes
 const routes = require('./routes');

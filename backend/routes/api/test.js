@@ -4,6 +4,10 @@ const router = express.Router();
 const { jwtConfig } = require('../../config');
 const { secret } = jwtConfig;
 
+router.post('/', (req, res) => {
+  res.json({ requestBody: req.body });
+});
+
 router.get('/jwt-secret', (req, res) => {
     res.json({ secret });
 });
