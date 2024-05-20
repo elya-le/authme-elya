@@ -3,9 +3,9 @@ import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import sessionReducer from './session';
 
-
 const rootReducer = combineReducers({
-  session: sessionReducer
+  session: sessionReducer,
+  // Add other reducers here if necessary
 });
 
 let enhancer;
