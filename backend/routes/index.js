@@ -1,17 +1,20 @@
 const express = require("express");
 const router = express.Router();
-
 const apiRouter = require("./api");
-const venuesRouter = require('./api/venues');
+const testRouter = require('./api/test'); // import the test routes
 
+// CSRF restore route
 router.get('/csrf/restore', (req, res) => {
     const csrfToken = req.csrfToken(); 
     res.cookie("XSRF-TOKEN", csrfToken);  
     res.status(200).json({ 'XSRF-Token': csrfToken }); 
 });
     
+// ase API routes
 router.use('/api', apiRouter);
-router.use('/api/venues', venuesRouter);
+
+// use Test routes
+router.use('/api/test', testRouter); // add the test routes
 
 if (process.env.NODE_ENV !== 'production') {
     router.get('/api/csrf/restore', (req, res) => {
@@ -39,10 +42,5 @@ if (process.env.NODE_ENV === 'production') {
         );
     });
 }
-
-// test route for CSRF
-router.post('/api/test', (req, res) => {
-    res.json({ requestBody: req.body });
-});
 
 module.exports = router;

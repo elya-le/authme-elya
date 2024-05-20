@@ -61,7 +61,6 @@ module.exports = (sequelize, DataTypes) => {
         }, {
             sequelize,
             modelName: 'Venue',
-            schema: process.env.SCHEMA, 
         });
     return Venue;
 };

@@ -1,13 +1,11 @@
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
+const { secret, expiresIn } = jwtConfig;
 const { User } = require('../db/models');
 
-const { secret, expiresIn } = jwtConfig;
+console.log('JWT secret used in auth.js:', secret); // debug log the secret
 
-// helper function
-// sends a JWT Cookie
 const setTokenCookie = (res, user) => {
-
     const safeUser = {
         id: user.id,
         email: user.email,
@@ -17,10 +15,13 @@ const setTokenCookie = (res, user) => {
     const token = jwt.sign(
         { data: safeUser },
         secret,
-        { expiresIn: parseInt(expiresIn) }
+        { expiresIn: parseInt(expiresIn, 10) }
     );
 
-    const isProduction = process.env.NODE_ENV === "production";
+    console.log('Generated token:', token); // debug log
+    console.log('Using secret to sign:', secret); // debug log
+
+    const isProduction = process.env.NODE_ENV === 'production';
 
     res.cookie('token', token, {
         maxAge: expiresIn * 1000,
@@ -28,12 +29,11 @@ const setTokenCookie = (res, user) => {
         secure: isProduction,
         sameSite: isProduction ? 'Lax' : 'Strict'
     });
-
     return token;
 };
 
 // middleware
-const restoreUser = (req, res, next) => {
+const restoreUser = async (req, res, next) => {
     const { token } = req.cookies;
 
     if (!token) {
@@ -41,7 +41,10 @@ const restoreUser = (req, res, next) => {
         return next();
     }
 
-    jwt.verify(token, secret, null, async (err, jwtPayload) => {
+    console.log('Token to be verified:', token); // debug log
+    console.log('Using secret to verify:', secret); // debug log
+
+    jwt.verify(token, secret, async (err, jwtPayload) => {
         if (err) {
             console.log('Error verifying token:', err);
             return next();
@@ -63,7 +66,6 @@ const restoreUser = (req, res, next) => {
         return next();
     });
 };
-
 
 // if there is no current user, return an error
 const requireAuth = (req, res, next) => {

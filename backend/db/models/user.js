@@ -1,5 +1,4 @@
 'use strict';
-'use strict';
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -70,7 +69,6 @@ module.exports = (sequelize, DataTypes) => {
       {
         sequelize,
         modelName: 'User',
-        schema: process.env.SCHEMA
       }
     );
     return User;

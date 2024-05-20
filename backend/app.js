@@ -12,8 +12,13 @@ const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const { Pool } = require('pg');
 
+// load environment variables
+require('dotenv').config();
 const { environment } = require('./config');
 const isProduction = environment === 'production';
+
+// check if JWT_SECRET is loaded
+console.log('JWT_SECRET:', process.env.JWT_SECRET); // temporary log to check the secret
 
 // import routes
 const routes = require('./routes');
@@ -38,7 +43,7 @@ app.use(helmet({
     contentSecurityPolicy: false,
 }));
 
-// Set up PostgreSQL connection pool
+// set up PostgreSQL connection pool
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: {
@@ -49,10 +54,10 @@ const pool = new Pool({
 
 app.use(session({
     store: new pgSession({
-        pool: pool, // Connection pool
-        tableName: 'session' // Use another table-name than the default "session"
+        pool: pool, // connection pool
+        tableName: 'session' // use another table-name than the default "session"
     }),
-    secret: 'secret-key',
+    secret: 'secret-key', // this should be consistent with your other secret keys, if this is unrelated, ignore this line
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -82,11 +87,11 @@ app.get('/api/csrf/restore', (req, res) => {
 
 // add a log to show incoming cookies
 app.use((req, res, next) => {
-    // console.log('Cookies: ', req.cookies); // log incoming cookies
+    console.log('Cookies: ', req.cookies); // log incoming cookies
     next();
 });
 
-// Root URL route
+// root URL route
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
