@@ -10,6 +10,7 @@ const store = configureStore();
 
 if (import.meta.env.MODE !== 'production') {
   restoreCSRF();
+
   window.csrfFetch = csrfFetch;
   window.store = store;
 }
