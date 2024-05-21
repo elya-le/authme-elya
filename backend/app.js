@@ -1,11 +1,9 @@
-console.log("Starting the application...");
-
 // import packages
 const express = require('express');
 require('express-async-errors');
 const morgan = require('morgan');
 const cors = require('cors');
-const csurf = require('csurf');
+const csrf = require('csurf');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -16,9 +14,6 @@ const { Pool } = require('pg');
 require('dotenv').config();
 const { environment } = require('./config');
 const isProduction = environment === 'production';
-
-// check if JWT_SECRET is loaded
-// console.log('JWT_SECRET:', process.env.JWT_SECRET); // temporary log to check the secret
 
 // import routes
 const routes = require('./routes');
@@ -35,8 +30,6 @@ if (!isProduction) {
         credentials: true,
     }));
 }
-
-app.use(express.json());
 
 app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
@@ -57,7 +50,7 @@ app.use(session({
         pool: pool, // connection pool
         tableName: 'session' // use another table-name than the default "session"
     }),
-    secret: 'secret-key', // this should be consistent with your other secret keys, if this is unrelated, ignore this line
+    secret: process.env.SESSION_SECRET || 'secret-key', // use environment variable for security
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -69,7 +62,7 @@ app.use(session({
 }));
 
 // add the CSRF token restore route after setting CSRF middleware
-app.use(csurf({
+app.use(csrf({
     cookie: {
         secure: isProduction,
         sameSite: isProduction ? 'None' : 'Strict',
@@ -88,6 +81,7 @@ app.get('/api/csrf/restore', (req, res) => {
 // add a log to show incoming cookies
 app.use((req, res, next) => {
     console.log('Cookies: ', req.cookies); // log incoming cookies
+    console.log('CSRF Token: ', req.cookies['XSRF-TOKEN']); // log incoming CSRF token
     next();
 });
 
@@ -98,10 +92,6 @@ app.get('/', (req, res) => {
 
 // use the routes defined in your routes folder
 app.use(routes);
-
-app.use((req, res, next) => {
-    next();
-});
 
 // Not Found middleware - catches and forwards to error handler
 app.use((req, res, next) => {
