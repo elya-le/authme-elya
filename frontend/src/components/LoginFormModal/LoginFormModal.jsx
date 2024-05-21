@@ -1,5 +1,3 @@
-// frontend/src/components/LoginFormModal/LoginFormModal.jsx
-
 import { useState } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
@@ -57,4 +55,3 @@ function LoginFormModal() {
 }
 
 export default LoginFormModal;
-
