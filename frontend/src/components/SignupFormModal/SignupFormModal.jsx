@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import * as sessionActions from '../../store/session';
-import './SignupForm.css';
+import './SignupFormModal.css';
 
 function SignupFormModal() {
     const dispatch = useDispatch();
@@ -13,36 +13,27 @@ function SignupFormModal() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errors, setErrors] = useState({});
-    const { closeModal } = useModal(); // Ensure closeModal is used
-    
+    const { closeModal } = useModal();
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (password === confirmPassword) {
             setErrors({});
             return dispatch(
-                sessionActions.signup({
-                    email,
-                    username,
-                    firstName,
-                    lastName,
-                    password
-                })
+                sessionActions.signup({ email, username, firstName, lastName, password })
             )
             .then(closeModal)
             .catch(async (res) => {
                 const data = await res.json();
-                if (data?.errors) {
-                    setErrors(data.errors);
-                }
+                if (data?.errors) setErrors(data.errors);
             });
         }
-        return setErrors({
-            confirmPassword: "Confirm Password field must be the same as the Password field"
-        });
+        return setErrors({ confirmPassword: "Confirm Password field must be the same as the Password field" });
     };
-    
+
     return (
-    <>
+    <div className="signup-form">
+        <button className="close-button" onClick={closeModal}>&times;</button>
         <h1>Sign Up</h1>
         <form onSubmit={handleSubmit}>
             <label>
@@ -109,7 +100,7 @@ function SignupFormModal() {
             )}
             <button type="submit">Sign Up</button>
         </form>
-        </>
+    </div>
     );
 }
 

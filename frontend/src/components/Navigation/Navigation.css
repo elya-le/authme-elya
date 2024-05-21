@@ -1,40 +1,51 @@
-/* existing styles */
+/* Navigation.css */
 
-.profile-dropdown {
-    position: absolute;
-    right: 0;
+/* Style for the navigation bar */
+.navigation-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
     background-color: white;
-    border: 1px solid #ddd;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1;
+    border-bottom: 1px solid #ddd;
 }
 
-.profile-dropdown li {
-    list-style: none;
-    padding: 8px 16px;
+/* Style for the logo */
+.logo img {
+    height: 40px;
 }
 
-.profile-dropdown li:hover {
-    background-color: #f1f1f1;
+/* Style for the navigation links */
+.nav-links {
+    display: flex;
+    align-items: center;
 }
 
-.profile-dropdown li button {
-    background: none;
+/* Specific styles for the login button */
+.login-button {
+    background-color: transparent;
     border: none;
+    color: #333;
+    font-size: 16px;
     cursor: pointer;
-    padding: 8px 16px;
-    width: 100%;
-    text-align: left;
+    margin-right: 20px;
 }
 
-.profile-dropdown li button:hover {
-    background-color: #f1f1f1;
+.login-button:hover {
+    color: #02798a;
 }
 
-.profile-dropdown li:hover {
-  cursor: pointer; /* ensure the cursor is a pointer when hovering over the list items */
+/* Specific styles for the signup button */
+.signup-button {
+    background-color: #02798a;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
 }
 
-.profile-dropdown.hidden {
-    display: none;
+.signup-button:hover {
+    background-color: #049cac;
 }

@@ -6,37 +6,42 @@ import LoginFormModal from '../LoginFormModal/LoginFormModal';
 import SignupFormModal from '../SignupFormModal/SignupFormModal';
 import './Navigation.css';
 
+// Path to your logo image in the public directory
+const meetupLogo = '/images/meetup-logo-1.svg';
+
 function Navigation({ isLoaded }) {
     const sessionUser = useSelector((state) => state.session.user);
 
     const sessionLinks = sessionUser ? (
-        <li>
+        <div className="profile">
             <ProfileButton user={sessionUser} />
-        </li>
+        </div>
     ) : (
         <>
-            <li>
             <OpenModalButton
-                buttonText="Log In"
+                buttonText="Log in"
                 modalComponent={<LoginFormModal />}
+                className="login-button"
             />
-            </li>
-            <li>
             <OpenModalButton
-                buttonText="Sign Up"
+                buttonText="Sign up"
                 modalComponent={<SignupFormModal />}
+                className="signup-button"
             />
-            </li>
         </>
     );
 
     return (
-        <ul>
-            <li>
-            <NavLink to="/">Home</NavLink>
-            </li>
-            {isLoaded && sessionLinks}
-        </ul>
+        <nav className="navigation-bar">
+            <div className="logo">
+                <NavLink exact to="/">
+                    <img src={meetupLogo} alt="Meetup Logo" />
+                </NavLink>
+            </div>
+            <div className="nav-links">
+                {isLoaded && sessionLinks}
+            </div>
+        </nav>
     );
 }
 

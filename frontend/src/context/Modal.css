@@ -1,3 +1,5 @@
+/* Modal.css */
+
 #modal {
     position: fixed;
     top: 0;
@@ -7,6 +9,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 #modal-background {
@@ -19,6 +22,11 @@
 }
 
 #modal-content {
-    position: absolute;
+    position: relative;
     background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

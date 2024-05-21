@@ -31,13 +31,13 @@ function ProfileButton({ user }) {
         e.preventDefault();
         dispatch(sessionActions.logout());
     };
-    const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+
     return (
-        <>
-            <button onClick={toggleMenu}>
+        <div className="profile-button-container">
+            <button onClick={toggleMenu} className="profile-icon">
                 <FaUserCircle />
             </button>
-            <ul className={ulClassName} ref={ulRef}>
+            <ul className={`profile-dropdown ${showMenu ? "" : "hidden"}`} ref={ulRef}>
                 <li>{user.username}</li>
                 <li>{user.firstName} {user.lastName}</li>
                 <li>{user.email}</li>
@@ -45,7 +45,7 @@ function ProfileButton({ user }) {
                     <button onClick={logout}>Log Out</button>
                 </li>
             </ul>
-        </>
+        </div>
     );
 }
 

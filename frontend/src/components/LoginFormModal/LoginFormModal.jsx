@@ -2,14 +2,14 @@ import { useState } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
-import './LoginForm.css';
+import './LoginFormModal.css';
 
 function LoginFormModal() {
     const dispatch = useDispatch();
     const [credential, setCredential] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
-    const { closeModal } = useModal(); // Ensure useModal is correctly used
+    const { closeModal } = useModal();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -23,12 +23,14 @@ function LoginFormModal() {
             }
         });
     };
+
     return (
-    <>
+    <div className="login-form">
+        <button className="close-button" onClick={closeModal}>&times;</button>
         <h1>Log In</h1>
         <form onSubmit={handleSubmit}>
             <label>
-            Username or Email
+            Email
             <input
                 type="text"
                 value={credential}
@@ -50,7 +52,7 @@ function LoginFormModal() {
             )}
             <button type="submit">Log In</button>
         </form>
-        </>
+    </div>
     );
 }
 
