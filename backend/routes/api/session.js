@@ -58,7 +58,7 @@ router.post('/',
                 const hashedPassword = user.hashedPassword.toString();
                 if (bcrypt.compareSync(password, hashedPassword)) {
                     const token = setTokenCookie(res, user);
-                    console.log('Token set in cookie during login:', token); // Debug log for token
+                    // console.log('Token set in cookie during login:', token); // debug log for token
 
                     return res.json({
                         user: {

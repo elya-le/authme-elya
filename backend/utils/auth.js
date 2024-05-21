@@ -18,8 +18,8 @@ const setTokenCookie = (res, user) => {
         { expiresIn: parseInt(expiresIn, 10) }
     );
 
-    console.log('Generated token:', token); // debug log
-    console.log('Using secret to sign:', secret); // debug log
+    // console.log('Generated token:', token); // debug log
+    // console.log('Using secret to sign:', secret); // debug log
 
     const isProduction = process.env.NODE_ENV === 'production';
 
@@ -41,8 +41,8 @@ const restoreUser = async (req, res, next) => {
         return next();
     }
 
-    console.log('Token to be verified:', token); // debug log
-    console.log('Using secret to verify:', secret); // debug log
+    // console.log('Token to be verified:', token); // debug log
+    // console.log('Using secret to verify:', secret); // debug log
 
     jwt.verify(token, secret, async (err, jwtPayload) => {
         if (err) {

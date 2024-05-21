@@ -80,8 +80,8 @@ app.get('/api/csrf/restore', (req, res) => {
 
 // add a log to show incoming cookies
 app.use((req, res, next) => {
-    console.log('Cookies: ', req.cookies); // log incoming cookies
-    console.log('CSRF Token: ', req.cookies['XSRF-TOKEN']); // log incoming CSRF token
+    // console.log('Cookies: ', req.cookies); // log incoming cookies
+    // console.log('CSRF Token: ', req.cookies['XSRF-TOKEN']); // log incoming CSRF token
     next();
 });
 
