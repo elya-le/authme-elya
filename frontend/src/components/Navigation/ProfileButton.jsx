@@ -2,10 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { FaUserCircle } from 'react-icons/fa';
 import * as sessionActions from '../../store/session';
-import OpenModalButton from '../OpenModalButton';
+import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal/LoginFormModal';
 import SignupFormModal from '../SignupFormModal/SignupFormModal';
-import OpenModalMenuItem from './OpenModalMenuItem';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
