@@ -1,0 +1,19 @@
+.profile-dropdown {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profile-dropdown.hidden {
+    display: none;
+}
+
+.profile-dropdown li {
+    margin: 5px 0;
+}
+
+.profile-dropdown button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
