@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import SignupFormModal from './components/SignupFormModal/SignupFormModal';
 import Navigation from './components/Navigation/Navigation';
+import LandingPage from './components/LandingPage/LandingPage'; 
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <h1></h1>
+                element: <LandingPage />
             },
             {
                 path: 'signup',
