@@ -21,8 +21,8 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
-// GET /api/groups - gets all groups
-router.get('/', async (req, res, next) => {
+// GET /api/groups - fetch group data
+router.get('/', async (req, res) => {
     try {
         const groups = await Group.findAll({
             include: [{ 
@@ -31,12 +31,13 @@ router.get('/', async (req, res, next) => {
                 attributes: ['id', 'firstName', 'lastName'] 
             }]
         });
-        res.status(200).json(groups); // Directly return the array of groups
-    } catch (error) {
-        console.error('Error fetching groups:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.json({ Groups: groups });
+    } catch (err) {
+        console.error(err); 
+        res.status(500).json({ error: 'Failed to fetch groups' }); 
     }
 });
+
 
 // GET /api/groups - fetch group data
 router.get('/groups', async (req, res) => {

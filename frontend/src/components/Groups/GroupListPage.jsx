@@ -10,7 +10,7 @@ const GroupListPage = () => {
         fetch('/api/groups')
             .then(response => response.json())
             .then(data => {
-                if (Array.isArray(data.Groups)) {
+                if (Array.isArray(data.Groups)) { // Ensure this matches the API response structure
                     setGroups(data.Groups);
                 } else {
                     setError('Invalid data format');
