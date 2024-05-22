@@ -31,10 +31,21 @@ router.get('/', async (req, res, next) => {
                 attributes: ['id', 'firstName', 'lastName'] 
             }]
         });
-        res.status(200).json({ Groups: groups });
+        res.status(200).json(groups); // Directly return the array of groups
     } catch (error) {
         console.error('Error fetching groups:', error);
         res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// GET /api/groups - fetch group data
+router.get('/groups', async (req, res) => {
+    try {
+        const groups = await Group.findAll(); 
+        res.json(groups); 
+    } catch (err) {
+        console.error(err); 
+        res.status(500).json({ error: 'Failed to fetch groups' }); 
     }
 });
 

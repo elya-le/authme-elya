@@ -3,7 +3,8 @@ import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import SignupFormModal from './components/SignupFormModal/SignupFormModal';
 import Navigation from './components/Navigation/Navigation';
-import LandingPage from './components/LandingPage/LandingPage'; 
+import LandingPage from './components/LandingPage/LandingPage';
+import GroupListPage from './components/Groups/GroupListPage'; 
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
             {
                 path: 'signup',
                 element: <SignupFormModal />
+            },
+            {
+                path: 'groups',
+                element: <GroupListPage /> 
             }
         ]
     }
