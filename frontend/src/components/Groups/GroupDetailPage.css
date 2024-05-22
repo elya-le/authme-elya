@@ -1,0 +1,75 @@
+.group-detail-page {
+    padding: 20px;
+}
+
+.breadcrumb {
+    margin-bottom: 20px;
+}
+
+.breadcrumb a {
+    color: teal;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.group-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.group-image {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.group-info {
+    flex: 1;
+}
+
+.group-info h1 {
+    margin-top: 0;
+}
+
+.join-button {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.join-button:hover {
+    background-color: darkred;
+}
+
+.group-details {
+    margin-top: 20px;
+}
+
+.upcoming-events {
+    margin-top: 20px;
+}
+
+.event-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.event-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.event-info h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}

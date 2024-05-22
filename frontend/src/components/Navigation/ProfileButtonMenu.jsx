@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { FaUserCircle } from 'react-icons/fa';
-import { FaAngleDown, FaAngleUp } from 'react-icons/fa'; // import arrow icons
+import { Link } from 'react-router-dom';
+import { FaUserCircle, FaAngleDown, FaAngleUp } from 'react-icons/fa'; // import arrow icons
 import * as sessionActions from '../../store/session';
 import './ProfileButtonMenu.css';
 
-function ProfileButtonMenu ({ user }) {
+function ProfileButtonMenu({ user }) {
     const dispatch = useDispatch();
     const [showMenu, setShowMenu] = useState(false);
     const [arrowDirection, setArrowDirection] = useState('down'); // state for arrow direction
@@ -48,6 +48,10 @@ function ProfileButtonMenu ({ user }) {
             </button>
             <ul className={`profile-dropdown ${showMenu ? "" : "hidden"}`} ref={ulRef}>
                 <li>{user.username}</li>
+                <hr />
+                <li>
+                    <Link to="/groups" className="dropdown-link" onClick={() => setShowMenu(false)}>View groups</Link>
+                </li>
                 <hr />
                 <li>
                     <button onClick={logout}>Log Out</button>

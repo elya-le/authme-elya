@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './GroupListPage.css'; 
 
 const GroupListPage = () => {
@@ -28,20 +29,22 @@ const GroupListPage = () => {
                 <h2 className="header-gray">Events</h2>
                 <h2 className="header-teal">Groups</h2>
             </header>
-            <p className="caption">Groups in Meetup</p>
+            <p className="caption">Groups in MeetPup</p>
             <div className="group-list">
                 {groups.map(group => (
-                    <div key={group.id} className="group-item">
-                        <img src={group.thumbnail} alt={`${group.name} Thumbnail`} className="group-thumbnail" />
-                        <div className="group-details">
-                            <h3 className="group-name">{group.name}</h3>
-                            <p className="group-location">{group.city}, {group.state}</p>
-                            <p className="group-description">{group.about}</p>
-                            <p className="group-events">
-                                {group.numEvents} events · {group.isPrivate ? 'Private' : 'Public'}
-                            </p>
+                    <Link to={`/groups/${group.id}`} key={group.id} className="group-item-link">
+                        <div className="group-item">
+                            <img src={group.thumbnail} alt={`${group.name} Thumbnail`} className="group-thumbnail" />
+                            <div className="group-details">
+                                <h3 className="group-name">{group.name}</h3>
+                                <p className="group-location">{group.city}, {group.state}</p>
+                                <p className="group-description">{group.about}</p>
+                                <p className="group-events">
+                                    {group.numEvents} events · {group.isPrivate ? 'Private' : 'Public'}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </div>

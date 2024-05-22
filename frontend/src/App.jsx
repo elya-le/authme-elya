@@ -5,6 +5,7 @@ import SignupFormModal from './components/SignupFormModal/SignupFormModal';
 import Navigation from './components/Navigation/Navigation';
 import LandingPage from './components/LandingPage/LandingPage';
 import GroupListPage from './components/Groups/GroupListPage'; 
+import GroupDetailPage from './components/Groups/GroupDetailPage';
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
             {
                 path: 'groups',
                 element: <GroupListPage /> 
+            },
+            {
+                path: 'groups/:groupId',
+                element: <GroupDetailPage /> 
             }
         ]
     }
