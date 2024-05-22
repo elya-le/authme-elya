@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import ProfileButton from './ProfileButton';
+import ProfileButtonMenu from './ProfileButtonMenu';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import LoginFormModal from '../LoginFormModal/LoginFormModal';
 import SignupFormModal from '../SignupFormModal/SignupFormModal';
@@ -14,7 +14,7 @@ function Navigation({ isLoaded }) {
 
     const sessionLinks = sessionUser ? (
         <div className="profile">
-            <ProfileButton user={sessionUser} />
+            <ProfileButtonMenu user={sessionUser} />
         </div>
     ) : (
         <>

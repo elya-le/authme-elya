@@ -38,6 +38,7 @@
 }
 
 .login-form form button {
+    font-size: 18px;
     width: 100%;
     padding: 10px;
     background-color: #d92323;
@@ -49,6 +50,26 @@
 
 .login-form form button:hover {
     background-color: #b81b1b;
+}
+
+.login-form button:disabled {
+    background-color: grey; /* greyed out background color */
+    cursor: not-allowed; /* change cursor to not-allowed */
+    opacity: 0.6; /* slightly transparent */
+}
+
+/* Add margin space between the login button and the demo user link */
+.demo-user-link {
+    margin-top: 24px;
+    text-align: center;
+    cursor: pointer;
+    color: #007bff; /* Blue color for the link */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.demo-user-link:hover {
+    text-decoration: underline;
 }
 
 .login-form form p {
@@ -64,4 +85,10 @@
     border: none;
     font-size: 20px;
     cursor: pointer;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
 }

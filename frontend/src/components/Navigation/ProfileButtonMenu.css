@@ -1,0 +1,75 @@
+.profile-button-container {
+    /* border: 1px solid red; */
+
+    position: relative;
+}
+
+.profile-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.profile-icon img {
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    margin-right: 5px; 
+}
+
+.default-icon {
+    font-size: 40px; /* set size */
+    margin-right: 20px; /* add space between icon and arrow */
+}
+
+.profile-dropdown {
+    /* border: 1px solid red; */
+
+    margin: 40px 0px 0px 20px;
+    padding: 0px 0px 0px 10px;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    list-style: none;
+    background-color: white;
+    border-radius: 4px;
+    z-index: 1000;
+    min-width: 200px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
+    background-color: white; /* Ensure background color is set */
+    border-radius: 2px; /* Optional: Add border-radius for smoother corners */
+}
+
+.profile-dropdown.hidden {
+    display: none;
+}
+
+.profile-dropdown li {
+    margin: 5px 0;
+    padding: 10px 10px 10px 10px;
+    font-size: 16px;
+}
+
+.profile-dropdown li button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.profile-dropdown li button:hover {
+    color: #02798a;
+    background-color: #f1f1f1;
+}
+
+.profile-dropdown li + li {
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}

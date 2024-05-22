@@ -38,6 +38,7 @@
 }
 
 .signup-form form button {
+    font-size: 18px;
     width: 100%;
     padding: 10px;
     background-color: #d92323;
@@ -64,4 +65,10 @@
     border: none;
     font-size: 20px;
     cursor: pointer;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
 }

@@ -1,17 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { FaUserCircle } from 'react-icons/fa';
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa'; // import arrow icons
 import * as sessionActions from '../../store/session';
-import './ProfileButton.css';
+import './ProfileButtonMenu.css';
 
-function ProfileButton({ user }) {
+function ProfileButtonMenu ({ user }) {
     const dispatch = useDispatch();
     const [showMenu, setShowMenu] = useState(false);
+    const [arrowDirection, setArrowDirection] = useState('down'); // state for arrow direction
     const ulRef = useRef();
 
     const toggleMenu = (e) => {
         e.stopPropagation(); // keep click from bubbling up to document and triggering closeMenu
         setShowMenu(!showMenu);
+        setArrowDirection(showMenu ? 'down' : 'up'); // toggle arrow direction
     };
 
     useEffect(() => {
@@ -20,6 +23,7 @@ function ProfileButton({ user }) {
         const closeMenu = (e) => {
             if (ulRef.current && !ulRef.current.contains(e.target)) {
                 setShowMenu(false);
+                setArrowDirection('down'); // reset arrow direction when menu closes
             }
         };
         document.addEventListener('click', closeMenu);
@@ -35,12 +39,16 @@ function ProfileButton({ user }) {
     return (
         <div className="profile-button-container">
             <button onClick={toggleMenu} className="profile-icon">
-                <FaUserCircle />
+                {user.profileImageUrl ? (
+                    <img src={user.profileImageUrl} alt="profile" className="profile-image" />
+                ) : (
+                    <FaUserCircle className="default-icon" />
+                )}
+                {arrowDirection === 'down' ? <FaAngleDown /> : <FaAngleUp />}
             </button>
             <ul className={`profile-dropdown ${showMenu ? "" : "hidden"}`} ref={ulRef}>
                 <li>{user.username}</li>
-                <li>{user.firstName} {user.lastName}</li>
-                <li>{user.email}</li>
+                <hr />
                 <li>
                     <button onClick={logout}>Log Out</button>
                 </li>
@@ -49,4 +57,4 @@ function ProfileButton({ user }) {
     );
 }
 
-export default ProfileButton;
+export default ProfileButtonMenu;
