@@ -44,9 +44,9 @@
     align-items: center;
 }
 
-.group-item:hover {
-    transform: scale(1.05);
-}
+/* .group-item:hover {
+    transform: ;
+} */
 
 .group-thumbnail {
     width: 100%;

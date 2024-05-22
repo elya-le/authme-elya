@@ -34,7 +34,7 @@ const GroupListPage = () => {
                 {groups.map(group => (
                     <Link to={`/groups/${group.id}`} key={group.id} className="group-item-link">
                         <div className="group-item">
-                            <img src={group.GroupImages[0]?.url || 'default-thumbnail.png'} alt={`${group.name} Thumbnail`} className="group-thumbnail" />
+                            <img src={group.GroupImages[0]?.url || '/default-image.png'} alt={`${group.name} Thumbnail`} className="group-thumbnail" />
                             <div className="group-details">
                                 <h3 className="group-name">{group.name}</h3>
                                 <p className="group-location">{group.city}, {group.state}</p>

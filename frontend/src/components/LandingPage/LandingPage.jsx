@@ -12,8 +12,8 @@ const LandingPage = () => {
         fetch('/api/groups')
             .then(response => response.json())
             .then(data => {
-                if (Array.isArray(data)) {
-                    setGroups(data);
+                if (Array.isArray(data.Groups)) { // Ensure this matches the API response structure
+                    setGroups(data.Groups);
                 } else {
                     setError('Invalid data format');
                 }
@@ -47,7 +47,7 @@ const LandingPage = () => {
                 <div className="column">
                     <div className="icon"></div> {/* replace with actual icon */}
                     <a href="/events" className="link">Find an event</a>
-                    <p>Snif out events that bring together paws and people for endless fun.</p>
+                    <p>Sniff out events that bring together paws and people for endless fun.</p>
                 </div>
                 <div className="column">
                     <div className="icon"></div> {/* replace with actual icon */}
@@ -72,12 +72,12 @@ const LandingPage = () => {
                     ) : (
                         groups.map(group => (
                             <div key={group.id} className="group-card">
-                                <img src={group.thumbnail} alt={`${group.name} Thumbnail`} className="group-thumbnail" />
+                                <img src={group.GroupImages[0]?.url || '/default-image.png'} alt={`${group.name} Thumbnail`} className="group-thumbnail" />
                                 <div className="group-info">
                                     <h3>{group.name}</h3>
                                     <p>{group.city}, {group.state}</p>
                                     <p>{group.about}</p>
-                                    <p>{group.numEvents} events · {group.isPrivate ? 'Private' : 'Public'}</p>
+                                    <p>{group.numEvents} events · {group.private ? 'Private' : 'Public'}</p>
                                 </div>
                             </div>
                         ))
@@ -89,3 +89,4 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+
