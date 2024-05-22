@@ -11,21 +11,21 @@ module.exports = {
       [
         {
           eventId: 1,
-          url: '../../images/g-urban.png',
+          url: '/images/g-urban.png',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           eventId: 2,
-          url: '../../images/g-urban.png',
+          url: '/images/g-urban.png',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           eventId: 3,
-          url: '../../images/g-urban.png',
+          url: '/images/g-urban.png',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),

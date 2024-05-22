@@ -11,21 +11,21 @@ module.exports = {
       [
         {
           groupId: 1,
-          url: '../../images/g-urban.png',
+          url: '/images/g-beach.png',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           groupId: 2, 
-          url: '../../images/g-beach.png',
+          url: '/images/g-beach.png',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           groupId: 3, 
-          url: '../../images/g-beach.png',
+          url: '/images/g-beach.png',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
