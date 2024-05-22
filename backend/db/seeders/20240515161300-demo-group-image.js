@@ -18,14 +18,14 @@ module.exports = {
         },
         {
           groupId: 2, 
-          url: '/images/g-beach.png',
+          url: '../images/g-urban.png',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           groupId: 3, 
-          url: '/images/g-beach.png',
+          url: '../../images/groups1.png',
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -41,12 +41,12 @@ module.exports = {
       {
         url: {
           [Sequelize.Op.in]: [
-            'http://example.com/path/to/group1image.jpg',
-            'http://example.com/path/to/group2image.jpg',
-            'http://example.com/path/to/group3image.jpg',
+            '/images/g-beach.png',
+            '../images/g-urban.png',
+            '../../images/groups1.png',
           ],
         },
       }
     );
-  },
+  }
 };

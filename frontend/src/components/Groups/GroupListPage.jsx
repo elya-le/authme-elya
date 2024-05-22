@@ -10,8 +10,8 @@ const GroupListPage = () => {
         fetch('/api/groups')
             .then(response => response.json())
             .then(data => {
-                if (Array.isArray(data)) {
-                    setGroups(data);
+                if (Array.isArray(data.Groups)) {
+                    setGroups(data.Groups);
                 } else {
                     setError('Invalid data format');
                 }
@@ -34,7 +34,7 @@ const GroupListPage = () => {
                 {groups.map(group => (
                     <Link to={`/groups/${group.id}`} key={group.id} className="group-item-link">
                         <div className="group-item">
-                            <img src={group.thumbnail} alt={`${group.name} Thumbnail`} className="group-thumbnail" />
+                            <img src={group.url} alt={`${group.name} Thumbnail`} className="group-thumbnail" />
                             <div className="group-details">
                                 <h3 className="group-name">{group.name}</h3>
                                 <p className="group-location">{group.city}, {group.state}</p>

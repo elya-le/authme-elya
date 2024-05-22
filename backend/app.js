@@ -1,4 +1,3 @@
-// import packages
 const express = require('express');
 require('express-async-errors');
 const morgan = require('morgan');
@@ -36,6 +35,9 @@ app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
     contentSecurityPolicy: false,
 }));
+
+// Serve static files from the 'images' directory
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // set up PostgreSQL connection pool
 const pool = new Pool({
