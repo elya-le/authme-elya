@@ -11,21 +11,21 @@ module.exports = {
       [
         {
           groupId: 1,
-          url: '/images/g-beach.png',
+          url: '/images/g-beach.png', 
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           groupId: 2, 
-          url: '../images/g-urban.png',
+          url: '/images/g-urban.png', 
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           groupId: 3, 
-          url: '../../images/groups1.png',
+          url: '/images/g-park.png', 
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -38,15 +38,8 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete(
       { tableName: 'GroupImages', schema: options.schema },
-      {
-        url: {
-          [Sequelize.Op.in]: [
-            '/images/g-beach.png',
-            '../images/g-urban.png',
-            '../../images/groups1.png',
-          ],
-        },
-      }
+      null,
+      {}
     );
-  }
+  },
 };

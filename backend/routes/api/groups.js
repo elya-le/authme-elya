@@ -25,11 +25,20 @@ const handleValidationErrors = (req, res, next) => {
 router.get('/', async (req, res) => {
     try {
         const groups = await Group.findAll({
-            include: [{ 
-                model: User, 
-                as: 'Organizer', 
-                attributes: ['id', 'firstName', 'lastName'] 
-            }]
+            include: [
+                { 
+                    model: User, 
+                    as: 'Organizer', 
+                    attributes: ['id', 'firstName', 'lastName'] 
+                },
+                {
+                    model: GroupImage,
+                    as: 'GroupImages',
+                    attributes: ['url'],
+                    where: { preview: true },
+                    required: false
+                }
+            ]
         });
         res.json({ Groups: groups });
     } catch (err) {
