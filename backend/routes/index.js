@@ -1,4 +1,3 @@
-// backend/routes/index.js
 const express = require('express');
 const router = express.Router();
 const path = require('path');
@@ -18,7 +17,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 
   // Serve the static assets in the frontend's build folder
-  router.use(express.static(path.resolve("../frontend/dist")));
+  router.use(express.static(path.resolve(__dirname, '../../frontend', 'dist')));
 
   // Serve the frontend's index.html file at all other routes NOT starting with /api
   router.get(/^(?!\/?api).*/, (req, res) => {
@@ -31,9 +30,9 @@ if (process.env.NODE_ENV === 'production') {
 
 // Add a XSRF-TOKEN cookie in development
 if (process.env.NODE_ENV !== 'production') {
-  router.get("/api/csrf/restore", (req, res) => {
+  router.get('/api/csrf/restore', (req, res) => {
     const csrfToken = req.csrfToken();
-    res.cookie("XSRF-TOKEN", csrfToken);
+    res.cookie('XSRF-TOKEN', csrfToken);
     res.status(200).json({
       'XSRF-Token': csrfToken
     });

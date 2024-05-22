@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const { Pool } = require('pg');
+const path = require('path');
 
 // load environment variables
 require('dotenv').config();
@@ -78,17 +79,22 @@ app.get('/api/csrf/restore', (req, res) => {
     });
 });
 
-// add a log to show incoming cookies
-app.use((req, res, next) => {
-    // console.log('Cookies: ', req.cookies); // log incoming cookies
-    // console.log('CSRF Token: ', req.cookies['XSRF-TOKEN']); // log incoming CSRF token
-    next();
-});
+// Serve static files from the React frontend app in production
+if (isProduction) {
+    app.use(express.static(path.resolve(__dirname, '../frontend/dist')));
 
-// root URL route
-app.get('/', (req, res) => {
-    res.send('!!!');
-});
+    // Serve the frontend's index.html file at the root route
+    app.get('/', (req, res) => {
+        res.cookie('XSRF-TOKEN', req.csrfToken());
+        res.sendFile(path.resolve(__dirname, '../frontend', 'dist', 'index.html'));
+    });
+
+    // Serve the frontend's index.html file at all other routes NOT starting with /api
+    app.get(/^(?!\/?api).*/, (req, res) => {
+        res.cookie('XSRF-TOKEN', req.csrfToken());
+        res.sendFile(path.resolve(__dirname, '../frontend', 'dist', 'index.html'));
+    });
+}
 
 // use the routes defined in your routes folder
 app.use(routes);
