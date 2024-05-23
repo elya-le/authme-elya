@@ -1,0 +1,135 @@
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.section1, .section2, .section3, .section4, .section5 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.section1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section1 .text {
+    flex: 1;
+    padding: 20px;
+}
+
+.section1 .infographic {
+    flex: 1;
+    padding: 20px;
+}
+
+.section1 .infographic img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.section2 {
+    padding: 20px;
+}
+
+.section3 {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.section3 .column {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px; 
+}
+
+.section3 .column img {
+    width: 140px; 
+    height: 140px; 
+    object-fit: contain; 
+}
+
+.section3 .link {
+    color: teal;
+    text-decoration: none;
+}
+
+.section3 .link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.section3 .link.disabled {
+    color: lightgrey;
+    pointer-events: none;
+}
+
+.section4 {
+    padding: 20px;
+}
+
+.signup-button {
+    background-color: teal;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.signup-button:hover {
+    background-color: darkcyan;
+}
+
+.section5 {
+    padding: 20px;
+    align-items: left;
+    text-align: left;
+}
+
+.groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.group-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.group-thumbnail {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.group-info {
+    padding: 15px;
+}
+
+.group-info h3 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.group-info p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.error {
+    color: red;
+}
