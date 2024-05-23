@@ -1,7 +1,5 @@
 import { csrfFetch } from './csrf';
 
-const API_BASE_URL = process.env.NODE_ENV === 'production' ? 'https://meetpup-elya.onrender.com/api' : 'http://localhost:5173/api';
-
 const SET_USER = "session/setUser";
 const REMOVE_USER = "session/removeUser";
 
@@ -20,7 +18,7 @@ const removeUser = () => {
 
 export const login = (user) => async (dispatch) => {
     const { credential, password } = user;
-    const response = await csrfFetch(`${API_BASE_URL}/session`, {
+    const response = await csrfFetch("/api/session", {
         method: "POST",
         body: JSON.stringify({
             credential,
@@ -35,7 +33,7 @@ export const login = (user) => async (dispatch) => {
 const initialState = { user: null };
 
 export const restoreUser = () => async (dispatch) => {
-    const response = await csrfFetch(`${API_BASE_URL}/session`);
+    const response = await csrfFetch("/api/session");
     const data = await response.json();
     dispatch(setUser(data.user));
     return response;
@@ -43,7 +41,7 @@ export const restoreUser = () => async (dispatch) => {
 
 export const signup = (user) => async (dispatch) => {
     const { username, firstName, lastName, email, password } = user;
-    const response = await csrfFetch(`${API_BASE_URL}/users`, {
+    const response = await csrfFetch("/api/users", {
         method: "POST",
         body: JSON.stringify({
             username,
@@ -59,7 +57,7 @@ export const signup = (user) => async (dispatch) => {
 };
 
 export const logout = () => async (dispatch) => {
-    const response = await csrfFetch(`${API_BASE_URL}/session`, {
+    const response = await csrfFetch('/api/session', {
         method: 'DELETE'
     });
     dispatch(removeUser());

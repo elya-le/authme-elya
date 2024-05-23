@@ -24,12 +24,12 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
 
-const corsOptions = {
-    origin: isProduction ? 'https://meetpup-elya.onrender.com' : 'http://localhost:5173',
-    credentials: true,
-};
-
-app.use(cors(corsOptions));
+if (!isProduction) {
+    app.use(cors({
+        origin: true,
+        credentials: true,
+    }));
+}
 
 app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
