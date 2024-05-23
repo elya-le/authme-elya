@@ -8,13 +8,15 @@
     display: block;
     margin-bottom: 20px;
     text-decoration: none;
-    color: #000;
+    color: #02798a;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .group-header {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .group-image {
@@ -27,6 +29,7 @@
 .group-info {
     flex: 1;
     flex-direction: column;
+    margin-left: 20px;
 }
 
 .group-info h1 {
@@ -44,7 +47,7 @@
     border: none;
     border-radius: 8px;
     font-size: 16px;
-    margin-top: 60px; 
+    margin-top: 10px; 
     cursor: pointer;
 }
 
@@ -52,6 +55,32 @@
     background-color: rgb(253, 72, 72);
 }
 
+.organizer-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.organizer-buttons button {
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-top: 10px; 
+    cursor: pointer;
+}
+
+.create-event-button,
+.update-group-button,
+.delete-group-button {
+    background-color: darkgrey;
+}
+
+.create-event-button:hover,
+.update-group-button:hover,
+.delete-group-button:hover {
+    background-color: grey;
+}
 
 .group-about {
     margin-bottom: 40px;
@@ -90,3 +119,4 @@ hr {
     border: 0;
     border-top: 1px solid #ccc;
 }
+

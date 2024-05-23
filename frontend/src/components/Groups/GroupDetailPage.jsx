@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import './GroupDetailPage.css';
 
 const GroupDetailPage = () => {
     const { groupId } = useParams();
     const [group, setGroup] = useState(null);
     const [error, setError] = useState(null);
+    const currentUser = useSelector(state => state.session.user);
 
     useEffect(() => {
         fetch(`/api/groups/${groupId}`)
@@ -28,19 +30,31 @@ const GroupDetailPage = () => {
         return <div>Loading...</div>;
     }
 
+    const isLoggedIn = !!currentUser;
+    const isOrganizer = currentUser && currentUser.id === group.organizerId;
+
     return (
         <div className="group-detail-page">
             <Link to="/groups" className="breadcrumb">Groups</Link>
             <div className="group-header">
                 <img src={group.GroupImages[0]?.url} alt={`${group.name}`} className="group-image" />
                 <div className="group-info">
-                    <h1>{group.name}</h1>
+                    <h1 className="underline-text">{group.name}</h1>
                     <p>{group.city}, {group.state}</p>
                     <p>{group.numMembers} events · {group.private ? 'Private' : 'Public'}</p>
                     <p>Organized by: {group.Organizer.firstName} {group.Organizer.lastName}</p>
-                    <button className="join-group-button" onClick={() => alert('Feature coming soon')}>
-                        Join this group
-                    </button>
+                    {isLoggedIn && !isOrganizer && (
+                        <button className="join-group-button" onClick={() => alert('Feature coming soon')}>
+                            Join this group
+                        </button>
+                    )}
+                    {isLoggedIn && isOrganizer && (
+                        <div className="organizer-buttons">
+                            <button className="create-event-button">Create event</button>
+                            <button className="update-group-button">Update</button>
+                            <button className="delete-group-button">Delete</button>
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="group-about">
