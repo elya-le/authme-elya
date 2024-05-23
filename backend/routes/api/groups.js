@@ -72,9 +72,26 @@ router.get('/:groupId', async (req, res) => {
     try {
         const group = await Group.findByPk(groupId, {
             include: [
-                { model: User, as: 'Organizer', attributes: ['id', 'firstName', 'lastName'] },
-                { model: GroupImage, as: 'GroupImages', attributes: ['id', 'url', 'preview'] },
-                { model: Venue, as: 'Venues', attributes: ['id', 'address', 'city', 'state', 'lat', 'lng'] }
+                { 
+                    model: User, 
+                    as: 'Organizer', 
+                    attributes: ['id', 'firstName', 'lastName'] 
+                },
+                { 
+                    model: GroupImage, 
+                    as: 'GroupImages', 
+                    attributes: ['id', 'url', 'preview'] 
+                },
+                { 
+                    model: Venue, 
+                    as: 'Venues', 
+                    attributes: ['id', 'address', 'city', 'state', 'lat', 'lng'] 
+                },
+                { 
+                    model: Event, 
+                    as: 'Events', 
+                    attributes: ['id', 'name', 'type', 'startDate', 'endDate', 'previewImage']
+                }
             ]
         });
 
@@ -100,13 +117,16 @@ router.get('/:groupId', async (req, res) => {
                 firstName: group.Organizer.firstName,
                 lastName: group.Organizer.lastName
             },
-            Venues: group.Venues
+            Venues: group.Venues,
+            Events: group.Events
         });
     } catch (error) {
         console.error('Error fetching group details:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+module.exports = router;
 
 // GET /api/groups/:groupId/events - returns all events for a group
 router.get('/:groupId/events', async (req, res) => {

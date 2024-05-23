@@ -1,52 +1,78 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import './GroupListPage.css';
+import { useParams, Link } from 'react-router-dom';
+import './GroupDetailPage.css';
 
-const GroupListPage = () => {
-    const [groups, setGroups] = useState([]);
+const GroupDetailPage = () => {
+    const { groupId } = useParams();
+    const [group, setGroup] = useState(null);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch('/api/groups')
+        fetch(`/api/groups/${groupId}`)
             .then(response => response.json())
             .then(data => {
-                if (Array.isArray(data)) {
-                    setGroups(data);
+                if (data) {
+                    setGroup(data);
                 } else {
-                    setError('Invalid data format');
+                    setError('Group not found');
                 }
             })
             .catch(err => setError(err.message));
-    }, []);
+    }, [groupId]);
 
     if (error) {
         return <div>Error: {error}</div>;
     }
 
+    if (!group) {
+        return <div>Loading...</div>;
+    }
+
     return (
-        <div className="group-list-page">
-            <header className="headers">
-                <h2 className="header-gray">Events</h2>
-                <h2 className="header-teal">Groups</h2>
-            </header>
-            <p className="caption">Groups in Meetup</p>
-            <div className="group-list">
-                {groups.map(group => (
-                    <Link to={`/groups/${group.id}`} key={group.id} className="group-item">
-                        <img src={group.thumbnail} alt={`${group.name} Thumbnail`} className="group-thumbnail" />
-                        <div className="group-details">
-                            <h3 className="group-name">{group.name}</h3>
-                            <p className="group-location">{group.city}, {group.state}</p>
-                            <p className="group-description">{group.about}</p>
-                            <p className="group-events">
-                                {group.numEvents} events · {group.isPrivate ? 'Private' : 'Public'}
-                            </p>
+        <div className="group-detail-page">
+            <Link to="/groups" className="breadcrumb">Groups</Link>
+            <div className="group-header">
+                <img src={group.GroupImages[0]?.url} alt={`${group.name}`} className="group-image" />
+                <div className="group-info">
+                    <h1>{group.name}</h1>
+                    <p>{group.city}, {group.state}</p>
+                    <p>{group.numMembers} events · {group.private ? 'Private' : 'Public'}</p>
+                    <p>Organized by: {group.Organizer.firstName} {group.Organizer.lastName}</p>
+                    <button className="join-group-button" onClick={() => alert('Feature coming soon')}>
+                        Join this group
+                    </button>
+                </div>
+            </div>
+            <div className="group-about">
+                <h2>What we&apos;re about</h2>
+                <p>{group.about}</p>
+            </div>
+            <div className="group-events">
+                <h2>Upcoming Events ({group.Events.filter(event => new Date(event.startDate) > new Date()).length})</h2>
+                {group.Events.filter(event => new Date(event.startDate) > new Date()).map(event => (
+                    <div key={event.id} className="event-card">
+                        <img src={event.previewImage} alt={`${event.name}`} className="event-image" />
+                        <div className="event-info">
+                            <h3>{event.name}</h3>
+                            <p>{new Date(event.startDate).toLocaleString()}</p>
+                            <p>{event.location}</p>
                         </div>
-                    </Link>
+                    </div>
+                ))}
+                <h2>Past Events ({group.Events.filter(event => new Date(event.startDate) <= new Date()).length})</h2>
+                {group.Events.filter(event => new Date(event.startDate) <= new Date()).map(event => (
+                    <div key={event.id} className="event-card">
+                        <img src={event.previewImage} alt={`${event.name}`} className="event-image" />
+                        <div className="event-info">
+                            <h3>{event.name}</h3>
+                            <p>{new Date(event.startDate).toLocaleString()}</p>
+                            <p>{event.location}</p>
+                        </div>
+                    </div>
                 ))}
             </div>
         </div>
     );
 };
 
-export default GroupListPage;
+export default GroupDetailPage;
