@@ -1,13 +1,15 @@
 .group-list-page {
-    padding: 20px;
+    padding: 0px 200px 0px 200px;
 }
 
 .headers {
     display: flex;
+    /* justify-content: space-between;  */
 }
 
 .header-gray {
     color: gray;
+    margin-right: 20px; 
 }
 
 .header-teal {
@@ -26,6 +28,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+
 }
 
 .group-item-link {
@@ -33,7 +36,7 @@
     color: inherit;
 }
 
-.group-card {
+.group-list-card {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
