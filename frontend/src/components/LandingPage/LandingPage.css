@@ -1,3 +1,4 @@
+/* General styling for the landing page */
 .landing-page {
     display: flex;
     flex-direction: column;
@@ -5,12 +6,13 @@
     padding: 20px;
 }
 
-.section1, .section2, .section3, .section4, .section5 {
+.section1, .section2, .section3, .section4 {
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
 }
 
+/* Section 1 styling */
 .section1 {
     display: flex;
     justify-content: space-between;
@@ -34,10 +36,12 @@
     object-fit: contain;
 }
 
+/* Section 2 styling */
 .section2 {
     padding: 20px;
 }
 
+/* Section 3 styling */
 .section3 {
     display: flex;
     justify-content: space-around;
@@ -74,6 +78,7 @@
     pointer-events: none;
 }
 
+/* Section 4 styling */
 .section4 {
     padding: 20px;
 }
@@ -90,46 +95,19 @@
     background-color: darkcyan;
 }
 
+
+/* Section 5 styling */
 .section5 {
+    width: 100%;
+    text-align: center;
     padding: 20px;
-    align-items: left;
-    text-align: left;
 }
 
-.groups-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+.groups-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
 }
 
-.group-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.group-thumbnail {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-}
-
-.group-info {
-    padding: 15px;
-}
-
-.group-info h3 {
-    margin: 0;
-    font-size: 1.2em;
-}
-
-.group-info p {
-    margin: 5px 0;
-    color: #666;
-}
-
-.error {
-    color: red;
-}

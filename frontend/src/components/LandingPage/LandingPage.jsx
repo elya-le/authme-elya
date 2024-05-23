@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import SignupFormModal from '../SignupFormModal/SignupFormModal';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
-import './LandingPage.css'; // import the CSS file
+import GroupCard from '../Groups/GroupCard'; // updated import path
+import './LandingPage.css';
 
 const LandingPage = () => {
     const [groups, setGroups] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Fetch groups from your backend API
         fetch('/api/groups')
             .then(response => response.json())
             .then(data => {
-                if (Array.isArray(data.Groups)) { // Ensure this matches the API response structure
+                if (Array.isArray(data.Groups)) {
                     setGroups(data.Groups);
                 } else {
                     setError('Invalid data format');
@@ -30,7 +29,7 @@ const LandingPage = () => {
                     <p className="intro-text">Whatever your adventure, from city strolls and beach romps to playful pup events, there are thousands of furry friends waiting on Meet Pup. PAW-some activities are happening daily.</p>
                 </div>
                 <div className="infographic">
-                    <img src="../../images/lp-infographic1.png" alt="Infographic" /> {/* update the path to your infographic */}
+                    <img src="../../images/lp-infographic1.png" alt="Infographic" />
                 </div>
             </section>
 
@@ -67,23 +66,12 @@ const LandingPage = () => {
 
             <section className="section5">
                 <h2>Explore MeetPup Groups</h2>
-                <div className="groups-grid">
-                    {error ? (
-                        <div className="error">{error}</div>
-                    ) : (
-                        groups.map(group => (
-                            <Link key={group.id} to={`/groups/${group.id}`} className="group-card">
-                                <img src={group.GroupImages[0]?.url || '/default-image.png'} alt={`${group.name} Thumbnail`} className="group-thumbnail" />
-                                <div className="group-info">
-                                    <h3>{group.name}</h3>
-                                    <p>{group.city}, {group.state}</p>
-                                    <p>{group.about}</p>
-                                    <p>{group.numEvents} events · {group.private ? 'Private' : 'Public'}</p>
-                                </div>
-                            </Link>
-                        ))
-                    )}
+                <div className="groups-container">
+                    {groups.map(group => (
+                        <GroupCard key={group.id} group={group} /> // display group cards
+                    ))}
                 </div>
+                {error && <p className="error-message">{error}</p>}
             </section>
         </div>
     );
