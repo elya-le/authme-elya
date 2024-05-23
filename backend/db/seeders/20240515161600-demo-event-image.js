@@ -11,25 +11,88 @@ module.exports = {
       [
         {
           eventId: 1,
-          url: '/images/g-urban.png',
+          url: '/images/img.png', 
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           eventId: 2,
-          url: '/images/g-urban.png',
+          url: '/images/img.png', 
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           eventId: 3,
-          url: '/images/g-urban.png',
+          url: '/images/img.png', 
           preview: true,
           createdAt: new Date(),
           updatedAt: new Date(),
-        }
+        },
+        {
+          eventId: 4,
+          url: '/images/img.png', 
+          preview: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          eventId: 5,
+          url: '/images/img.png', 
+          preview: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          eventId: 6,
+          url: '/images/img.png', 
+          preview: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          eventId: 7,
+          url: '/images/img.png', 
+          preview: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          eventId: 8,
+          url: '/images/img.png', 
+          preview: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          eventId: 9,
+          url: '/images/img.png', 
+          preview: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          eventId: 10,
+          url: '/images/img.png', 
+          preview: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          eventId: 11,
+          url: '/images/img.png', 
+          preview: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          eventId: 12,
+          url: '/images/img.png', 
+          preview: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       { validate: true }
     );
@@ -41,9 +104,18 @@ module.exports = {
       {
         url: {
           [Sequelize.Op.in]: [
-            'http://example.com/path/to/event1image.jpg',
-            'http://example.com/path/to/event2image.jpg',
-            'http://example.com/path/to/event3image.jpg'
+            '/images/img.png',
+            '/images/img.png',
+            '/images/img.png',
+            '/images/img.png',
+            '/images/img.png',
+            '/images/img.png',
+            '/images/img.png',
+            '/images/img.png',
+            '/images/img.png',
+            '/images/img.png',
+            '/images/img.png',
+            '/images/img.png'
           ]
         }
       }

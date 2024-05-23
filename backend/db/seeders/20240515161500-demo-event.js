@@ -11,7 +11,7 @@ module.exports = {
       { tableName: 'Events', schema: options.schema }, 
       [
         // Urban Trailblazers events
-        {
+        { // 1
           venueId: 1,
           groupId: 1,
           name: 'Low Rider Limbo',
@@ -24,7 +24,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
+        { // 2
           venueId: 2,
           groupId: 1,
           name: 'Central Park Adventure Walk',
@@ -37,7 +37,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
+        { // 3
           venueId: 3,
           groupId: 1,
           name: 'Rooftop Romp',
@@ -50,7 +50,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
+        { // 4
           venueId: 1,
           groupId: 1,
           name: 'City Street Scavenger Hunt',
@@ -64,7 +64,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         // Beachfront Barks events
-        {
+        { // 5
           venueId: 4,
           groupId: 2,
           name: 'Brush Your Chow Day',
@@ -77,7 +77,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
+        { // 6
           venueId: 5,
           groupId: 2,
           name: 'Sandy Paws Playdate',
@@ -90,7 +90,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
+        { // 7
           venueId: 5,
           groupId: 2,
           name: 'Sunset Beach Bonfire',
@@ -103,7 +103,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
+        { // 8
           venueId: 7,
           groupId: 2,
           name: 'Doggie Paddle Race',
@@ -117,7 +117,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         // Big Pup events
-        {
+        { // 9
           venueId: 3,
           groupId: 3,
           name: 'Big Hound Day @ Ren Faire',
@@ -130,7 +130,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
+        { // 10
           venueId: 9,
           groupId: 3,
           name: 'Giant Paws Park Day',
@@ -143,7 +143,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
+        { // 11
           venueId: 10,
           groupId: 3,
           name: 'Big Dog Brunch',
@@ -156,7 +156,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
+        { // 12
           venueId: 11,
           groupId: 3,
           name: 'Mega Mutt Meetup',
