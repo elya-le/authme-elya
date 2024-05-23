@@ -74,6 +74,7 @@
 .update-group-button,
 .delete-group-button {
     background-color: darkgrey;
+    white-space: nowrap; 
 }
 
 .create-event-button:hover,
@@ -119,4 +120,3 @@ hr {
     border: 0;
     border-top: 1px solid #ccc;
 }
-

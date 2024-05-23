@@ -37,7 +37,11 @@ const GroupDetailPage = () => {
         <div className="group-detail-page">
             <Link to="/groups" className="breadcrumb">Groups</Link>
             <div className="group-header">
-                <img src={group.GroupImages[0]?.url} alt={`${group.name}`} className="group-image" />
+                {group.GroupImages && group.GroupImages.length > 0 ? (
+                    <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" /> // display the first image if available
+                ) : (
+                    <img src="/images/default-group.jpg" alt="Default Group" className="group-image" /> // display a default image if no images are available
+                )}
                 <div className="group-info">
                     <h1 className="underline-text">{group.name}</h1>
                     <p>{group.city}, {group.state}</p>

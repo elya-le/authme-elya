@@ -36,8 +36,8 @@ app.use(helmet({
     contentSecurityPolicy: false,
 }));
 
-// Serve static files from the 'images' directory
-app.use('/images', express.static(path.join(__dirname, 'images')));
+// serve static files from the "public/images" directory
+app.use('/images', express.static(path.join(__dirname, 'public/images'))); 
 
 // set up PostgreSQL connection pool
 const pool = new Pool({

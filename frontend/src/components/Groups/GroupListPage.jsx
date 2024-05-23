@@ -36,7 +36,11 @@ const GroupListPage = () => {
                         {index > 0 && <hr className="group-divider" />}
                         <Link to={`/groups/${group.id}`} className="group-item-link">
                             <div className="group-item">
-                                <img src={group.url} alt={`${group.name} Thumbnail`} className="group-thumbnail" />
+                                {group.GroupImages && group.GroupImages.length > 0 ? (
+                                    <img src={group.GroupImages[0].url} alt={`${group.name} Thumbnail`} className="group-thumbnail" /> // display the first image if available
+                                ) : (
+                                    <img src="/images/img.png" alt="Default Group" className="group-thumbnail" /> // display a default image if no images are available
+                                )}
                                 <div className="group-details">
                                     <h3 className="group-name">{group.name}</h3>
                                     <p className="group-location">{group.city}, {group.state}</p>
