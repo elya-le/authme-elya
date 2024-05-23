@@ -7,6 +7,7 @@ import './LandingPage.css';
 const LandingPage = () => {
     const [groups, setGroups] = useState([]);
     const [error, setError] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
         fetch('/api/groups')
@@ -19,6 +20,17 @@ const LandingPage = () => {
                 }
             })
             .catch(err => setError(err.message));
+    }, []);
+
+    useEffect(() => {
+        fetch('/api/session')
+            .then(response => response.json())
+            .then(data => {
+                if (data.user) {
+                    setCurrentUser(data.user);
+                }
+            })
+            .catch(err => console.error('Error fetching user session:', err));
     }, []);
 
     return (
@@ -56,13 +68,15 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            <section className="section4">
-                <OpenModalButton
-                    buttonText="Join MeetPup"
-                    modalComponent={<SignupFormModal />}
-                    className="signup-button"
-                />
-            </section>
+            {!currentUser && ( // conditionally render the section4 based on user login status
+                <section className="section4">
+                    <OpenModalButton
+                        buttonText="Join MeetPup"
+                        modalComponent={<SignupFormModal />}
+                        className="signup-button"
+                    />
+                </section>
+            )}
 
             <section className="section5">
                 <h2>Explore MeetPup Groups</h2>
