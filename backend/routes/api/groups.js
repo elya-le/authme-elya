@@ -25,6 +25,18 @@ const handleValidationErrors = (req, res, next) => {
 router.get('/', async (req, res) => {
     try {
         const groups = await Group.findAll({
+            attributes: {
+                include: [
+                    [
+                        sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM "Events"
+                            WHERE "Events"."groupId" = "Group"."id"
+                        )`),
+                        'numEvents'
+                    ]
+                ]
+            },
             include: [
                 { 
                     model: User, 

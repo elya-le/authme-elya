@@ -40,8 +40,8 @@
     z-index: 1000;
     min-width: 200px; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
-    background-color: white; /* Ensure background color is set */
-    border-radius: 2px; /* Optional: Add border-radius for smoother corners */
+    background-color: white; 
+    border-radius: 2px; 
 }
 
 .profile-dropdown.hidden {

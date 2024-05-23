@@ -10,7 +10,7 @@ const GroupListPage = () => {
         fetch('/api/groups')
             .then(response => response.json())
             .then(data => {
-                if (Array.isArray(data.Groups)) { // ensure this matches the API response structure
+                if (Array.isArray(data.Groups)) { 
                     setGroups(data.Groups);
                 } else {
                     setError('Invalid data format');
@@ -48,7 +48,7 @@ const GroupListPage = () => {
                                     <p className="group-location">{group.city}, {group.state}</p>
                                     <p className="group-description">{group.about}</p>
                                     <p className="group-events">
-                                        {group.numEvents} events · {group.isPrivate ? 'Private' : 'Public'}
+                                        {group.numEvents} events · {group.private ? 'Private' : 'Public'}
                                     </p>
                                 </div>
                             </div>
