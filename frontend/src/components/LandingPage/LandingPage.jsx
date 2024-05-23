@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import SignupFormModal from '../SignupFormModal/SignupFormModal';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import './LandingPage.css'; // import the CSS file
@@ -40,17 +41,17 @@ const LandingPage = () => {
 
             <section className="section3">
                 <div className="column">
-                    <div className="icon"></div> {/* replace with actual icon */}
+                    <img src="../../images/img.png" alt="Icon" className="small-icon" />
                     <a href="/groups" className="link">See all groups</a>
                     <p>Find your pack among our groups—join the fun and start wagging</p>
                 </div>
                 <div className="column">
-                    <div className="icon"></div> {/* replace with actual icon */}
+                    <img src="../../images/img.png" alt="Icon" className="small-icon" />
                     <a href="/events" className="link">Find an event</a>
                     <p>Sniff out events that bring together paws and people for endless fun.</p>
                 </div>
                 <div className="column">
-                    <div className="icon"></div> {/* replace with actual icon */}
+                    <img src="../../images/img.png" alt="Icon" className="small-icon" />
                     <a href="/events" className="link">Start a new group</a>
                     <p>Gather furr-ends and create your own MeetPup group to share adventures with</p>
                 </div>
@@ -71,7 +72,7 @@ const LandingPage = () => {
                         <div className="error">{error}</div>
                     ) : (
                         groups.map(group => (
-                            <div key={group.id} className="group-card">
+                            <Link key={group.id} to={`/groups/${group.id}`} className="group-card">
                                 <img src={group.GroupImages[0]?.url || '/default-image.png'} alt={`${group.name} Thumbnail`} className="group-thumbnail" />
                                 <div className="group-info">
                                     <h3>{group.name}</h3>
@@ -79,7 +80,7 @@ const LandingPage = () => {
                                     <p>{group.about}</p>
                                     <p>{group.numEvents} events · {group.private ? 'Private' : 'Public'}</p>
                                 </div>
-                            </div>
+                            </Link>
                         ))
                     )}
                 </div>
@@ -89,4 +90,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-

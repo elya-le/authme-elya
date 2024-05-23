@@ -46,6 +46,17 @@
 
 .section3 .column {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px; 
+}
+
+.section3 .column img {
+    width: 140px; 
+    height: 140px; 
+    object-fit: contain; 
 }
 
 .section3 .link {

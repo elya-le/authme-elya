@@ -5,13 +5,23 @@
 }
 
 .breadcrumb {
-    display: block;
+    display: flex;
+    align-items: center;
     margin-bottom: 20px;
+}
+
+.breadcrumb span {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.breadcrumb-link {
     text-decoration: none;
     color: #02798a;
     font-weight: bold;
     text-decoration: underline;
 }
+
 
 .group-header {
     display: flex;

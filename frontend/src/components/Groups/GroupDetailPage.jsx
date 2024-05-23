@@ -33,9 +33,18 @@ const GroupDetailPage = () => {
     const isLoggedIn = !!currentUser;
     const isOrganizer = currentUser && currentUser.id === group.organizerId;
 
+    // Sort events by startDate
+    const sortedEvents = group.Events.slice().sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+    
+    const upcomingEvents = sortedEvents.filter(event => new Date(event.startDate) > new Date());
+    const pastEvents = sortedEvents.filter(event => new Date(event.startDate) <= new Date());
+
     return (
         <div className="group-detail-page">
-            <Link to="/groups" className="breadcrumb">Groups</Link>
+            <div className='breadcrumb'>
+                <span>&lt;</span> {/* This adds the unlinked "<" character */}
+                <Link to="/groups" className="breadcrumb-link">Groups</Link>
+            </div>
             <div className="group-header">
                 {group.GroupImages && group.GroupImages.length > 0 ? (
                     <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" /> // display the first image if available
@@ -66,8 +75,8 @@ const GroupDetailPage = () => {
                 <p>{group.about}</p>
             </div>
             <div className="group-events">
-                <h2>Upcoming Events ({group.Events.filter(event => new Date(event.startDate) > new Date()).length})</h2>
-                {group.Events.filter(event => new Date(event.startDate) > new Date()).map(event => (
+                <h2>Upcoming Events ({upcomingEvents.length})</h2>
+                {upcomingEvents.map(event => (
                     <div key={event.id} className="event-card">
                         <img src={event.previewImage} alt={`${event.name}`} className="event-image" />
                         <div className="event-info">
@@ -77,8 +86,8 @@ const GroupDetailPage = () => {
                         </div>
                     </div>
                 ))}
-                <h2>Past Events ({group.Events.filter(event => new Date(event.startDate) <= new Date()).length})</h2>
-                {group.Events.filter(event => new Date(event.startDate) <= new Date()).map(event => (
+                <h2>Past Events ({pastEvents.length})</h2>
+                {pastEvents.map(event => (
                     <div key={event.id} className="event-card">
                         <img src={event.previewImage} alt={`${event.name}`} className="event-image" />
                         <div className="event-info">
