@@ -22,7 +22,7 @@
     text-decoration: underline;
 }
 
-.group-detail-card {
+.group-detail-card-main {
     display: flex;
     align-items: flex-start;
     margin-bottom: 40px;
@@ -55,8 +55,8 @@
     margin-right: 20px;
 }
 
-.group-detail-card-info-heard {
-
+.group-detail-card-info-header {
+    align-items: flex-start; 
 }
 
 .group-info h1 {

@@ -44,7 +44,7 @@ const GroupDetailPage = () => {
                 <span>&lt;</span> 
                 <Link to="/groups" className="breadcrumb-link">Groups</Link>
             </div>
-            <div className="group-detail-card">
+            <div className="group-detail-card-main">
                 {group.GroupImages && group.GroupImages.length > 0 ? (
                     <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-detail-image" /> 
                 ) : (
