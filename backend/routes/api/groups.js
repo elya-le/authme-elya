@@ -37,8 +37,21 @@ router.get('/', async (req, res) => {
                     attributes: ['url'],
                     where: { preview: true },
                     required: false
+                },
+                {
+                    model: Event,
+                    as: 'Events',
+                    attributes: []
                 }
-            ]
+            ],
+            attributes: {
+                include: [
+                    [
+                        sequelize.fn("COUNT", sequelize.col("Events.id")), "numEvents"
+                    ]
+                ]
+            },
+            group: ['Group.id', 'GroupImages.id', 'Organizer.id']
         });
         res.json({ Groups: groups });
     } catch (err) {
@@ -46,6 +59,7 @@ router.get('/', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch groups' }); 
     }
 });
+
 
 // GET /api/groups/current - gets all groups organized or joined by the current user
 router.get('/current', authenticated, async (req, res, next) => {

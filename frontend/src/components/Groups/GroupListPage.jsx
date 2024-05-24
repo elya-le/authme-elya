@@ -37,18 +37,19 @@ const GroupListPage = () => {
                         <Link to={`/groups/${group.id}`} className="group-item-link">
                             <div className="group-list-card">
                                 <div className="group-image">
-                                {group.GroupImages && group.GroupImages.length > 0 ? (
-                                    <img src={group.GroupImages[0].url} alt={`${group.name} Thumbnail`} className="group-thumbnail" /> // display the first image if available
-                                ) : (
-                                    <img src="/images/img.png" alt="Default Group" className="group-thumbnail" /> // display a default image if no images are available
-                                )}
+                                    {group.GroupImages && group.GroupImages.length > 0 ? (
+                                        <img src={group.GroupImages[0].url} alt={`${group.name} Thumbnail`} className="group-thumbnail" /> // display the first image if available
+                                    ) : (
+                                        <img src="/images/img.png" alt="Default Group" className="group-thumbnail" /> // display a default image if no images are available
+                                    )}
                                 </div>
                                 <div className="group-details">
                                     <h3 className="group-name">{group.name}</h3>
                                     <p className="group-location">{group.city}, {group.state}</p>
                                     <p className="group-description">{group.about}</p>
                                     <p className="group-events">
-                                        {group.numEvents} events · {group.private ? 'Private' : 'Public'}
+                                        {group.numEvents} events &middot;{" "}
+                                        {group.private ? 'Private' : 'Public'}
                                     </p>
                                 </div>
                             </div>
