@@ -83,9 +83,30 @@ const GroupDetailPage = () => {
                         <>
                             <h2>Upcoming Events ({upcomingEvents.length})</h2>
                             {upcomingEvents.map(event => (
+                                <Link to={`/events/${event.id}`} key={event.id} className="event-card-link"> {/* Link to event detail page */}
+                                    <div key={event.id} className="event-card">
+                                        <div className="event-info-top">
+                                            <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
+                                            <div className="event-title">
+                                                <p>{new Date(event.startDate).toLocaleString()}</p>
+                                                <h3>{event.name}</h3>
+                                                <p>{event.location}</p>
+                                            </div>     
+                                        </div>
+                                        <div className="event-info-bottom">
+                                            <p className="group-description">{group.about}</p>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </>
+                        )}
+                        <h2>Past Events ({pastEvents.length})</h2>
+                        {pastEvents.map(event => (
+                            <Link to={`/events/${event.id}`} key={event.id} className="event-card-link"> {/* Link to event detail page */}
                                 <div key={event.id} className="event-card">
                                     <div className="event-info-top">
-                                    <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
+                                        <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
                                         <div className="event-title">
                                             <p>{new Date(event.startDate).toLocaleString()}</p>
                                             <h3>{event.name}</h3>
@@ -96,25 +117,8 @@ const GroupDetailPage = () => {
                                         <p className="group-description">{group.about}</p>
                                     </div>
                                 </div>
-                            ))}
-                        </>
-                    )}
-                    <h2>Past Events ({pastEvents.length})</h2>
-                    {pastEvents.map(event => (
-                        <div key={event.id} className="event-card">
-                            <div className="event-info-top">
-                            <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
-                                <div className="event-title">
-                                    <p>{new Date(event.startDate).toLocaleString()}</p>
-                                    <h3>{event.name}</h3>
-                                    <p>{event.location}</p>
-                                </div>     
-                            </div>
-                            <div className="event-info-bottom">
-                                <p className="group-description">{group.about}</p>
-                            </div>
-                        </div>
-                    ))}
+                            </Link>
+                        ))}
                 </div>
             </div>
         </div>

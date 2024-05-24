@@ -122,6 +122,11 @@
     max-width: 600px;
 }
 
+.event-card-link {
+    text-decoration: none;
+    color: black;
+}
+
 .event-image {
     width: 100px;
     height: 100px;
