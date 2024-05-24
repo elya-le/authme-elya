@@ -1,0 +1,159 @@
+/* General styling for the landing page */
+
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.section1, .section2, .section3, .section4 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Section 1 styling */
+.section1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section1 .text {
+    flex: 1;
+    padding: 20px;
+}
+
+.section1 .infographic {
+    flex: 1;
+    padding: 20px;
+}
+
+.section1 .infographic img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Section 2 styling */
+.section2 {
+    padding: 20px;
+}
+
+/* Section 3 styling */
+.section3 {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+
+.section3 .column {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px; 
+}
+
+.section3 .column img {
+    width: 140px; 
+    height: 120px; 
+    border-radius: 8px;
+}
+
+
+a {
+    text-decoration: none; /* removes the underline */
+    color: black
+}
+
+
+.section3-group-link {
+    margin: 15px 0px 0px 0px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #02798a;
+}
+
+.section3-event-link {
+    margin: 15px 0px 0px 0px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #02798a;
+}
+
+.section3-start-link-enabled {
+    margin: 15px 0px 0px 0px;
+    font-size: 20px;
+    font-weight: bold;
+    color:  #02798a;
+}
+
+.section3-start-link-disabled {
+    margin: 15px 0px 0px 0px;
+    font-size: 20px;
+    font-weight: bold;
+    color: grey;
+}
+.column-disabled {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px; 
+    color: grey;
+}
+
+.section3 .column-disabled img {
+    width: 140px; 
+    height: 120px; 
+    border-radius: 8px;
+}
+
+.section3 .link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.section3 .link.disabled {
+    color: lightgrey;
+    pointer-events: none;
+}
+
+/* Section 4 styling */
+.section4 {
+    padding: 20px;
+}
+
+.signup-button {
+    background-color: teal;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.signup-button:hover {
+    background-color: darkcyan;
+}
+
+/* Section 5 styling */
+.section5 {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+}
+
+.groups-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+
