@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { FaUserCircle, FaAngleDown, FaAngleUp } from 'react-icons/fa'; // import arrow icons
+import { FaUserCircle, FaAngleDown, FaAngleUp } from 'react-icons/fa'; 
 import * as sessionActions from '../../store/session';
 import './ProfileButtonMenu.css';
 
@@ -34,6 +34,7 @@ function ProfileButtonMenu({ user }) {
     const logout = (e) => {
         e.preventDefault();
         dispatch(sessionActions.logout());
+        window.location.reload(); // reload the page after logout
     };
 
     return (
