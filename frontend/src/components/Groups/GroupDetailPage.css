@@ -167,6 +167,10 @@
     display:flex;
 }
 
+.event-info-bottom {
+    margin: 20px 0px 0px 0px;
+}
+
 hr {
     margin: 20px 0;
     border: 0;

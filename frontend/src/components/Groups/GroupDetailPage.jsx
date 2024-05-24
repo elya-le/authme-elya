@@ -95,9 +95,12 @@ const GroupDetailPage = () => {
                                         <div className="event-info-top">
                                             <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
                                             <div className="event-title">
-                                                <p>{new Date(event.startDate).toLocaleString()}</p>
+                                                <p>
+                                                    {new Date(event.startDate).toLocaleDateString()} &middot; {new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                </p>
                                                 <h3>{event.name}</h3>
-                                                <p>{event.location}</p>
+                                                <p>{event.Venue?.address}<br/>{event.Venue?.city}, {event.Venue?.state} </p> {/* corrected typo and added null check */}
+                                    
                                             </div>     
                                         </div>
                                         <div className="event-info-bottom">
@@ -108,24 +111,31 @@ const GroupDetailPage = () => {
                             ))}
                         </>
                         )}
-                        <h2>Past Events ({pastEvents.length})</h2>
-                        {pastEvents.map(event => (
-                            <Link to={`/events/${event.id}`} key={event.id} className="event-card-link"> {/* Link to event detail page */}
-                                <div key={event.id} className="event-card">
-                                    <div className="event-info-top">
-                                        <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
-                                        <div className="event-title">
-                                            <p>{new Date(event.startDate).toLocaleString()}</p>
-                                            <h3>{event.name}</h3>
-                                            <p>{event.location}</p>
-                                        </div>     
-                                    </div>
-                                    <div className="event-info-bottom">
-                                        <p className="group-description">{group.about}</p>
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
+                        
+                        {pastEvents.length > 0 && ( // render only if there are past events
+                            <>
+                                <h2>Past Events ({pastEvents.length})</h2>
+                                {pastEvents.map(event => (
+                                    <Link to={`/events/${event.id}`} key={event.id} className="event-card-link"> {/* Link to event detail page */}
+                                        <div key={event.id} className="event-card">
+                                            <div className="event-info-top">
+                                                <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
+                                                <div className="event-title">
+                                                    <p>
+                                                        {new Date(event.startDate).toLocaleDateString()} &middot; {new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    </p>
+                                                    <h3>{event.name}</h3>
+                                                    <p>{event.location}</p>
+                                                </div>     
+                                            </div>
+                                            <div className="event-info-bottom">
+                                                <p className="group-description">{group.about}</p>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </>
+                        )}
                 </div>
             </div>
         </div>

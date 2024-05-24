@@ -79,7 +79,6 @@ router.get('/current', authenticated, async (req, res, next) => {
     }
 });
 
-// GET /api/groups/:groupId - gets details of a group by its id
 router.get('/:groupId', async (req, res) => {
     const { groupId } = req.params;
 
@@ -104,22 +103,21 @@ router.get('/:groupId', async (req, res) => {
                 { 
                     model: Event, 
                     as: 'Events', 
+                    include: [{ 
+                        model: Venue, 
+                        as: 'Venue', 
+                        attributes: ['address', 'city', 'state']
+                    }],
                     attributes: ['id', 'name', 'type', 'startDate', 'endDate', 'previewImage']
                 }
-            ],
-            attributes: {
-                include: [
-                    [
-                        sequelize.fn("COUNT", sequelize.col("Events.id")), "numEvents"
-                    ]
-                ]
-            },
-            group: ['Group.id', 'GroupImages.id', 'Organizer.id', 'Venues.id', 'Events.id']
+            ]
         });
 
         if (!group) {
             return res.status(404).json({ message: "Group couldn't be found" });
         }
+
+        const numEvents = await Event.count({ where: { groupId: group.id } });
 
         res.status(200).json({
             id: group.id,
@@ -141,7 +139,7 @@ router.get('/:groupId', async (req, res) => {
             },
             Venues: group.Venues,
             Events: group.Events,
-            numEvents: group.dataValues.numEvents // include number of events
+            numEvents // include number of events
         });
     } catch (error) {
         console.error('Error fetching group details:', error);
@@ -149,65 +147,36 @@ router.get('/:groupId', async (req, res) => {
     }
 });
 
-
-
-
-// GET /api/groups/:groupId/events - returns all events for a group
 router.get('/:groupId/events', async (req, res) => {
     const { groupId } = req.params;
 
     try {
-        const group = await Group.findByPk(groupId, {
-            include: [
-                {
-                    model: Event,
-                    as: 'Events',
-                    include: [
-                        {
-                            model: Venue,
-                            as: 'Venue',
-                            attributes: ['id', 'city', 'state']
-                        },
-                        {
-                            model: Attendance,
-                            as: 'Attendances',
-                            attributes: ['id']
-                        }
-                    ]
-                }
-            ]
-        });
-
+        const group = await Group.findByPk(groupId);
         if (!group) {
             return res.status(404).json({ message: "Group couldn't be found" });
         }
 
-        const events = group.Events.map(event => ({
-            id: event.id,
-            groupId: event.groupId,
-            venueId: event.venueId,
-            name: event.name,
-            type: event.type,
-            startDate: event.startDate,
-            endDate: event.endDate,
-            numAttending: event.Attendances.length,
-            previewImage: event.previewImage || null,
-            Group: {
-                id: group.id,
-                name: group.name,
-                city: group.city,
-                state: group.state
-            },
-            Venue: event.Venue ? {
-                id: event.Venue.id,
-                city: event.Venue.city,
-                state: event.Venue.state
-            } : null
-        }));
+        const events = await Event.findAll({
+            where: { groupId: groupId },
+            include: [
+                {
+                    model: Venue,
+                    as: 'Venue',
+                    attributes: ['id', 'city', 'state']
+                },
+                {
+                    model: Attendance,
+                    as: 'Attendances',
+                    attributes: ['userID', 'status']
+                }
+            ],
+            attributes: ['id', 'groupId', 'venueId', 'name', 'type', 'startDate', 'endDate', 'previewImage', [sequelize.fn('COUNT', sequelize.col('Attendances.id')), 'numAttending']],
+            group: ['Event.id', 'Venue.id', 'Attendances.id'] // Ensure grouping
+        });
 
         res.status(200).json({ Events: events });
     } catch (error) {
-        console.error('Error fetching events for group:', error);
+        console.error('Failed to fetch events for the group:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
