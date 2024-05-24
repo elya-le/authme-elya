@@ -14,7 +14,7 @@ const GroupDetailPage = () => {
             .then(response => response.json())
             .then(data => {
                 if (data) {
-                    setGroup(data); // set group data
+                    setGroup(data); 
                 } else {
                     setError('Group not found');
                 }
@@ -79,8 +79,28 @@ const GroupDetailPage = () => {
                     <p>{group.about}</p>
                 </div>
                 <div className="group-events">
-                    <h2>Upcoming Events ({upcomingEvents.length})</h2> 
-                    {upcomingEvents.map(event => (
+                    {upcomingEvents.length > 0 && ( // render only if there are upcoming events
+                        <>
+                            <h2>Upcoming Events ({upcomingEvents.length})</h2>
+                            {upcomingEvents.map(event => (
+                                <div key={event.id} className="event-card">
+                                    <div className="event-info-top">
+                                    <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
+                                        <div className="event-title">
+                                            <p>{new Date(event.startDate).toLocaleString()}</p>
+                                            <h3>{event.name}</h3>
+                                            <p>{event.location}</p>
+                                        </div>     
+                                    </div>
+                                    <div className="event-info-bottom">
+                                        <p className="group-description">{group.about}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                    )}
+                    <h2>Past Events ({pastEvents.length})</h2>
+                    {pastEvents.map(event => (
                         <div key={event.id} className="event-card">
                             <div className="event-info-top">
                             <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
@@ -93,22 +113,6 @@ const GroupDetailPage = () => {
                             <div className="event-info-bottom">
                                 <p className="group-description">{group.about}</p>
                             </div>
-                        </div>
-                    ))}
-                    <h2>Past Events ({pastEvents.length})</h2> 
-                    {pastEvents.map(event => (
-                        <div key={event.id} className="event-card">
-                        <div className="event-info-top">
-                        <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
-                            <div className="event-title">
-                                <p>{new Date(event.startDate).toLocaleString()}</p>
-                                <h3>{event.name}</h3>
-                                <p>{event.location}</p>
-                            </div>     
-                        </div>
-                        <div className="event-info-bottom">
-                            <p className="group-description">{group.about}</p>
-                        </div>
                         </div>
                     ))}
                 </div>
