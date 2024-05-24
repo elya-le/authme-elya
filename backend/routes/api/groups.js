@@ -106,7 +106,15 @@ router.get('/:groupId', async (req, res) => {
                     as: 'Events', 
                     attributes: ['id', 'name', 'type', 'startDate', 'endDate', 'previewImage']
                 }
-            ]
+            ],
+            attributes: {
+                include: [
+                    [
+                        sequelize.fn("COUNT", sequelize.col("Events.id")), "numEvents"
+                    ]
+                ]
+            },
+            group: ['Group.id', 'GroupImages.id', 'Organizer.id', 'Venues.id', 'Events.id']
         });
 
         if (!group) {
@@ -132,7 +140,8 @@ router.get('/:groupId', async (req, res) => {
                 lastName: group.Organizer.lastName
             },
             Venues: group.Venues,
-            Events: group.Events
+            Events: group.Events,
+            numEvents: group.dataValues.numEvents // include number of events
         });
     } catch (error) {
         console.error('Error fetching group details:', error);
@@ -140,7 +149,8 @@ router.get('/:groupId', async (req, res) => {
     }
 });
 
-module.exports = router;
+
+
 
 // GET /api/groups/:groupId/events - returns all events for a group
 router.get('/:groupId/events', async (req, res) => {

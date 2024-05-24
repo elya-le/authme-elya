@@ -14,7 +14,7 @@ const GroupDetailPage = () => {
             .then(response => response.json())
             .then(data => {
                 if (data) {
-                    setGroup(data);
+                    setGroup(data); // set group data
                 } else {
                     setError('Group not found');
                 }
@@ -46,14 +46,14 @@ const GroupDetailPage = () => {
             </div>
             <div className="group-header">
                 {group.GroupImages && group.GroupImages.length > 0 ? (
-                    <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" /> // display the first image if available
+                    <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" /> 
                 ) : (
-                    <img src="/images/default-group.jpg" alt="Default Group" className="group-image" /> // display a default image if no images are available
+                    <img src="/images/default-group.jpg" alt="Default Group" className="group-image" /> 
                 )}
                 <div className="group-info">
                     <h1 className="underline-text">{group.name}</h1>
                     <p>{group.city}, {group.state}</p>
-                    <p>{group.numEvents} events · {group.private ? 'Private' : 'Public'}</p>
+                    <p>{group.numEvents} events &middot;{" "} {group.private ? 'Private' : 'Public'}</p> 
                     <p>Organized by: {group.Organizer.firstName} {group.Organizer.lastName}</p>
                     {isLoggedIn && !isOrganizer && (
                         <button className="join-group-button" onClick={() => alert('Feature coming soon')}>
@@ -79,7 +79,7 @@ const GroupDetailPage = () => {
                     <p>{group.about}</p>
                 </div>
                 <div className="group-events">
-                    <h2>Upcoming Events ({upcomingEvents.length})</h2>
+                    <h2>Upcoming Events ({upcomingEvents.length})</h2> 
                     {upcomingEvents.map(event => (
                         <div key={event.id} className="event-card">
                             <div className="event-info-top">
@@ -95,7 +95,7 @@ const GroupDetailPage = () => {
                             </div>
                         </div>
                     ))}
-                    <h2>Past Events ({pastEvents.length})</h2>
+                    <h2>Past Events ({pastEvents.length})</h2> 
                     {pastEvents.map(event => (
                         <div key={event.id} className="event-card">
                         <div className="event-info-top">
