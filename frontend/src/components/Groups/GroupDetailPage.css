@@ -1,13 +1,10 @@
-.group-detail-page {
-    padding: 20px;
-    max-width: 900px;
-    margin: 0 auto;
-}
+
 
 .breadcrumb {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    padding-left: 100px;
 }
 
 .breadcrumb span {
@@ -27,6 +24,7 @@
     display: flex;
     align-items: flex-start;
     margin-bottom: 20px;
+    padding-left: 100px;
 }
 
 .group-image {
@@ -93,6 +91,14 @@
     background-color: grey;
 }
 
+.bottom-container {
+
+    padding-left: 100px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: rgb(211, 209, 209);
+}
+
 .group-about {
     margin-bottom: 40px;
 }
@@ -114,6 +120,10 @@
     margin-bottom: 20px;
     flex-direction: column;
     margin-left: 10px;
+    padding: 10px;
+    background: white;
+    border-radius: 5px;
+    max-width: 600px;
 }
 
 .event-image {
