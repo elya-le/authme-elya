@@ -38,19 +38,7 @@ router.get('/', async (req, res) => {
                     where: { preview: true },
                     required: false
                 }
-            ],
-            attributes: {
-                include: [
-                    [
-                        sequelize.literal(`(
-                            SELECT COUNT(*)
-                            FROM "Events"
-                            WHERE "Events"."groupId" = "Group"."id"
-                        )`),
-                        'numEvents'
-                    ]
-                ]
-            }
+            ]
         });
         res.json({ Groups: groups });
     } catch (err) {
@@ -58,7 +46,6 @@ router.get('/', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch groups' }); 
     }
 });
-
 
 // GET /api/groups/current - gets all groups organized or joined by the current user
 router.get('/current', authenticated, async (req, res, next) => {
@@ -84,18 +71,6 @@ router.get('/:groupId', async (req, res) => {
 
     try {
         const group = await Group.findByPk(groupId, {
-            attributes: {
-                include: [
-                    [
-                        sequelize.literal(`(
-                            SELECT COUNT(*)
-                            FROM "Events"
-                            WHERE "Events"."groupId" = "Group"."id"
-                        )`),
-                        'numEvents'
-                    ]
-                ]
-            },
             include: [
                 { 
                     model: User, 
@@ -136,7 +111,6 @@ router.get('/:groupId', async (req, res) => {
             createdAt: group.createdAt,
             updatedAt: group.updatedAt,
             numMembers: group.numMembers,
-            numEvents: group.dataValues.numEvents, 
             GroupImages: group.GroupImages,
             Organizer: {
                 id: group.Organizer.id,
@@ -152,6 +126,7 @@ router.get('/:groupId', async (req, res) => {
     }
 });
 
+module.exports = router;
 
 // GET /api/groups/:groupId/events - returns all events for a group
 router.get('/:groupId/events', async (req, res) => {
