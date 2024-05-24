@@ -17,17 +17,17 @@
 
 .breadcrumb-link {
     text-decoration: none;
-    color: #02798a;
+    color: #02798a !important; 
     font-weight: bold;
     text-decoration: underline;
 }
 
 .group-detail-card-main {
+    /* border: 1px solid blue; */
     display: flex;
     align-items: flex-start;
     margin-bottom: 40px;
     padding-left: 100px;
-    border: 1px solid blue;
 }
 
 .group-detail-image {
@@ -38,13 +38,13 @@
 }
 
 .group-detail-card-info-container {
+    /* border: 1px solid red; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     flex: 1;
     margin-left: 20px;
     align-items: flex-start; 
-    border: 1px solid red;
     height: 400px;
     align-items: sp;
 }
@@ -68,8 +68,8 @@
 }
 
 .group-detail-button-container{
+    /* border: 1px solid red; */
     align-items: baseline;
-    border: 1px solid red;
     margin: 10px 0px 0px 0px;
 
 }
@@ -84,6 +84,7 @@
     font-size: 16px;
     margin-top: 10px; 
     cursor: pointer;
+    white-space: nowrap; 
 }
 
 .join-group-button:hover {
