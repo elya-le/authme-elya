@@ -21,7 +21,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          organizerId: 1, 
+          organizerId: 2, 
           name: 'Beachfront Barks',
           about: "Perfect for dogs who cant stay away from the water. Meetups include beach games and swimming sessions.",
           type: 'In person',
@@ -32,7 +32,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          organizerId: 1, 
+          organizerId: 3, 
           name: 'Big Pup',
           about: "Help your pony-sized lapdog socialize and make friends with other pups they won't accidentally flatten",
           type: 'In person',

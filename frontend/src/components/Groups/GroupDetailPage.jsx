@@ -44,29 +44,36 @@ const GroupDetailPage = () => {
                 <span>&lt;</span> 
                 <Link to="/groups" className="breadcrumb-link">Groups</Link>
             </div>
-            <div className="group-header">
+            <div className="group-detail-card">
                 {group.GroupImages && group.GroupImages.length > 0 ? (
-                    <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" /> 
+                    <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-detail-image" /> 
                 ) : (
-                    <img src="/images/default-group.jpg" alt="Default Group" className="group-image" /> 
+                    <img src="/images/default-group.jpg" alt="Default Group" className="group-detail-image" /> 
                 )}
-                <div className="group-info">
-                    <h1 className="underline-text">{group.name}</h1>
+                <div className="group-detail-card-info-container">
+                    <div className="group-detail-card-info-header">
+                    <h1>{group.name}</h1>
                     <p>{group.city}, {group.state}</p>
                     <p>{group.numEvents} events &middot;{" "} {group.private ? 'Private' : 'Public'}</p> 
                     <p>Organized by: {group.Organizer.firstName} {group.Organizer.lastName}</p>
-                    {isLoggedIn && !isOrganizer && (
-                        <button className="join-group-button" onClick={() => alert('Feature coming soon')}>
-                            Join this group
-                        </button>
-                    )}
-                    {isLoggedIn && isOrganizer && (
-                        <div className="organizer-buttons">
-                            <button className="create-event-button">Create event</button>
-                            <button className="update-group-button">Update</button>
-                            <button className="delete-group-button">Delete</button>
-                        </div>
-                    )}
+
+                    </div>
+                    
+                    <div className='group-detail-button-container'>
+                        {isLoggedIn && !isOrganizer && (
+                            <button className="join-group-button" onClick={() => alert('Feature coming soon')}>
+                                Join this group
+                            </button>
+                        )}
+                        {isLoggedIn && isOrganizer && (
+                            <div className="organizer-buttons">
+                                <button className="create-event-button">Create event</button>
+                                <button className="update-group-button">Update</button>
+                                <button className="delete-group-button">Delete</button>
+                            </div>
+                        )}
+                    </div>
+                    
                 </div>
             </div>
             <div className='bottom-container'>

@@ -1,3 +1,8 @@
+.group-detail-page {
+    align-items: flex-start;
+    padding: 20px 0px 0px 0px;
+}
+
 .breadcrumb {
     display: flex;
     align-items: center;
@@ -17,14 +22,32 @@
     text-decoration: underline;
 }
 
-
-.group-header {
+.group-detail-card {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     padding-left: 100px;
+    border: 1px solid blue;
 }
 
+.group-detail-image {
+    width: 600px;
+    height: 400px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.group-detail-card-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    margin-left: 20px;
+    align-items: flex-start; 
+    border: 1px solid red;
+    height: 400px;
+    align-items: sp;
+}
 .group-image {
     width: 300px;
     height: 200px;
@@ -32,11 +55,8 @@
     margin-right: 20px;
 }
 
-.group-info {
-    flex: 1;
-    flex-direction: column;
-    margin-left: 20px;
-    align-items: flex-start; 
+.group-detail-card-info-heard {
+
 }
 
 .group-info h1 {
@@ -46,6 +66,14 @@
 .group-info p {
     margin: 5px 0;
 }
+
+.group-detail-button-container{
+    align-items: baseline;
+    border: 1px solid red;
+    margin: 10px 0px 0px 0px;
+
+}
+
 
 .join-group-button {
     background-color: red;
@@ -65,6 +93,7 @@
 .organizer-buttons {
     display: flex;
     gap: 10px;
+
 }
 
 .organizer-buttons button {
@@ -92,7 +121,7 @@
 
 .bottom-container {
     padding: 10px 0px 10px 100px;
-    background-color: rgb(208, 208, 208);
+    background-color: rgb(240, 240, 240);
 }
 
 .group-about {
@@ -115,7 +144,7 @@
     display: flex;
     margin: 20px 0px 20px 0px;
     flex-direction: column;
-    padding: 10px;
+    padding: 20px;
     background: white;
     border-radius: 8px;
     max-width: 600px;
