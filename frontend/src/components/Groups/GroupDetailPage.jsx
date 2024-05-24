@@ -41,7 +41,7 @@ const GroupDetailPage = () => {
     return (
         <div className="group-detail-page">
             <div className='breadcrumb'>
-                <span>&lt;</span> {/* This adds the unlinked "<" character */}
+                <span>&lt;</span> 
                 <Link to="/groups" className="breadcrumb-link">Groups</Link>
             </div>
             <div className="group-header">

@@ -53,7 +53,11 @@ const router = createBrowserRouter([
             }
         ]
     }
-]);
+],
+    {
+    basename: process.env.NODE_ENV === 'production' ? '' : ''
+    }
+);
 
 function App() {
     return <RouterProvider router={router} />;

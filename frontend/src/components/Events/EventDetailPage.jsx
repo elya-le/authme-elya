@@ -31,7 +31,8 @@ const EventDetailPage = () => {
     return (
         <div className="event-detail-page">
             <div className="breadcrumb">
-                <Link to="/events" className="breadcrumb-link">&lt; Events</Link>
+                <span>&lt;</span>
+                <Link to="/events" className="breadcrumb-link">Events</Link>
             </div>
             <h1>{event.name}</h1>
             <p>Hosted by {event.hostFirstName} {event.hostLastName}</p>
