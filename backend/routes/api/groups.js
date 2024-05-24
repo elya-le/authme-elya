@@ -25,18 +25,6 @@ const handleValidationErrors = (req, res, next) => {
 router.get('/', async (req, res) => {
     try {
         const groups = await Group.findAll({
-            attributes: {
-                include: [
-                    [
-                        sequelize.literal(`(
-                            SELECT COUNT(*)
-                            FROM "Events"
-                            WHERE "Events"."groupId" = "Group"."id"
-                        )`),
-                        'numEvents'
-                    ]
-                ]
-            },
             include: [
                 { 
                     model: User, 
@@ -49,9 +37,20 @@ router.get('/', async (req, res) => {
                     attributes: ['url'],
                     where: { preview: true },
                     required: false
-                },
-                
-            ]
+                }
+            ],
+            attributes: {
+                include: [
+                    [
+                        sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM "Events"
+                            WHERE "Events"."groupId" = "Group"."id"
+                        )`),
+                        'numEvents'
+                    ]
+                ]
+            }
         });
         res.json({ Groups: groups });
     } catch (err) {
@@ -59,6 +58,7 @@ router.get('/', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch groups' }); 
     }
 });
+
 
 // GET /api/groups/current - gets all groups organized or joined by the current user
 router.get('/current', authenticated, async (req, res, next) => {
