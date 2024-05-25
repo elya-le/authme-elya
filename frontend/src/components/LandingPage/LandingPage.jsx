@@ -71,7 +71,7 @@ const LandingPage = () => {
                         <div className="column">
                             <img src="../../images/img.png" alt="Icon" className="small-icon" />
                             <a href="/groups" className="section3-start-link-enabled">Start a new group</a>
-                            <p>If you havent find what you're looking for yet... create your own MeetPup group and watch as pups come wagging to join your adventures!</p>
+                            <p>If you havent find what you&apos;re looking for yet... create your own MeetPup group and watch as pups come wagging to join your adventures!</p>
                         </div>
                     </Link>
                 ) : (
