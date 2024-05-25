@@ -12,7 +12,7 @@ const EventListPage = () => {
         fetch('/api/events')
             .then(response => response.json())
             .then(data => {
-                console.log('Fetched data:', data); // log fetched data
+                console.log('Fetched data:', data);
                 if (Array.isArray(data.Events)) {
                     setEvents(data.Events);
                 } else {
@@ -38,9 +38,9 @@ const EventListPage = () => {
                 <p className='list-page-caption'>Events in MeetPup</p>
             </div>
             <div className='list-section2'>
-                {events.map((event, index) => (
-                    <div key={event.id} className='event-item'> 
-                        {index > 0 && <hr className='event-divider' />}
+                {events.map((event) => (
+                    <div key={event.id} className='event-item'>
+                        <hr className='event-divider' />
                         <Link to={`/events/${event.id}`} className='event-card-link'>
                             <div className='event-card-top'>
                                 <div className='event-card-image'>
