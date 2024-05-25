@@ -14,7 +14,21 @@ const EventListPage = () => {
             .then(data => {
                 console.log('Fetched data:', data);
                 if (Array.isArray(data.Events)) {
-                    setEvents(data.Events);
+                    const now = new Date(); // sort events by date
+                    const sortedEvents = data.Events.sort((a, b) => {
+                        const dateA = new Date(a.startDate);
+                        const dateB = new Date(b.startDate);
+                        if (dateA >= now && dateB >= now) {
+                            return dateA - dateB; // both are upcoming events
+                        } else if (dateA < now && dateB < now) {
+                            return dateA - dateB; // both are past events
+                        } else if (dateA >= now && dateB < now) {
+                            return -1; // a is upcoming and b is past
+                        } else {
+                            return 1; // a is past and b is upcoming
+                        }
+                    });
+                    setEvents(sortedEvents);
                 } else {
                     setError('Invalid data format');
                 }

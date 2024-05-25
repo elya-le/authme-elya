@@ -55,6 +55,9 @@ function ProfileButtonMenu({ user }) {
                 <li>
                     <Link to="/groups" className="dropdown-link" onClick={() => setShowMenu(false)}>View groups</Link>
                 </li>
+                <li>
+                    <Link to="/events" className="dropdown-link" onClick={() => setShowMenu(false)}>View events</Link>
+                </li>
                 <hr />
                 <li>
                     <button onClick={logout}>Log Out</button>
