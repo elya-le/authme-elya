@@ -130,16 +130,6 @@
     margin-bottom: 10px;
 }
 
-.event-card {
-    display: flex;
-    margin: 20px 0px 20px 0px;
-    flex-direction: column;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    max-width: 600px;
-}
-
 .event-card-link {
     text-decoration: none;
     color: black;

@@ -6,6 +6,7 @@ import Navigation from './components/Navigation/Navigation';
 import LandingPage from './components/LandingPage/LandingPage';
 import GroupListPage from './components/Groups/GroupListPage'; 
 import GroupDetailPage from './components/Groups/GroupDetailPage';
+import EventListPage from './components/Events/EventListPage';
 import EventDetailPage from './components/Events/EventDetailPage';
 import * as sessionActions from './store/session';
 
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
             {
                 path: 'groups/:groupId',
                 element: <GroupDetailPage /> 
+            },
+            {
+                path: 'events',
+                element: <EventListPage />
             },
             {
                 path: 'events/:eventId',

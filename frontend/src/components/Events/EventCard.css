@@ -1,0 +1,32 @@
+.event-card-link {
+    display: flex;
+    margin: 20px 0px 20px 0px;
+    flex-direction: column;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    max-width: 600px;
+}
+
+.event-card-top {
+    display: flex;
+}
+
+.event-card-thumbnail {
+    width: 250px;
+    height: 200px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.event-card-details {
+    margin: 10px 20px;
+}
+
+.event-card-name {
+    margin: 10px 0px;
+}
+
+.event-card-bottom {
+    margin: 10px 0px;
+}

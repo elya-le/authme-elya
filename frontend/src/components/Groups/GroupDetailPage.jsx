@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import '../Events/EventCard.css';
 import './GroupDetailPage.css';
+import '../../Main.css';
 
 const GroupDetailPage = () => {
     const { groupId } = useParams();
@@ -88,48 +90,59 @@ const GroupDetailPage = () => {
                         <>
                             <h2>Upcoming Events ({upcomingEvents.length})</h2>
                             {upcomingEvents.map(event => (
-                                <Link to={`/events/${event.id}`} key={event.id} className="event-card-link"> {/* link to event detail page */}
-                                    <div key={event.id} className="event-card">
-                                        <div className="event-info-top">
-                                            <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
-                                            <div className="event-title">
-                                                <p>
-                                                    {new Date(event.startDate).toLocaleDateString()} &middot; {new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                </p>
-                                                <h3>{event.name}</h3>
-                                                <p>{event.Venue?.address}<br/>{event.Venue?.city}, {event.Venue?.state} </p> {/* corrected typo and added null check */}
-                                            </div>     
+                                <Link to={`/events/${event.id}`} key={event.id} className="event-card-link"> 
+                                    <div className='event-card-top'>
+                                        <div className='event-card-image'>
+                                            {event.EventImages && event.EventImages.length > 0 ? (
+                                                <img src={event.EventImages[0].url} alt={`${event.name} Thumbnail`} className='event-card-thumbnail' />
+                                            ) : (
+                                                <img src='/images/img.png' alt='Default Event' className='event-card-thumbnail' />
+                                            )}
                                         </div>
-                                        <div className="event-info-bottom">
-                                            <p className="group-description">{group.about}</p>
+                                        <div className='event-card-details'>
+                                            <p className='event-card-time'>{new Date(event.startDate).toLocaleDateString()} &middot; {new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                                            <h3 className='event-card-name'>{event.name}</h3>
+                                            <p className='event--card-location'>
+                                                {event.Venue?.address}<br/>
+                                                {event.Venue?.city}, {event.Venue?.state}
+                                            </p>
                                         </div>
+                                    </div>
+                                    <div className='event-card-bottom'>
+                                        <p className='event-description'>{event.description || 'No description available'}</p>
+                                        {console.log('Event description:', event.description)}
                                     </div>
                                 </Link>
                             ))}
                         </>
                         )}
-                        
-                        {pastEvents.length > 0 && ( // render only if there are past events
-                            <>
-                                <h2>Past Events ({pastEvents.length})</h2>
-                                {pastEvents.map(event => (
-                                    <Link to={`/events/${event.id}`} key={event.id} className="event-card-link"> {/* link to event detail page */}
-                                        <div key={event.id} className="event-card">
-                                            <div className="event-info-top">
-                                                <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
-                                                <div className="event-title">
-                                                    <p>
-                                                        {new Date(event.startDate).toLocaleDateString()} &middot; {new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                    </p>
-                                                    <h3>{event.name}</h3>
-                                                    <p>{event.Venue?.address}<br/>{event.Venue?.city}, {event.Venue?.state} </p> 
-                                                </div>     
-                                            </div>
-                                            <div className="event-info-bottom">
-                                                <p className="group-description">{group.about}</p>
-                                            </div>
+                    {pastEvents.length > 0 && ( // render only if there are past events
+                        <>
+                            <h2>Past Events ({pastEvents.length})</h2>
+                            {pastEvents.map(event => (
+                                <Link to={`/events/${event.id}`} key={event.id} className="event-card-link"> 
+                                    <div className='event-card-top'>
+                                        <div className='event-card-image'>
+                                            {event.EventImages && event.EventImages.length > 0 ? (
+                                                <img src={event.EventImages[0].url} alt={`${event.name} Thumbnail`} className='event-card-thumbnail' />
+                                            ) : (
+                                                <img src='/images/img.png' alt='Default Event' className='event-card-thumbnail' />
+                                            )}
                                         </div>
-                                    </Link>
+                                        <div className='event-card-details'>
+                                            <p className='event-card-time'>{new Date(event.startDate).toLocaleDateString()} &middot; {new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                                            <h3 className='event-card-name'>{event.name}</h3>
+                                            <p className='event--card-location'>
+                                                {event.Venue?.address}<br/>
+                                                {event.Venue?.city}, {event.Venue?.state}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className='event-card-bottom'>
+                                        <p className='event-description'>{event.description || 'No description available'}</p>
+                                        {console.log('Event description:', event.description)}
+                                    </div>
+                                </Link>
                                 ))}
                             </>
                         )}

@@ -39,7 +39,7 @@ const LandingPage = () => {
             <section className="section1">
                 <div className="text">
                     <h1>Welcome to MeetPup</h1>
-                    <p className="intro-text">Whatever your adventure, from city strolls and beach romps to playful pup events, there are thousands of furry friends waiting on Meet Pup. PAW-some activities are happening daily.</p>
+                    <p className="intro-text">Whatever your adventure, from city strolls and beach romps to playful pup events, there are thousands of furry friends waiting to connect on MeetPup. PAW-some activities are happening daily.</p>
                 </div>
                 <div className="infographic">
                     <img src="../../images/lp-infographic1.png" alt="Infographic" />
@@ -47,8 +47,8 @@ const LandingPage = () => {
             </section>
 
             <section className="section2">
-                <h2>Where tails wag and friendships blossom</h2>
-                <p>Unleash the fun with events and groups for every pup</p>
+                <h2>How MeetPup Works</h2>
+                <p>Join a group, attend an event, or start your own... The fun awaits!</p>
             </section>
 
             <section className="section3">
@@ -56,14 +56,14 @@ const LandingPage = () => {
                     <div className="column">
                         <img src="../../images/img.png" alt="Icon" className="small-icon" />
                         <a href="/events" className="section3-group-link">See all groups</a>
-                        <p>Find your pack among our groups—join the fun and start wagging</p>
+                        <p>Find your pack among our groups. MeetPup has a community for every breed, age, and size!</p>
                     </div>
                 </Link>
                 <Link to="/groups" className="section3-link">
                     <div className="column">
                         <img src="../../images/img.png" alt="Icon" className="small-icon" />
                         <a href="/groups" className="section3-event-link">Find an event</a>
-                        <p>Sniff out events that bring together paws and people for endless fun.</p>
+                        <p>Sniff out events that bring together paws and people for endless fun. MeetPup makes it easy to connect, socialize, and share experiences with your local dog community.</p>
                     </div>
                 </Link>
                 {currentUser ? (
@@ -71,7 +71,7 @@ const LandingPage = () => {
                         <div className="column">
                             <img src="../../images/img.png" alt="Icon" className="small-icon" />
                             <a href="/groups" className="section3-start-link-enabled">Start a new group</a>
-                            <p>Gather furr-ends and create your own MeetPup group to share adventures with</p>
+                            <p>If you havent find what you're looking for yet... create your own MeetPup group and watch as pups come wagging to join your adventures!</p>
                         </div>
                     </Link>
                 ) : (

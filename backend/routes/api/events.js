@@ -30,10 +30,18 @@ router.get('/', async (req, res) => {
                     model: Attendance,
                     as: 'Attendances',
                     attributes: []
+                },
+                {
+                    model: EventImage,
+                    as: 'EventImages',
+                    attributes: ['id', 'url', 'preview']
                 }
             ],
-            attributes: ['id', 'groupId', 'venueId', 'name', 'type', 'startDate', 'endDate', 'previewImage', [sequelize.fn('COUNT', sequelize.col('Attendances.id')), 'numAttending']],
-            group: ['Event.id', 'Group.id', 'Venue.id']
+            attributes: [
+                'id', 'groupId', 'venueId', 'name', 'type', 'startDate', 'endDate', 'description', // include description
+                [sequelize.fn('COUNT', sequelize.col('Attendances.id')), 'numAttending']
+            ],
+            group: ['Event.id', 'Group.id', 'Venue.id', 'EventImages.id']
         });
 
         res.status(200).json({ Events: events });

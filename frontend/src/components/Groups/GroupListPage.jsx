@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './GroupListPage.css'; 
+import '../../Main.css';
 
 const GroupListPage = () => {
     const [groups, setGroups] = useState([]); 
@@ -24,12 +25,17 @@ const GroupListPage = () => {
     }
 
     return (
-        <div className="group-list-page">
-            <header className="headers">
-                <h2 className="header-gray">Events</h2>
-                <h2 className="header-teal">Groups</h2>
-            </header>
-            <p className="caption">Groups in MeetPup</p>
+        <div className='list-page'>
+            <div className='list-section1'>
+                <header className='list-headers'>
+                    <Link to='/events' className='header-gray'>
+                        <h2>Events</h2>
+                    </Link>
+                    <h2 className="header-teal">Groups</h2>
+                </header>
+                <p className='list-page-caption'>Groups in MeetPup</p>
+            </div>
+            
             <div className="group-list">
                 {groups.map((group, index) => (
                     <div key={group.id}>
