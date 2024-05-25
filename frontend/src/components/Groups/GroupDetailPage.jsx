@@ -40,25 +40,23 @@ const GroupDetailPage = () => {
 
     return (
         <div className="group-detail-page">
-            <div className='breadcrumb'>
+            <div className='section1-group-breadcrumb'>
                 <span>&lt;</span> 
-                <Link to="/groups" className="breadcrumb-link">Groups</Link>
+                <Link to='/groups' className='group-breadcrumb-link'>Groups</Link>
             </div>
-            <div className="group-detail-card-main">
+            <div className='section2-group-detail-container'>
                 {group.GroupImages && group.GroupImages.length > 0 ? (
-                    <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-detail-image" /> 
+                    <img src={group.GroupImages[0].url} alt={`${group.name}`} className="section2-group-detail-image" /> 
                 ) : (
-                    <img src="/images/default-group.jpg" alt="Default Group" className="group-detail-image" /> 
+                    <img src="/images/default-group.jpg" alt="Default Group" className="section2-group-detail-image" /> 
                 )}
-                <div className="group-detail-card-info-container">
+                <div className="group-detail-info-container">
                     <div className="group-detail-card-info-header">
-                    <h1>{group.name}</h1>
-                    <p>{group.city}, {group.state}</p>
-                    <p>{group.numEvents} events &middot;{" "} {group.private ? 'Private' : 'Public'}</p> 
-                    <p>Organized by: {group.Organizer.firstName} {group.Organizer.lastName}</p>
-
+                        <h1>{group.name}</h1>
+                        <p>{group.city}, {group.state}</p>
+                        <p>{group.numEvents} events &middot;{" "} {group.private ? 'Private' : 'Public'}</p> 
+                        <p>Organized by: {group.Organizer.firstName} {group.Organizer.lastName}</p>
                     </div>
-                    
                     <div className='group-detail-button-container'>
                         {isLoggedIn && !isOrganizer && (
                             <button className="join-group-button" onClick={() => alert('Feature coming soon')}>
@@ -76,7 +74,7 @@ const GroupDetailPage = () => {
                     
                 </div>
             </div>
-            <div className='bottom-container'>
+            <div className='section3-bottom-container'>
                 <div className="group-about">
                     <h2>Organizer</h2>
                     <p>{group.Organizer.firstName} {group.Organizer.lastName}</p>
@@ -90,7 +88,7 @@ const GroupDetailPage = () => {
                         <>
                             <h2>Upcoming Events ({upcomingEvents.length})</h2>
                             {upcomingEvents.map(event => (
-                                <Link to={`/events/${event.id}`} key={event.id} className="event-card-link"> {/* Link to event detail page */}
+                                <Link to={`/events/${event.id}`} key={event.id} className="event-card-link"> {/* link to event detail page */}
                                     <div key={event.id} className="event-card">
                                         <div className="event-info-top">
                                             <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
@@ -100,7 +98,6 @@ const GroupDetailPage = () => {
                                                 </p>
                                                 <h3>{event.name}</h3>
                                                 <p>{event.Venue?.address}<br/>{event.Venue?.city}, {event.Venue?.state} </p> {/* corrected typo and added null check */}
-                                    
                                             </div>     
                                         </div>
                                         <div className="event-info-bottom">
@@ -116,7 +113,7 @@ const GroupDetailPage = () => {
                             <>
                                 <h2>Past Events ({pastEvents.length})</h2>
                                 {pastEvents.map(event => (
-                                    <Link to={`/events/${event.id}`} key={event.id} className="event-card-link"> {/* Link to event detail page */}
+                                    <Link to={`/events/${event.id}`} key={event.id} className="event-card-link"> {/* link to event detail page */}
                                         <div key={event.id} className="event-card">
                                             <div className="event-info-top">
                                                 <img src={group.GroupImages[0].url} alt={`${group.name}`} className="group-image" />
@@ -125,7 +122,7 @@ const GroupDetailPage = () => {
                                                         {new Date(event.startDate).toLocaleDateString()} &middot; {new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                     </p>
                                                     <h3>{event.name}</h3>
-                                                    <p>{event.location}</p>
+                                                    <p>{event.Venue?.address}<br/>{event.Venue?.city}, {event.Venue?.state} </p> 
                                                 </div>     
                                             </div>
                                             <div className="event-info-bottom">

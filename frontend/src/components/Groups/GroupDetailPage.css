@@ -3,26 +3,26 @@
     padding: 20px 0px 0px 0px;
 }
 
-.breadcrumb {
+.section1-group-breadcrumb {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
     padding-left: 100px;
 }
 
-.breadcrumb span {
+.section1-group-breadcrumb span {
     margin-right: 5px;
     font-weight: bold;
 }
 
-.breadcrumb-link {
+.group-breadcrumb-link {
     text-decoration: none;
     color: #02798a !important; 
     font-weight: bold;
     text-decoration: underline;
 }
 
-.group-detail-card-main {
+.section2-group-detail-container {
     /* border: 1px solid blue; */
     display: flex;
     align-items: flex-start;
@@ -30,7 +30,7 @@
     padding-left: 100px;
 }
 
-.group-detail-image {
+.section2-group-detail-image {
     width: 600px;
     height: 400px;
     object-fit: cover;
@@ -48,30 +48,12 @@
     height: 400px;
     align-items: sp;
 }
-.group-image {
-    width: 300px;
-    height: 200px;
-    object-fit: cover;
-    margin-right: 20px;
-}
-
-.group-detail-card-info-header {
-    align-items: flex-start; 
-}
-
-.group-info h1 {
-    margin-bottom: 10px;
-}
-
-.group-info p {
-    margin: 5px 0;
-}
 
 .group-detail-button-container{
     /* border: 1px solid red; */
     align-items: baseline;
     margin: 10px 0px 0px 0px;
-
+    
 }
 
 
@@ -94,7 +76,7 @@
 .organizer-buttons {
     display: flex;
     gap: 10px;
-
+    
 }
 
 .organizer-buttons button {
@@ -120,7 +102,7 @@
     background-color: grey;
 }
 
-.bottom-container {
+.section3-bottom-container {
     padding: 10px 0px 10px 100px;
     background-color: rgb(240, 240, 240);
 }
@@ -129,6 +111,13 @@
     margin-bottom: 40px;
 }
 
+/* should be event image!! */
+.group-image { 
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+    margin-right: 20px;
+}
 .group-about h2 {
     margin-bottom: 10px;
 }

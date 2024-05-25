@@ -53,7 +53,12 @@ router.get('/:eventId', async (req, res) => {
                 {
                     model: Group,
                     as: 'Group',
-                    attributes: ['id', 'name', 'city', 'state', 'private', 'organizerId'] 
+                    attributes: ['id', 'name', 'city', 'state', 'private', 'organizerId'],
+                    include: {
+                        model: User,
+                        as: 'Organizer',
+                        attributes: ['firstName', 'lastName']
+                    }
                 },
                 {
                     model: Venue,
@@ -85,7 +90,6 @@ router.get('/:eventId', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-
 
 // GET /api/events - add query filters
 router.get('/', async (req, res) => {
