@@ -8,8 +8,6 @@ import '../../Main.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faUsers, faUser } from '@fortawesome/free-solid-svg-icons';
 
-
-
 const GroupDetailPage = () => {
     const { groupId } = useParams();
     const [group, setGroup] = useState(null);
