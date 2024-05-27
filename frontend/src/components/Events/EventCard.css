@@ -6,7 +6,20 @@
     border-radius: 8px;
     max-width: 600px;
     padding-bottom: 10px;
+    /* border: 1px solid red; */
 }
+
+.event-list-card-link {
+    display: flex;
+    margin: 20px 0px 20px 0px;
+    flex-direction: column;
+    background: white;
+    border-radius: 8px;
+    max-width: 600px;
+    padding-bottom: 10px;
+    /* border: 1px solid blue; */
+}
+
 
 .event-divider {
     padding-bottom: 20px;
@@ -45,3 +58,6 @@
     margin: 10px 0px;
 }
 
+.event--card-location {
+
+}

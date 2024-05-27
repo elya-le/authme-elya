@@ -54,7 +54,7 @@ const EventListPage = () => {
                 {events.map((event) => (
                     <div key={event.id} className='event-item'>
                         <hr className='event-divider' />
-                        <Link to={`/events/${event.id}`} className='event-card-link'>
+                        <Link to={`/events/${event.id}`} className='event-list-card-link'>
                             <div className='event-card-top'>
                                 <div className='event-card-image'>
                                     {event.EventImages && event.EventImages.length > 0 ? (

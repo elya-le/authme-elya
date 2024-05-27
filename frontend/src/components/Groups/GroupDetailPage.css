@@ -1,5 +1,6 @@
 .group-detail-page {
     padding: 20px 0px 0px 0px;
+
 }
 
 .section1-group-header {
@@ -9,13 +10,13 @@
 }
 
 .group-detail-breadcrumb {
-    margin: 20px;
+    margin: 0px 0px 20px 40px;
 }
 
 .section2-group-detail-container {
     display: flex;
     align-items: flex-start;
-    margin: 10px 20px 20px 20px;
+    margin: 10px 20px 20px 40px;
 }
 
 .group-detail-image {
@@ -109,7 +110,8 @@
 }
 
 .section3-bottom-container {
-    padding: 30px 0px 10px 20px;
+    padding: 30px 0px 10px 40px;
+    
     background-color: rgb(240, 240, 240);
 }
 
