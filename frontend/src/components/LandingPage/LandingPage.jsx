@@ -6,6 +6,8 @@ import GroupCard from '../Groups/GroupCard';
 import './LandingPage.css';
 
 const LandingPage = () => {
+  console.log('Rendering LandingPage');
+
   const [groups, setGroups] = useState([]);
   const [error, setError] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
