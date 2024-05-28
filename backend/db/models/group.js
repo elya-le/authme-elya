@@ -88,7 +88,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     city: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         notEmpty: true, 
       }
@@ -98,8 +98,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: true, 
-        len: [2, 2], 
-        isUppercase: true, 
       }
     },
     numMembers: {

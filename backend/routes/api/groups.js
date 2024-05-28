@@ -277,19 +277,16 @@ router.get('/:groupId/members', async (req, res) => {
   }
 });
 
-// group validation
 const validateGroup = [
   check('name')
     .exists({ checkFalsy: true })
     .isLength({ max: 60 }).withMessage('Name must be 60 characters or less'),
   check('about')
-    .isLength({ min: 50 }).withMessage('About must be 50 characters or more'),
+    .isLength({ min: 15 }).withMessage('About must be 15 characters or more'),
   check('type')
     .isIn(['Online', 'In person']).withMessage("Type must be 'Online' or 'In person'"),
   check('private')
     .isBoolean().withMessage('Private must be a boolean'),
-  check('city')
-    .exists({ checkFalsy: true }).withMessage('City is required'),
   check('state')
     .exists({ checkFalsy: true }).withMessage('State is required')
     .isLength({ min: 2, max: 2 }).withMessage('State must be 2 characters')
@@ -329,73 +326,83 @@ const validateEvent = [
 
 // POST /api/groups - create a new group
 router.post('/', validateGroup, async (req, res, next) => {
-    const { user } = req;
-    const { name, about, type, private, city, state } = req.body;
+  const { user } = req;
+  const { name, about, type, private, state } = req.body;
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({
-            message: "Bad Request",
-            errors: errors.mapped()
-        });
-    }
+  console.log('Received group creation request:', { name, about, type, private, state });
+  console.log('User:', user);
 
-    const t = await sequelize.transaction(); 
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log('Validation errors:', errors.mapped());
+    return res.status(400).json({
+      message: 'Bad Request',
+      errors: errors.mapped()
+    });
+  }
 
-    try {
-        const group = await Group.create({
-            organizerId: user.id,
-            name,
-            about,
-            type,
-            private,
-            city,
-            state,
-        }, { transaction: t });
+  const t = await sequelize.transaction(); 
 
-        // Create a membership for the organizer
-        await Membership.create({
-            userId: user.id,
-            groupId: group.id,
-            status: 'co-host' // or 'organizer' depending on your logic
-        }, { transaction: t });
+  try {
+    const group = await Group.create({
+      organizerId: user.id,
+      name,
+      about,
+      type,
+      private,
+      state
+    }, { transaction: t });
 
-        await t.commit(); 
+    console.log('Group created:', group);
 
-        return res.status(201).json(group);
-    } catch (error) {
-        await t.rollback(); 
-        next(error);
-    }
+    // create a membership for the organizer
+    await Membership.create({
+      userId: user.id,
+      groupId: group.id,
+      status: 'co-host' // or 'organizer' depending on your logic
+    }, { transaction: t });
+
+    await t.commit(); 
+
+    return res.status(201).json(group);
+  } catch (error) {
+    await t.rollback(); 
+    console.log('Error creating group:', error);
+    next(error);
+  }
 });
 
 // POST /api/groups/:groupId/images - adds an image to a group
 router.post('/:groupId/images', authenticated, async (req, res) => {
-    const { groupId } = req.params;
-    const { url, preview } = req.body;
+  const { groupId } = req.params;
+  const { url, preview } = req.body;
 
-    try {
-        const group = await Group.findByPk(groupId);
+  console.log('Received image upload request:', { groupId, url, preview });
+  console.log('User:', req.user);
 
-        if (!group) {
-            return res.status(404).json({ message: "Group couldn't be found" });
-        }
+  try {
+      const group = await Group.findByPk(groupId);
 
-        if (group.organizerId !== req.user.id) {
-            return res.status(403).json({ message: "Forbidden. You are not authorized to add an image to this group." });
-        }
+      if (!group) {
+          return res.status(404).json({ message: "Group couldn't be found" });
+      }
 
-        const groupImage = await GroupImage.create({
-            groupId,
-            url,
-            preview
-        });
+      if (group.organizerId !== req.user.id) {
+          return res.status(403).json({ message: "Forbidden. You are not authorized to add an image to this group." });
+      }
 
-        res.status(201).json(groupImage);
-    } catch (error) {
-        console.error('Error adding image to group:', error);
-        return res.status(500).json({ message: 'Internal server error', errors: error.errors ? error.errors.map(e => e.message) : [error.message] });
-    }
+      const groupImage = await GroupImage.create({
+          groupId,
+          url,
+          preview
+      });
+
+      console.log('Group image added:', groupImage);
+      res.status(201).json(groupImage);
+  } catch (error) {
+      console.error('Error adding image to group:', error);
+      return res.status(500).json({ message: 'Internal server error', errors: error.errors ? error.errors.map(e => e.message) : [error.message] });
+  }
 });
 
 // POST /api/groups/:groupId/venues - creates a new venue for a group

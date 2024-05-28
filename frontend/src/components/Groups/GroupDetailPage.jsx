@@ -151,7 +151,7 @@ const GroupDetailPage = () => {
                 </div>
                 <div className='event-card-bottom'>
                   <p className='event-description'>{event.description || 'No description available'}</p>
-                  {console.log('Event description:', event.description)}
+                    {console.log('Event description:', event.description)}
                 </div>
               </Link>
               ))}

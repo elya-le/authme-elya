@@ -64,17 +64,17 @@ const LandingPage = () => {
           </div>
         </Link>
         {currentUser ? (
-          <Link to='/groups' className='section3-link'>
+          <Link to='/groups/new' className='section3-link'>
             <div className='column'>
               <img src='../../images/img.png' alt='Icon' className='small-icon' />
-              <a href='/groups' className='section3-start-link-enabled'>Start a new group</a>
-              <p>If you havent find what you&apos;re looking for yet... create your own MeetPup group and watch as pups come wagging to join your adventures!</p>
+              <span className='section3-start-link-enabled'>Start a new group</span>
+              <p>If you haven&apos;t found what you&apos;re looking for yet... create your own MeetPup group and watch as pups come wagging to join your adventures!</p>
             </div>
           </Link>
         ) : (
           <div className='column-disabled'>
             <img src='../../images/img.png' alt='Icon' className='small-icon' />
-            <a href='/groups' className='section3-start-link-disabled'>Start a new group</a>
+            <span className='section3-start-link-disabled'>Start a new group</span>
             <p>Gather furr-ends and create your own MeetPup group to share adventures with</p>
           </div>
         )}

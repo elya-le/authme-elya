@@ -1,0 +1,33 @@
+.section1-create-group-header {
+  display: flex;
+}
+
+.section2-create-group-location {
+  display: flex;
+  flex-direction: column;
+}
+
+.section3-create-group-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.section4-create-group-about{
+  display: flex;
+  flex-direction: column;
+}
+
+.section5-create-group-type {
+  display: flex;
+  flex-direction: column;
+}
+
+.section6-create-group-privacy {
+  display: flex;
+  flex-direction: column;
+}
+
+.section7-create-group-image {
+  display: flex;
+  flex-direction: column;
+}
