@@ -1,63 +1,62 @@
 .event-card-link {
-    display: flex;
-    margin: 20px 0px 20px 0px;
-    flex-direction: column;
-    background: white;
-    border-radius: 8px;
-    max-width: 600px;
-    padding-bottom: 10px;
-    /* border: 1px solid red; */
+  display: flex;
+  margin: 20px 0px 20px 0px;
+  flex-direction: column;
+  background: white;
+  border-radius: 8px;
+  max-width: 600px;
+  padding-bottom: 10px;
+  font-weight: normal;
+  /* border: 1px solid red; */
 }
 
 .event-list-card-link {
-    display: flex;
-    margin: 20px 0px 20px 0px;
-    flex-direction: column;
-    background: white;
-    border-radius: 8px;
-    max-width: 600px;
-    padding-bottom: 10px;
-    /* border: 1px solid blue; */
+  display: flex;
+  margin: 20px 0px 20px 0px;
+  flex-direction: column;
+  background: white;
+  border-radius: 8px;
+  max-width: 600px;
+  padding-bottom: 10px;
+  /* border: 1px solid blue; */
 }
 
 
 .event-divider {
-    padding-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .event-card-top {
-    display: flex;
+  display: flex;
 }
 
 .event-card-thumbnail {
-    width: 240px;
-    height: 140px;
-    object-fit: cover;
-    flex-shrink: 0;
-    border-radius: 10px;
+  width: 240px;
+  height: 140px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: 10px;
 }
 
 .event-card-details {
-    margin: 10px 20px;
+  margin: 10px 20px;
 }
 
 .event-card-name {
-    margin: 10px 0px;
+  margin: 10px 0px;
 }
 
 .event-card-time {
-    color: #7C6F50;
-    font-weight: bold;
+  color: #7C6F50;
+  font-weight: bold;
 }
 
 .event-card-groupId {
-    color: grey;
+  color: grey;
 }
 
 .event-card-bottom {
-    margin: 10px 0px;
+  margin: 10px 0px;
 }
 
-.event--card-location {
 
-}

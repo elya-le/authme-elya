@@ -1,30 +1,32 @@
 .group-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    margin: 10px;
-    width: 100%;
-    max-width: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 30px;
+  padding: 20px;
+  width: 100%;
+  max-width: 300px;
+  background-color: white;
 }
 
 .group-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 .group-card-content {
-    padding: 10px;
-    text-align: left;
+  padding: 10px;
+  text-align: left;
 
 }
 
 .group-card h3 {
-    margin: 10px 0;
+  margin: 10px 0;
 }
 
 .group-card p {
-    margin: 0;
+  margin: 0;
 }
 
 .group-card a {
@@ -35,7 +37,7 @@
     height: 100%; 
 }
 
-/* Responsive design */
+/* responsive design */
 .groups-container {
     display: flex;
     flex-wrap: wrap;

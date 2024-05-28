@@ -2,52 +2,51 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class GroupImage extends Model {
-        static associate(models) {
-        GroupImage.belongsTo(models.Group, { 
-            foreignKey: 'groupId', 
-            as: 'Group', 
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE' 
-        });
-        }
+  class GroupImage extends Model {
+    static associate(models) {
+    GroupImage.belongsTo(models.Group, { 
+      foreignKey: 'groupId', 
+      as: 'Group', 
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE' 
+    });
     }
-
-    GroupImage.init(
-        {
-            id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            autoIncrement: true,
-            primaryKey: true
-            },
-        groupId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'Groups', 
-                key: 'id' 
-            }
-            },
-        url: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                isUrl: true 
-            }
-        },
-        preview: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false 
-        }
-    },
+  }
+  GroupImage.init(
     {
-        sequelize, 
-        modelName: 'GroupImage', 
-        tableName: 'GroupImages', 
-        timestamps: true 
+      id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true
+      },
+    groupId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Groups', 
+        key: 'id' 
+      }
+      },
+    url: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isUrl: true 
+      }
+    },
+    preview: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false 
     }
-    );
-    return GroupImage;
+  },
+  {
+    sequelize, 
+    modelName: 'GroupImage', 
+    tableName: 'GroupImages', 
+    timestamps: true 
+  }
+  );
+  return GroupImage;
 };

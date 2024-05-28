@@ -6,30 +6,26 @@ const { User } = require('../db/models');
 // console.log('JWT secret used in auth.js:', secret); // debug log the secret
 
 const setTokenCookie = (res, user) => {
-    const safeUser = {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-    };
-
-    const token = jwt.sign(
-        { data: safeUser },
-        secret,
-        { expiresIn: parseInt(expiresIn, 10) }
-    );
-
-    // console.log('Generated token:', token); // debug log
-    // console.log('Using secret to sign:', secret); // debug log
-
-    const isProduction = process.env.NODE_ENV === 'production';
-
-    res.cookie('token', token, {
-        maxAge: expiresIn * 1000,
-        httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? 'Lax' : 'Strict'
-    });
-    return token;
+  const safeUser = {
+    id: user.id,
+    email: user.email,
+    username: user.username,
+  };
+  const token = jwt.sign(
+    { data: safeUser },
+    secret,
+    { expiresIn: parseInt(expiresIn, 10) }
+  );
+  // console.log('Generated token:', token); // debug log
+  // console.log('Using secret to sign:', secret); // debug log
+  const isProduction = process.env.NODE_ENV === 'production';
+  res.cookie('token', token, {
+    maxAge: expiresIn * 1000,
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? 'Lax' : 'Strict'
+  });
+  return token;
 };
 
 // middleware

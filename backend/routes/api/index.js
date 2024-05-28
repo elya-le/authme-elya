@@ -20,7 +20,7 @@ router.use('/images', imagesRouter);
 router.use('/events', eventsRouter);
 
 router.post('/test', (req, res) => {
-    res.json({ requestBody: req.body });
+  res.json({ requestBody: req.body });
 });
 
 module.exports = router;

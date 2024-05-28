@@ -1,58 +1,56 @@
-/* General styling for the landing page */
-
+/* general styling for the landing page */
 .landing-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .section1, .section2, .section3, .section4 {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-/* Section 1 styling */
+/* section 1 styling */
 .section1 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .title {
-    text-align: left;
-
-    flex: 1;
-    padding: 20px;
-    margin: 80px;
+  text-align: left;
+  flex: 1;
+  padding: 20px;
+  margin: 80px;
 }
 
 .intro-text {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .section1 .infographic {
-    flex: 1;
-    padding: 20px;
+  flex: 1;
+  padding: 20px;
 }
 
 .section1 .infographic img {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
-/* Section 2 styling */
+/* section 2 styling */
 .section2 {
-    padding: 20px;
+  padding: 20px;
 }
 
-/* Section 3 styling */
+/* section 3 styling */
 .section3 {
-    display: flex;
-    justify-content: space-evenly;
-    padding: 10px;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 10px;
 }
 
 
@@ -86,6 +84,11 @@ a {
     color: #02798a;
 }
 
+
+.section3-group-link:hover{
+  text-decoration: underline;
+}
+
 .section3-event-link {
     margin: 15px 0px 0px 0px;
     font-size: 20px;
@@ -93,11 +96,22 @@ a {
     color: #02798a;
 }
 
+.section3-event-link:hover{
+  text-decoration: underline;
+}
 .section3-start-link-enabled {
     margin: 15px 0px 0px 0px;
     font-size: 20px;
     font-weight: bold;
     color:  #02798a;
+}
+
+.section3-start-link-enabled:hover {
+  margin: 15px 0px 0px 0px;
+  font-size: 20px;
+  font-weight: bold;
+  color:  #02798a;
+  text-decoration: underline;
 }
 
 .section3-start-link-disabled {
@@ -138,7 +152,7 @@ a {
 }
 
 .signup-button {
-    background-color: teal;
+    background-color:#02798a;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -162,13 +176,15 @@ a {
 }
 
 .explore-groups-container {
-
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
 }
 
-
+.group-card-white-bg {
+  border: 1px solid red;
+  background-color: white;
+}
 
 
 
