@@ -44,7 +44,9 @@ function ProfileButtonMenu({ user }) {
         {arrowDirection === 'down' ? <FaAngleDown /> : <FaAngleUp />}
       </button>
       <ul className={`profile-dropdown ${showMenu ? "" : 'hidden'}`} ref={ulRef}>
-        <li>{user.username}</li>
+        <li>Hello, {user.username}<br></br><br></br>
+        {user.email}
+        </li>
         <hr />
         <li>
           <Link to='/groups' className='dropdown-link' onClick={() => setShowMenu(false)}>View groups</Link>
