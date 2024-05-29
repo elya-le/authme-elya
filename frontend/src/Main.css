@@ -59,6 +59,14 @@ h4 {
   font-weight: bold;
 }
 
+.form-container {
+  max-width: 600px; 
+  margin: 20px 20px 20px 40px;
+  padding: 20px;
+  background-color: #f9f9f9; 
+  border-radius: 10px; 
+}
+
 .field-error {
   color: red;
 }
@@ -72,3 +80,4 @@ h4 {
 label {
   font-weight: bold;
 }
+
