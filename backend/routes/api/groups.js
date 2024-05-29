@@ -277,21 +277,25 @@ router.get('/:groupId/members', async (req, res) => {
   }
 });
 
+// group validation
+// group validation
 const validateGroup = [
   check('name')
-    .exists({ checkFalsy: true })
+    .notEmpty().withMessage('Name is required')
+    .isLength({ min: 1 }).withMessage('Name is required')
     .isLength({ max: 60 }).withMessage('Name must be 60 characters or less'),
   check('about')
-    .isLength({ min: 15 }).withMessage('About must be 15 characters or more'),
+    .isLength({ min: 30 }).withMessage('Description needs 30 or more characters'),
   check('type')
     .isIn(['Online', 'In person']).withMessage("Type must be 'Online' or 'In person'"),
   check('private')
     .isBoolean().withMessage('Private must be a boolean'),
+  check('city')
+    .notEmpty().withMessage('City is required'),
   check('state')
-    .exists({ checkFalsy: true }).withMessage('State is required')
+    .notEmpty().withMessage('State is required')
     .isLength({ min: 2, max: 2 }).withMessage('State must be 2 characters')
 ];
-
 // venue validation
 const validateVenue = [
   check('address').exists({ checkFalsy: true }).withMessage('Street address is required'),

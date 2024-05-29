@@ -40,6 +40,13 @@ select {
     cursor: pointer;
 }
 
-.create-group-button:hover {
-  background-color: #b81b1b;
+.create-group-button.grey {
+  background-color: grey;
+  color: white;
+  cursor: pointer;
 }
+
+/* .create-group-button:hover {
+  background-color: #b81b1b;
+} */
+
