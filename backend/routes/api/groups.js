@@ -537,36 +537,57 @@ router.post('/:groupId/membership', restoreUser, requireAuth, async (req, res) =
     }
 });
 
+
 // PUT /api/groups/:groupId - updates a group
 router.put('/:groupId', authenticated, validateGroup, handleValidationErrors, async (req, res) => {
-    const { groupId } = req.params;
-    const { name, about, type, private, city, state } = req.body;
+  const { groupId } = req.params;
+  const { name, about, type, private, city, state, previewImage } = req.body;
 
-    try {
-        const group = await Group.findByPk(groupId);
-        if (!group) {
-            return res.status(404).json({ message: "Group couldn't be found" });
-        }
+  try {
+      const group = await Group.findByPk(groupId, {
+          include: {
+              model: GroupImage,
+              as: 'GroupImages',
+              where: { preview: true },
+              required: false
+          }
+      });
+      if (!group) {
+          return res.status(404).json({ message: "Group couldn't be found" });
+      }
 
-        if (group.organizerId !== req.user.id) {
-            return res.status(403).json({ message: "Forbidden. You are not authorized to edit this group." });
-        }
+      if (group.organizerId !== req.user.id) {
+          return res.status(403).json({ message: "Forbidden. You are not authorized to edit this group." });
+      }
 
-        const updatedGroup = await group.update({
-            name,
-            about,
-            type,
-            private,
-            city,
-            state,
-        });
+      await group.update({
+          name,
+          about,
+          type,
+          private,
+          city,
+          state,
+      });
 
-        res.status(200).json(updatedGroup);
-    } catch (error) {
-        console.error('Error updating group:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
+      if (previewImage) {
+          if (group.GroupImages.length > 0) {
+              await group.GroupImages[0].update({ url: previewImage });
+          } else {
+              await GroupImage.create({
+                  groupId: group.id,
+                  url: previewImage,
+                  preview: true
+              });
+          }
+      }
+
+      res.status(200).json(group);
+  } catch (error) {
+      console.error('Error updating group:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
 });
+
 
 // PUT /api/groups/:groupId/membership - change the status of a membership for a group
 router.put('/:groupId/membership', restoreUser, requireAuth, async (req, res) => {

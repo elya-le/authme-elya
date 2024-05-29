@@ -60,7 +60,7 @@ const LandingPage = () => {
           <div className='column'>
             <img src='../../images/img.png' alt='Icon' className='small-icon' />
             <a href='/groups' className='section3-event-link'>Find an event</a>
-            <p>Sniff out events that bring together paws and people for endless fun. MeetPup makes it easy to connect, socialize, and share experiences with your local dog community.</p>
+            <p>Sniff out events. MeetPup makes it easy to connect, socialize, and share experiences with your local dog community.</p>
           </div>
         </Link>
         {currentUser ? (

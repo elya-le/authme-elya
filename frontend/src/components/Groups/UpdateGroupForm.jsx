@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { csrfFetch } from '../../store/csrf';
 import './CreateGroupForm.css';
 
-const CreateGroupForm = () => {
+const states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
+
+const UpdateGroupForm = () => {
+  const { groupId } = useParams();
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [about, setAbout] = useState('');
@@ -12,38 +16,24 @@ const CreateGroupForm = () => {
   const [state, setState] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [errors, setErrors] = useState({});
-  const [csrfToken, setCsrfToken] = useState('');
   const [formIncomplete, setFormIncomplete] = useState(false);
 
-  const states = [
-    'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-  ];
-
   useEffect(() => {
-    fetch('/api/csrf/restore', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setCsrfToken(data['XSRF-Token']);
+    csrfFetch(`/api/groups/${groupId}`)
+      .then(response => response.json())
+      .then(data => {
+        setName(data.name);
+        setAbout(data.about);
+        setType(data.type);
+        setPrivateGroup(data.private);
+        setCity(data.city);
+        setState(data.state);
+        if (data.GroupImages && data.GroupImages.length > 0) {
+          setImageUrl(data.GroupImages[0].url);
+        }
       })
-      .catch((error) => {
-        console.error('Error fetching CSRF token:', error);
-      });
-
-    return () => { // clear form data and errors on unmount
-      setName('');
-      setAbout('');
-      setType('Online');
-      setPrivateGroup(false);
-      setCity('');
-      setState('');
-      setImageUrl('');
-      setErrors({});
-      setFormIncomplete(false);
-    };
-  }, []);
+      .catch(err => setErrors({ general: err.message }));
+  }, [groupId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,11 +53,10 @@ const CreateGroupForm = () => {
       return;
     }
 
-    const response = await fetch('/api/groups', {
-      method: 'POST',
+    const response = await csrfFetch(`/api/groups/${groupId}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'CSRF-Token': csrfToken,
       },
       body: JSON.stringify({
         name,
@@ -76,40 +65,16 @@ const CreateGroupForm = () => {
         private: privateGroup,
         city,
         state,
+        previewImage: imageUrl,
       }),
     });
 
     if (response.ok) {
       const data = await response.json();
-
-      if (imageUrl) {
-        const imageResponse = await fetch(`/api/groups/${data.id}/images`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'CSRF-Token': csrfToken,
-          },
-          body: JSON.stringify({
-            url: imageUrl,
-            preview: true,
-          }),
-        });
-
-        if (!imageResponse.ok) {
-          const imageErrorData = await imageResponse.json();
-          setErrors((prevErrors) => ({ ...prevErrors, imageUrl: imageErrorData.errors.url }));
-          return;
-        }
-      }
-
       navigate(`/groups/${data.id}`);
     } else {
       const errorData = await response.json();
-      const formattedErrors = Object.keys(errorData.errors).reduce((acc, key) => {
-        acc[key] = errorData.errors[key].msg;
-        return acc;
-      }, {});
-      setErrors(formattedErrors);
+      setErrors(Object.values(errorData.errors));
     }
   };
 
@@ -117,7 +82,7 @@ const CreateGroupForm = () => {
     <div className='form-container'>
       <form onSubmit={handleSubmit}>
         <div className='section1-create-group-header'>
-          <h2>Start a New Group</h2>
+          <h2>Update your Group</h2>
         </div>
         <div className='section2-create-group-location'>
           <hr />
@@ -219,7 +184,7 @@ const CreateGroupForm = () => {
             type='submit'
             className={`create-group-button ${!name || !about || about.length < 30 || !city || !state ? 'grey' : ''}`}
           >
-            Create Group
+            Update Group
           </button>
         </div>
       </form>
@@ -227,4 +192,4 @@ const CreateGroupForm = () => {
   );
 };
 
-export default CreateGroupForm;
+export default UpdateGroupForm;
