@@ -16,8 +16,10 @@ const CreateEventForm = () => {
   const [errors, setErrors] = useState({});
   const [csrfToken, setCsrfToken] = useState('');
   const [formIncomplete, setFormIncomplete] = useState(false);
+  const [groupName, setGroupName] = useState('');
 
   useEffect(() => {
+    // Fetch CSRF token
     fetch('/api/csrf/restore', {
       method: 'GET',
       credentials: 'include',
@@ -28,6 +30,18 @@ const CreateEventForm = () => {
       })
       .catch((error) => {
         console.error('Error fetching CSRF token:', error);
+      });
+
+    // Fetch group details
+    fetch(`/api/groups/${groupId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.name) {
+          setGroupName(data.name);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching group details:', error);
       });
 
     return () => {
@@ -43,7 +57,7 @@ const CreateEventForm = () => {
       setErrors({});
       setFormIncomplete(false);
     };
-  }, []);
+  }, [groupId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -96,7 +110,7 @@ const CreateEventForm = () => {
         const errorData = await response.json();
         console.log('Error creating event:', errorData);
         const formattedErrors = Object.keys(errorData.errors).reduce((acc, key) => {
-          acc[key] = errorData.errors[key];
+          acc[key] = errorData.errors[key].msg;
           return acc;
         }, {});
         setErrors(formattedErrors);
@@ -110,7 +124,7 @@ const CreateEventForm = () => {
     <div className="form-container">
       <form onSubmit={handleSubmit}>
         <div className="section-create-event-header">
-          <h2>Create an event for  </h2>
+          <h2>Create an event for {groupName}</h2>
         </div>
         <div className="section-create-event">
           <label>What is the name of your event?</label><br />
