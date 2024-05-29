@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import '../Events/EventCard.css';
 import './GroupDetailPage.css';
 import '../../Main.css';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faUsers, faUser } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,6 +12,7 @@ const GroupDetailPage = () => {
   const { groupId } = useParams();
   const [group, setGroup] = useState(null);
   const [error, setError] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const currentUser = useSelector(state => state.session.user);
   const navigate = useNavigate();
 
@@ -98,7 +100,7 @@ const GroupDetailPage = () => {
               <div className='organizer-buttons'>
                 <button className='create-event-button'>Create event</button>
                 <button className='update-group-button'>Update</button>
-                <button className='delete-group-button' onClick={handleDelete}>Delete</button>
+                <button className='delete-group-button' onClick={() => setShowDeleteModal(true)}>Delete</button>
               </div>
             )}
           </div>
@@ -202,6 +204,7 @@ const GroupDetailPage = () => {
           )}
         </div>
       </div>
+      <DeleteConfirmationModal show={showDeleteModal} onClose={() => setShowDeleteModal(false)} onConfirm={handleDelete} />
     </div>
   );
 };

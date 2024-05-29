@@ -327,9 +327,9 @@ const validateEvent = [
 // POST /api/groups - create a new group
 router.post('/', validateGroup, async (req, res, next) => {
   const { user } = req;
-  const { name, about, type, private, state } = req.body;
+  const { name, about, type, private, city, state } = req.body;
 
-  console.log('Received group creation request:', { name, about, type, private, state });
+  console.log('Received group creation request:', { name, about, type, private, city, state });
   console.log('User:', user);
 
   const errors = validationResult(req);
@@ -350,6 +350,7 @@ router.post('/', validateGroup, async (req, res, next) => {
       about,
       type,
       private,
+      city,
       state
     }, { transaction: t });
 
