@@ -78,7 +78,7 @@ const GroupDetailPage = () => {
           />
         ) : (
           <img
-            src='/images/default-group.png'
+            src='/images/img.png'
             alt="Default Group"
             className="group-detail-image"
           />
@@ -116,7 +116,7 @@ const GroupDetailPage = () => {
           <p>{group.about}</p>
         </div>
         <div className='group-events'>
-          {upcomingEvents.length > 0 && (
+          {upcomingEvents.length > 0 ? (
             <>
               <h2>Upcoming Events ({upcomingEvents.length})</h2>
               {upcomingEvents.map(event => (
@@ -163,6 +163,8 @@ const GroupDetailPage = () => {
                 </Link>
               ))}
             </>
+          ) : (
+            <h2>No Upcoming Events</h2>
           )}
           {pastEvents.length > 0 && (
             <>
