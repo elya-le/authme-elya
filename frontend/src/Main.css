@@ -68,3 +68,7 @@ h4 {
   margin-top: 10px;
   text-align: left;
 }
+
+label {
+  font-weight: bold;
+}

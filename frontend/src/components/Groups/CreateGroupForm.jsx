@@ -121,7 +121,7 @@ const CreateGroupForm = () => {
           <h2>Start a New Group</h2>
         </div>
 
-        {Object.keys(errors).length > 0 && (
+        {/* {Object.keys(errors).length > 0 && (
           <div className='error-messages'>
             <ul>
               {Object.values(errors).map((error, index) => (
@@ -129,7 +129,7 @@ const CreateGroupForm = () => {
               ))}
             </ul>
           </div>
-        )}
+        )} */}
 
         <div className='section2-create-group-location'>
           <hr />
