@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom'; // import useNavigate
 import { useSelector } from 'react-redux';
 import '../Events/EventCard.css';
 import './GroupDetailPage.css';
 import '../../Main.css';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faUsers, faUser } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,6 +12,7 @@ const GroupDetailPage = () => {
   const [group, setGroup] = useState(null);
   const [error, setError] = useState(null);
   const currentUser = useSelector(state => state.session.user);
+  const navigate = useNavigate(); // useNavigate hook
 
   useEffect(() => {
     fetch(`/api/groups/${groupId}`)
@@ -28,6 +28,23 @@ const GroupDetailPage = () => {
       .catch(err => setError(err.message));
   }, [groupId]);
 
+  const handleDelete = async () => {
+    const response = await fetch(`/api/groups/${groupId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'CSRF-Token': document.cookie.split('=')[1], // Get CSRF token from cookie
+      }
+    });
+
+    if (response.ok) {
+      navigate('/groups'); // Redirect to the groups list page after successful deletion
+    } else {
+      const errorData = await response.json();
+      setError(errorData.message || 'Failed to delete group');
+    }
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -35,12 +52,14 @@ const GroupDetailPage = () => {
   if (!group) {
     return <div>Loading...</div>;
   }
+
   const isLoggedIn = !!currentUser;
   const isOrganizer = currentUser && currentUser.id === group.organizerId;
   const sortedEvents = group.Events.slice().sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
-  
+
   const upcomingEvents = sortedEvents.filter(event => new Date(event.startDate) > new Date());
   const pastEvents = sortedEvents.filter(event => new Date(event.startDate) <= new Date());
+
   return (
     <div className='group-detail-page'>
       <div className='group-detail-breadcrumb'>
@@ -55,25 +74,25 @@ const GroupDetailPage = () => {
         )}
         <div className="group-detail-info-container">
           <h1>{group.name}</h1>
-        <div className='group-card-info'>
-          <p><FontAwesomeIcon icon={faMapMarkerAlt} /> {group.city}, {group.state}</p><br/>
-          <p><FontAwesomeIcon icon={faUsers} /> {group.numEvents} events &middot;{" "} {group.private ? 'Private' : 'Public'}</p><br/>
-          <p><FontAwesomeIcon icon={faUser} /> Organized by: <b> {group.Organizer.firstName} {group.Organizer.lastName} </b></p>
-        </div>
-        <div className='group-button-container'>
-          {isLoggedIn && !isOrganizer && (
-            <button className='join-group-button' onClick={() => alert('Feature coming soon')}>
-            Join this group
-            </button>
-          )}
-          {isLoggedIn && isOrganizer && (
-            <div className='organizer-buttons'>
-              <button className='create-event-button'>Create event</button>
-              <button className='update-group-button'>Update</button>
-              <button className='delete-group-button'>Delete</button>
-            </div>
-          )}
-        </div>
+          <div className='group-card-info'>
+            <p><FontAwesomeIcon icon={faMapMarkerAlt} /> {group.city}, {group.state}</p><br/>
+            <p><FontAwesomeIcon icon={faUsers} /> {group.numEvents} events &middot;{" "} {group.private ? 'Private' : 'Public'}</p><br/>
+            <p><FontAwesomeIcon icon={faUser} /> Organized by: <b> {group.Organizer.firstName} {group.Organizer.lastName} </b></p>
+          </div>
+          <div className='group-button-container'>
+            {isLoggedIn && !isOrganizer && (
+              <button className='join-group-button' onClick={() => alert('Feature coming soon')}>
+                Join this group
+              </button>
+            )}
+            {isLoggedIn && isOrganizer && (
+              <div className='organizer-buttons'>
+                <button className='create-event-button'>Create event</button>
+                <button className='update-group-button'>Update</button>
+                <button className='delete-group-button' onClick={handleDelete}>Delete</button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <div className='section3-bottom-container'>
@@ -88,7 +107,7 @@ const GroupDetailPage = () => {
         <div className='group-events'>
           {upcomingEvents.length > 0 && ( // render only if there are upcoming events
           <>
-          <h2>Upcoming Events ({upcomingEvents.length})</h2>
+            <h2>Upcoming Events ({upcomingEvents.length})</h2>
             {upcomingEvents.map(event => (
               <Link to={`/events/${event.id}`} key={event.id} className='event-card-link'> 
                 <div className='event-card-top'>
@@ -96,33 +115,31 @@ const GroupDetailPage = () => {
                     {event.EventImages && event.EventImages.length > 0 ? (
                       <img src={event.EventImages[0].url} alt={`${event.name} Thumbnail`} className='event-card-thumbnail' />
                     ) : (
-                    <img src='/images/img.png' alt='Default Event' className='event-card-thumbnail' />
+                      <img src='/images/img.png' alt='Default Event' className='event-card-thumbnail' />
                     )}
                   </div>
-                    <div className='event-card-details'>
+                  <div className='event-card-details'>
                     <p className='event-card-time'>
-                    {/* {new Date(event.startDate).toLocaleDateString()} &middot; {new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} */}
-                    {new Date(event.startDate).toLocaleDateString('en-US', {
-                      weekday: 'short',
-                      month: 'short',
-                      day: 'numeric',
-                      hour: 'numeric',
-                      minute: 'numeric',
-                      hour12: true,
-                      timeZoneName: 'short'
-                    }).toUpperCase()}
+                      {new Date(event.startDate).toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true,
+                        timeZoneName: 'short'
+                      }).toUpperCase()}
                     </p>
                     <h3 className='event-card-name'>{event.name}</h3>
                     <p className='event-card-location'>
                       {event.Venue?.address}<br/>
                       {event.Venue?.city}, {event.Venue?.state}
                     </p>
-                    </div>
                   </div>
-                  <div className='event-card-bottom'>
-                    <p className='event-description'>{event.description || 'No description available'}</p>
-                    {console.log('Event description:', event.description)}
-                  </div>
+                </div>
+                <div className='event-card-bottom'>
+                  <p className='event-description'>{event.description || 'No description available'}</p>
+                </div>
               </Link>
             ))}
           </>
@@ -151,7 +168,6 @@ const GroupDetailPage = () => {
                 </div>
                 <div className='event-card-bottom'>
                   <p className='event-description'>{event.description || 'No description available'}</p>
-                    {console.log('Event description:', event.description)}
                 </div>
               </Link>
               ))}

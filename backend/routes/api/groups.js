@@ -637,35 +637,35 @@ router.put('/:groupId/membership', restoreUser, requireAuth, async (req, res) =>
 
 // DELETE /api/groups/:groupId - deletes a group
 router.delete('/:groupId', restoreUser, requireAuth, async (req, res) => {
-    const { groupId } = req.params;
+  const { groupId } = req.params;
 
-    const t = await sequelize.transaction();
+  const t = await sequelize.transaction();
 
-    try {
-        const group = await Group.findByPk(groupId, { transaction: t });
-        if (!group) {
-            await t.rollback();
-            return res.status(404).json({ message: "Group couldn't be found" });
-        }
+  try {
+      const group = await Group.findByPk(groupId, { transaction: t });
+      if (!group) {
+          await t.rollback();
+          return res.status(404).json({ message: "Group couldn't be found" });
+      }
 
-        if (req.user.id !== group.organizerId) {
-            await t.rollback();
-            return res.status(403).json({ message: "Forbidden: You are not allowed to delete this group" });
-        }
+      if (req.user.id !== group.organizerId) {
+          await t.rollback();
+          return res.status(403).json({ message: "Forbidden: You are not allowed to delete this group" });
+      }
 
-        await GroupImage.destroy({ where: { groupId }, transaction: t });
-        await Event.destroy({ where: { groupId }, transaction: t });
-        await Venue.destroy({ where: { groupId }, transaction: t });
-        await Membership.destroy({ where: { groupId }, transaction: t });
-        await group.destroy({ transaction: t });
-        await t.commit();
+      await GroupImage.destroy({ where: { groupId }, transaction: t });
+      await Event.destroy({ where: { groupId }, transaction: t });
+      await Venue.destroy({ where: { groupId }, transaction: t });
+      await Membership.destroy({ where: { groupId }, transaction: t });
+      await group.destroy({ transaction: t });
+      await t.commit();
 
-        return res.status(200).json({ message: "Successfully deleted" });
-    } catch (error) {
-        await t.rollback();
-        console.error('Failed to delete group:', error);
-        return res.status(500).json({ message: 'Internal server error', errors: error.errors ? error.errors.map(e => e.message) : [error.message] });
-    }
+      return res.status(200).json({ message: "Successfully deleted" });
+  } catch (error) {
+      await t.rollback();
+      console.error('Failed to delete group:', error);
+      return res.status(500).json({ message: 'Internal server error', errors: error.errors ? error.errors.map(e => e.message) : [error.message] });
+  }
 });
 
 // DELETE /api/groups/:groupId/membership/:memberId - delete a membership to a group
