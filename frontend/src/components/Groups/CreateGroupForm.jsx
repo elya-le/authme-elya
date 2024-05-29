@@ -81,92 +81,93 @@ const CreateGroupForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className='section1-create-group-header'>
-        <hr />
-        <h2>Start a New Group</h2>
-      </div>
-      <div className='section2-create-group-location'>
-        <hr />
-        <label>Set your group&apos;s location</label><br />
-        <p>MeetPup groups meet locally, in person, and online. We&apos;ll connect you with people in your area.</p><br></br>
-        <input
-          type='text'
-          placeholder='City'
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        /><br></br>
-        <select value={state} onChange={(e) => setState(e.target.value)}>
-          <option value=''>Select State</option>
-          {states.map((state) => (
-            <option key={state} value={state}>
-              {state}
-            </option>
-          ))}
-        </select>
-        {errors.state && <p>{errors.state}</p>}
-      </div>
-      <div className='section3-create-group-name'>
-        <hr />
-        <label>What will your group&apos;s name be?</label><br />
-        <input
-          type='text'
-          placeholder='What is your group name?'
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        {errors.name && <p>{errors.name}</p>}
-      </div>
-      <div className='section4-create-group-about'>
-        <hr />
-        <label>Describe the purpose of your group.</label><br />
-        <p>
-          1. What is the purpose of the group?<br />
-          2. Who should join?<br />
-          3. What will you do at your events?
-        </p><br />
-        <textarea
-          placeholder='Please write at least 15 characters'
-          value={about}
-          onChange={(e) => setAbout(e.target.value)}
-        />
-        {errors.about && <p>{errors.about}</p>}
-      </div>
-      <div className='section5-create-group-type'>
-        <hr />
-        <label>Is this an in-person or online group?</label><br />
-        <select value={type} onChange={(e) => setType(e.target.value)}>
-          <option value='Online'>Online</option>
-          <option value='In person'>In person</option>
-        </select>
-      </div>
-      <div className='section6-create-group-privacy'>
-        <hr />
-        <label>Is this group private or public?</label><br />
-        <select
-          value={privateGroup}
-          onChange={(e) => setPrivateGroup(e.target.value === 'true')}
-        >
-          <option value={true}>Private</option>
-          <option value={false}>Public</option>
-        </select>
-      </div>
-      <div className='section7-create-group-image'>
-        <hr />
-        <label>Group Image URL</label><br />
-        <input
-          type='text'
-          placeholder='Image URL'
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-        />
-        {errors.imageUrl && <p>{errors.imageUrl}</p>}
-      </div>
-      <div className='section8-create-group-submit'>
-        <hr />
-        <button type='submit'>Create Group</button>
-      </div>
-    </form>
+    <div className='form-container'>
+      <form onSubmit={handleSubmit}>
+        <div className='section1-create-group-header'>
+          <h2>Start a New Group</h2>
+        </div>
+        <div className='section2-create-group-location'>
+          <hr />
+          <label>Set your group&apos;s location</label><br />
+          <p>MeetPup groups meet locally, in person, and online. We&apos;ll connect you with people in your area.</p><br />
+          <input
+            type='text'
+            placeholder='City'
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+          /><br />
+          <select value={state} onChange={(e) => setState(e.target.value)}>
+            <option value=''>Select State</option>
+            {states.map((state) => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
+          </select>
+          {errors.state && <p>{errors.state}</p>}
+        </div>
+        <div className='section3-create-group-name'>
+          <hr />
+          <label>What will your group&apos;s name be?</label><br />
+          <input
+            type='text'
+            placeholder='What is your group name?'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          {errors.name && <p>{errors.name}</p>}
+        </div>
+        <div className='section4-create-group-about'>
+          <hr />
+          <label>Describe the purpose of your group.</label><br />
+          <p>
+            1. What is the purpose of the group?<br />
+            2. Who should join?<br />
+            3. What will you do at your events?
+          </p><br />
+          <textarea
+            placeholder='Please write at least 15 characters'
+            value={about}
+            onChange={(e) => setAbout(e.target.value)}
+          />
+          {errors.about && <p>{errors.about}</p>}
+        </div>
+        <div className='section5-create-group-type'>
+          <hr />
+          <label>Is this an in-person or online group?</label><br />
+          <select value={type} onChange={(e) => setType(e.target.value)}>
+            <option value='Online'>Online</option>
+            <option value='In person'>In person</option>
+          </select>
+        </div>
+        <div className='section6-create-group-privacy'>
+          <hr />
+          <label>Is this group private or public?</label><br />
+          <select
+            value={privateGroup}
+            onChange={(e) => setPrivateGroup(e.target.value === 'true')}
+          >
+            <option value={true}>Private</option>
+            <option value={false}>Public</option>
+          </select>
+        </div>
+        <div className='section7-create-group-image'>
+          <hr />
+          <label>Group Image URL</label><br />
+          <input
+            type='text'
+            placeholder='Image URL'
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+          />
+          {errors.imageUrl && <p>{errors.imageUrl}</p>}
+        </div>
+        <div className='section8-create-group-submit'>
+          <hr />
+          <button className='create-group-button'>Create Group</button>
+        </div>
+      </form>
+    </div>
   );
 };
 

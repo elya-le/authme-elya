@@ -1,33 +1,45 @@
-.section1-create-group-header {
-  display: flex;
+.form-container {
+  max-width: 600px; /* Adjust the width as needed */
+  margin: 0;
+  padding: 20px;
+  background-color: #f9f9f9; 
+  border-radius: 10px; 
 }
 
-.section2-create-group-location {
+.section1-create-group-header,
+.section2-create-group-location,
+.section3-create-group-name,
+.section4-create-group-about,
+.section5-create-group-type,
+.section6-create-group-privacy,
+.section7-create-group-image,
+.section8-create-group-submit {
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px; /* Add space between sections */
 }
 
-.section3-create-group-name {
-  display: flex;
-  flex-direction: column;
+input[type="text"],
+textarea,
+select {
+  width: 100%; /* Ensure inputs are full width within the container */
+  padding: 10px;
+  margin-top: 5px; /* Add space above inputs */
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Optional: Add border radius */
 }
 
-.section4-create-group-about{
-  display: flex;
-  flex-direction: column;
+.create-group-button {
+  font-size: 18px;
+    width: 100%;
+    padding: 10px;
+    background-color: #d92323;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.section5-create-group-type {
-  display: flex;
-  flex-direction: column;
-}
-
-.section6-create-group-privacy {
-  display: flex;
-  flex-direction: column;
-}
-
-.section7-create-group-image {
-  display: flex;
-  flex-direction: column;
+.create-group-button:hover {
+  background-color: #b81b1b;
 }
