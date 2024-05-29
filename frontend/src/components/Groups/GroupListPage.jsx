@@ -40,9 +40,18 @@ const GroupListPage = () => {
               <div className='group-card-top'>
                 <div className="group-image">
                   {group.GroupImages && group.GroupImages.length > 0 ? (
-                    <img src={group.GroupImages[0].url} alt={`${group.name} Thumbnail`} className='group-card-thumbnail' /> // display the first image if available
+                    <img
+                      src={group.GroupImages[0].url}
+                      alt="Group Thumbnail"
+                      className='group-card-thumbnail'
+                      onError={(e) => e.target.src = '/images/img.png'} // Fallback image
+                    />
                   ) : (
-                    <img src="/images/img.png" alt="Default Group" className='group-card-thumbnail' /> // display a default image if no images are available
+                    <img
+                      src='/images/img.png'
+                      alt="Default Group"
+                      className='group-card-thumbnail'
+                    />
                   )}
                 </div>
                 <div className='group-details'>
