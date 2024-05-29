@@ -98,7 +98,9 @@ const GroupDetailPage = () => {
             )}
             {isLoggedIn && isOrganizer && (
               <div className='organizer-buttons'>
-                <button className='create-event-button'>Create event</button>
+                <Link to={`/groups/${groupId}/events/new`}>
+                  <button className='create-event-button'>Create event</button>
+                </Link>
                 <Link to={`/groups/${groupId}/update`}>
                   <button className='update-group-button'>Update</button>
                 </Link>
@@ -130,7 +132,7 @@ const GroupDetailPage = () => {
                           src={event.EventImages[0].url}
                           alt="Event Thumbnail"
                           className='event-card-thumbnail'
-                          onError={(e) => e.target.src = '/images/img.png'} // fallback image
+                          onError={(e) => e.target.src = '/images/img.png'} // Fallback image
                         />
                       ) : (
                         <img
@@ -180,7 +182,7 @@ const GroupDetailPage = () => {
                           src={event.EventImages[0].url}
                           alt="Event Thumbnail"
                           className='event-card-thumbnail'
-                          onError={(e) => e.target.src = '/images/img.png'} // fallback image
+                          onError={(e) => e.target.src = '/images/img.png'} // Fallback image
                         />
                       ) : (
                         <img

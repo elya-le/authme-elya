@@ -278,7 +278,6 @@ router.get('/:groupId/members', async (req, res) => {
 });
 
 // group validation
-// group validation
 const validateGroup = [
   check('name')
     .notEmpty().withMessage('Name is required')
@@ -308,24 +307,22 @@ const validateVenue = [
 
 // event validation
 const validateEvent = [
-    check('name').exists({ checkFalsy: true }).withMessage('Name is required')
-        .isLength({ min: 5 }).withMessage('Name must be at least 5 characters'),
-    check('type').exists({ checkFalsy: true }).withMessage('Type is required')
-        .isIn(['Online', 'In person', 'online', 'in person']).withMessage("Type must be 'Online' or 'In person'"),
-    check('capacity')
-        .isInt({ min: 2 }).withMessage('Capacity must be an integer and at least 2'),
-    check('price')
-        .isFloat({ min: 0 }).withMessage('Price must be a non-negative number'),
-    check('description')
-        .exists({ checkFalsy: true }).withMessage('Description is required'),
-    check('startDate')
-        .isISO8601().withMessage('Start date must be a valid date')
-        .custom((value, { req }) => new Date(value) > new Date()).withMessage('Start date must be in the future'),
-    check('endDate')
-        .isISO8601().withMessage('End date must be a valid date')
-        .custom((value, { req }) => new Date(value) > new Date(req.body.startDate)).withMessage('End date must be after start date'),
-    check('venueId')
-        .isInt().withMessage('Venue ID must be an integer')
+  check('name').exists({ checkFalsy: true }).withMessage('Name is required')
+      .isLength({ min: 5 }).withMessage('Name must be at least 5 characters'),
+  check('type').exists({ checkFalsy: true }).withMessage('Type is required')
+      .isIn(['Online', 'In person', 'online', 'in person']).withMessage("Type must be 'Online' or 'In person'"),
+  check('capacity')
+      .isInt({ min: 2 }).withMessage('Capacity must be an integer and at least 2'),
+  check('price')
+      .isFloat({ min: 0 }).withMessage('Price must be a non-negative number'),
+  check('description')
+      .exists({ checkFalsy: true }).withMessage('Description is required'),
+  check('startDate')
+      .isISO8601().withMessage('Start date must be a valid date')
+      .custom((value, { req }) => new Date(value) > new Date()).withMessage('Start date must be in the future'),
+  check('endDate')
+      .isISO8601().withMessage('End date must be a valid date')
+      .custom((value, { req }) => new Date(value) > new Date(req.body.startDate)).withMessage('End date must be after start date')
 ];
 
 // POST /api/groups - create a new group
@@ -444,45 +441,44 @@ router.post('/:groupId/venues', authenticated, validateVenue, handleValidationEr
 
 // POST /api/groups/:groupId/events - create an event for a specific group
 router.post('/:groupId/events', authenticated, validateEvent, handleValidationErrors, async (req, res) => {
-    const { groupId } = req.params;
-    const { name, type, startDate, endDate, venueId, description, capacity, price } = req.body;
+  const { groupId } = req.params;
+  const { name, type, startDate, endDate, description, capacity, price } = req.body;
 
-    try {
-        const group = await Group.findByPk(groupId);
-        if (!group) {
-            return res.status(404).json({ message: "Group couldn't be found" });
-        }
-        const venue = await Venue.findByPk(venueId);
-        if (!venueId) {
-            return res.status(400).json({ message: "Venue ID is required" });
-        }
-        if (!venue) {
-            return res.status(404).json({ message: "Venue couldn't be found" });
-        }
-        if (req.user.id !== group.organizerId) {
-            return res.status(403).json({ message: "Forbidden: You are not allowed to create events for this group" });
-        }
+  console.log('Received event creation request:', { groupId, name, type, startDate, endDate, description, capacity, price });
 
-        const event = await Event.create({
-            venueId,
-            groupId,
-            name,
-            type,
-            capacity,
-            price,
-            description,
-            startDate,
-            endDate
-        });
+  try {
+      const group = await Group.findByPk(groupId);
+      if (!group) {
+          console.log("Group couldn't be found");
+          return res.status(404).json({ message: "Group couldn't be found" });
+      }
 
-        res.status(201).json(event);
-    } catch (error) {
-        console.error('Failed to create event:', error);
-        if (error.name === 'SequelizeValidationError') {
-            return res.status(400).json({ message: 'Validation error', errors: error.errors.map(e => e.message) });
-        }
-        res.status(500).json({ message: 'Internal server error' });
-    }
+      if (req.user.id !== group.organizerId) {
+          console.log('Forbidden: User is not allowed to create events for this group');
+          return res.status(403).json({ message: "Forbidden: You are not allowed to create events for this group" });
+      }
+
+      const event = await Event.create({
+          groupId,
+          name,
+          type,
+          capacity,
+          price,
+          description,
+          startDate,
+          endDate
+      });
+
+      console.log('Event created successfully:', event);
+      res.status(201).json(event);
+  } catch (error) {
+      console.error('Failed to create event:', error);
+      if (error.name === 'SequelizeValidationError') {
+          console.log('Validation errors:', error.errors.map(e => e.message));
+          return res.status(400).json({ message: 'Validation error', errors: error.errors.map(e => e.message) });
+      }
+      res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 // POST /api/groups/:groupId/membership - request membership for a group

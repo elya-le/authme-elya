@@ -4,12 +4,13 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import SignupFormModal from './components/SignupFormModal/SignupFormModal';
 import Navigation from './components/Navigation/Navigation';
 import LandingPage from './components/LandingPage/LandingPage';
-import GroupListPage from './components/Groups/GroupListPage'; 
+import GroupListPage from './components/Groups/GroupListPage';
 import GroupDetailPage from './components/Groups/GroupDetailPage';
 import EventListPage from './components/Events/EventListPage';
 import EventDetailPage from './components/Events/EventDetailPage';
-import CreateGroupPage from './components/Groups/CreateGroupPage'; 
-import UpdateGroupForm from './components/Groups/UpdateGroupForm'; // Add this import
+import CreateGroupPage from './components/Groups/CreateGroupPage';
+import UpdateGroupForm from './components/Groups/UpdateGroupForm';
+import CreateEventForm from './components/Events/CreateEventForm';
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -21,10 +22,10 @@ function Layout() {
     });
   }, [dispatch]);
   return (
-  <>
-    <Navigation isLoaded={isLoaded} />
-    {isLoaded && <Outlet />}
-  </>
+    <>
+      <Navigation isLoaded={isLoaded} />
+      {isLoaded && <Outlet />}
+    </>
   );
 }
 
@@ -42,15 +43,19 @@ const router = createBrowserRouter([
       },
       {
         path: 'groups',
-        element: <GroupListPage /> 
+        element: <GroupListPage />
       },
       {
         path: 'groups/:groupId',
-        element: <GroupDetailPage /> 
+        element: <GroupDetailPage />
       },
       {
-        path: 'groups/:groupId/update', 
-        element: <UpdateGroupForm /> 
+        path: 'groups/:groupId/update',
+        element: <UpdateGroupForm />
+      },
+      {
+        path: 'groups/:groupId/events/new',
+        element: <CreateEventForm />
       },
       {
         path: 'events',
@@ -58,19 +63,18 @@ const router = createBrowserRouter([
       },
       {
         path: 'events/:eventId',
-        element: <EventDetailPage /> 
+        element: <EventDetailPage />
       },
       {
-        path: 'groups/new', 
-        element: <CreateGroupPage /> 
+        path: 'groups/new',
+        element: <CreateGroupPage />
       }
     ]
   }
 ],
-  {
+{
   basename: process.env.NODE_ENV === 'production' ? '' : ''
-  }
-);
+});
 
 function App() {
   return <RouterProvider router={router} />;
