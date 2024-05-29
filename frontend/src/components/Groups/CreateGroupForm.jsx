@@ -19,6 +19,13 @@ const CreateGroupForm = () => {
     'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
   ];
 
+  const formatCityName = (city) => {
+    if (city.length === 3) {
+      return city.toUpperCase();
+    }
+    return city.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  };
+
   useEffect(() => {
     fetch('/api/csrf/restore', {
       method: 'GET',
@@ -50,11 +57,13 @@ const CreateGroupForm = () => {
     setErrors({}); // clear previous errors
     setFormIncomplete(false); // reset form incomplete error
 
+    const formattedCity = formatCityName(city);
+
     const newErrors = {};
 
     if (!name) newErrors.name = 'Name is required';
     if (!about || about.length < 30) newErrors.about = 'Description needs 30 or more characters';
-    if (!city) newErrors.city = 'City is required';
+    if (!formattedCity) newErrors.city = 'City is required';
     if (!state) newErrors.state = 'State is required';
 
     if (Object.keys(newErrors).length > 0) {
@@ -74,7 +83,7 @@ const CreateGroupForm = () => {
         about,
         type,
         private: privateGroup,
-        city,
+        city: formattedCity,
         state,
       }),
     });

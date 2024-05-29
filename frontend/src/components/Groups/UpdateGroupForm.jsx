@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { csrfFetch } from '../../store/csrf';
-import './CreateGroupForm.css';
 
 const states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
 
@@ -15,11 +13,17 @@ const UpdateGroupForm = () => {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  const [errors, setErrors] = useState({});
-  const [formIncomplete, setFormIncomplete] = useState(false);
+  const [errors, setErrors] = useState([]);
+
+  const formatCityName = (city) => {
+    if (city.length === 3) {
+      return city.toUpperCase();
+    }
+    return city.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  };
 
   useEffect(() => {
-    csrfFetch(`/api/groups/${groupId}`)
+    fetch(`/api/groups/${groupId}`) // fetch the current group details to pre-populate the form
       .then(response => response.json())
       .then(data => {
         setName(data.name);
@@ -28,42 +32,29 @@ const UpdateGroupForm = () => {
         setPrivateGroup(data.private);
         setCity(data.city);
         setState(data.state);
-        if (data.GroupImages && data.GroupImages.length > 0) {
-          setImageUrl(data.GroupImages[0].url);
-        }
+        setImageUrl(data.previewImage || '');
       })
-      .catch(err => setErrors({ general: err.message }));
+      .catch(err => setErrors([err.message]));
   }, [groupId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({}); // clear previous errors
-    setFormIncomplete(false); // reset form incomplete error
-
-    const newErrors = {};
-
-    if (!name) newErrors.name = 'Name is required';
-    if (!about || about.length < 30) newErrors.about = 'Description needs 30 or more characters';
-    if (!city) newErrors.city = 'City is required';
-    if (!state) newErrors.state = 'State is required';
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      setFormIncomplete(true);
-      return;
-    }
-
-    const response = await csrfFetch(`/api/groups/${groupId}`, {
+    const formattedCity = formatCityName(city);
+    
+    const csrfToken = document.cookie.split('XSRF-TOKEN=')[1]; // Get CSRF token from cookie
+    
+    const response = await fetch(`/api/groups/${groupId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'XSRF-Token': csrfToken, // Add CSRF token to the headers
       },
       body: JSON.stringify({
         name,
         about,
         type,
         private: privateGroup,
-        city,
+        city: formattedCity,
         state,
         previewImage: imageUrl,
       }),
@@ -175,11 +166,6 @@ const UpdateGroupForm = () => {
 
         <div className='section8-create-group-submit'>
           <hr />
-          {formIncomplete && (
-            <div className='form-incomplete-error'>
-              <p>Incomplete form - see requirements above</p>
-            </div>
-          )} <br></br>
           <button
             type='submit'
             className={`create-group-button ${!name || !about || about.length < 30 || !city || !state ? 'grey' : ''}`}
