@@ -286,7 +286,7 @@ const validateGroup = [
   check('about')
     .isLength({ min: 30 }).withMessage('Description needs 30 or more characters'),
   check('type')
-    .isIn(['Online', 'In person']).withMessage("Type must be 'Online' or 'In person'"),
+    .isIn(['Online', 'In person', 'online', 'in person']).withMessage("Type must be 'Online' or 'In person'"),
   check('private')
     .isBoolean().withMessage('Private must be a boolean'),
   check('city')
