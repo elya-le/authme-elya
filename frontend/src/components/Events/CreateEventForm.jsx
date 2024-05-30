@@ -67,9 +67,9 @@ const CreateEventForm = () => {
     e.preventDefault();
     setErrors({}); // clear previous errors
     setFormIncomplete(false); // reset form incomplete error
-
+  
     const newErrors = {};
-
+  
     if (!name) newErrors.name = 'Name is required';
     if (!type) newErrors.type = 'Event type is required';
     if (!isPrivate) newErrors.isPrivate = 'Visibility is required';
@@ -80,15 +80,15 @@ const CreateEventForm = () => {
     if (!imageUrl) newErrors.imageUrl = 'Image URL is required';
     if (!description || description.length < 30) newErrors.description = 'Description needs 30 or more characters';
     if (type === 'In person' && !venueId) newErrors.venueId = 'Venue is required for in-person events';
-
+  
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       setFormIncomplete(true);
       return;
     }
-
+  
     console.log('Submitting event:', { name, type, isPrivate, price, capacity, startDate, endDate, imageUrl, description, venueId });
-
+  
     try {
       const response = await fetch(`/api/groups/${groupId}/events`, {
         method: 'POST',
@@ -100,8 +100,8 @@ const CreateEventForm = () => {
           name,
           type,
           private: isPrivate === 'true',
-          price,
-          capacity,
+          price: parseFloat(price), // convert to number
+          capacity: parseInt(capacity, 10), // convert to number
           startDate,
           endDate,
           imageUrl,
@@ -109,9 +109,9 @@ const CreateEventForm = () => {
           venueId: type === 'In person' ? venueId : null, // Include venueId only for in-person events
         }),
       });
-
+  
       console.log('Response status:', response.status);
-
+  
       if (response.ok) {
         const data = await response.json();
         console.log('Event created:', data);
@@ -129,6 +129,7 @@ const CreateEventForm = () => {
       console.error('Network or server error:', error);
     }
   };
+  
 
   return (
     <div className="form-container">
