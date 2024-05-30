@@ -128,7 +128,19 @@ const CreateGroupForm = () => {
         <div className='section1-create-group-header'>
           <h2>Start a New Group</h2>
         </div>
-        <div className='section2-create-group-location'>
+        <div className='section2-create-group-name'>
+          <hr />
+          <label>What will your group&apos;s name be?</label><br />
+          <p>Choose a name that will give people a clear idea of what the group is about. Feel free to get creative! You can edit this later if you change your mind.</p><br />
+          {errors.name && <p className='field-error'>{errors.name}</p>}
+          <input
+            type='text'
+            placeholder='What is your group name?'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className='section3-create-group-location'>
           <hr />
           <label>Set your group&apos;s location</label><br />
           <p>MeetPup groups meet locally, in person, and online. We&apos;ll connect you with people in your area.</p><br />
@@ -150,20 +162,6 @@ const CreateGroupForm = () => {
             ))}
           </select>
         </div>
-
-        <div className='section3-create-group-name'>
-          <hr />
-          <label>What will your group&apos;s name be?</label><br />
-          <p>Choose a name that will give people a clear idea of what the group is about. Feel free to get creative! You can edit this later if you change your mind.</p><br />
-          {errors.name && <p className='field-error'>{errors.name}</p>}
-          <input
-            type='text'
-            placeholder='What is your group name?'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-
         <div className='section4-create-group-about'>
           <hr />
           <label>Describe the purpose of your group.</label><br />
