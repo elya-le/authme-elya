@@ -42,7 +42,7 @@ const CreateGroupForm = () => {
     return () => { // clear form data and errors on unmount
       setName('');
       setAbout('');
-      setType('Online');
+      setType('In person');
       setPrivateGroup(false);
       setCity('');
       setState('');
@@ -122,6 +122,19 @@ const CreateGroupForm = () => {
     }
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImageUrl(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className='form-container'>
       <form onSubmit={handleSubmit}>
@@ -186,7 +199,7 @@ const CreateGroupForm = () => {
           <label>Is this an in-person or online group?</label><br />
           <select value={type} onChange={(e) => setType(e.target.value)}>
             <option value='Online'>Online</option>
-            <option value='In person'>In person</option>
+            <option value='In person'>In person</option> {/* Capitalized to match state */}
           </select>
         </div>
 
@@ -207,12 +220,21 @@ const CreateGroupForm = () => {
           <hr />
           <label>Please add an image URL for your group below:</label><br />
           {errors.imageUrl && <p className='field-error'>{errors.imageUrl}</p>}
-          <input
-            type='text'
-            placeholder='Image URL'
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
+          <div className='image-url-input-container'>
+            <input
+              type='text'
+              placeholder='Image URL'
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+            />
+            <br></br><br></br>
+            <input
+              type='file'
+              accept='image/*'
+              onChange={handleImageUpload}
+              className='image-upload-button'
+            />
+          </div>
         </div>
 
         <div className='section8-create-group-submit'>

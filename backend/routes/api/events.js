@@ -101,7 +101,7 @@ router.get('/', async (req, res) => {
   if (isNaN(page) || page < 1 || page > 10) errors.page = 'Page must be between 1 and 10';
   if (isNaN(size) || size < 1 || size > 20) errors.size = 'Size must be between 1 and 20';
   if (name && typeof name !== 'string') errors.name = 'Name must be a string';
-  if (type && !['Online', 'In Person'].includes(type)) errors.type = "Type must be 'Online' or 'In Person'";
+  if (type && !['Online', 'In person'].includes(type)) errors.type = "Type must be 'Online' or 'In person'";
   if (startDate && isNaN(Date.parse(startDate))) errors.startDate = 'Start date must be a valid datetime';
   if (Object.keys(errors).length) return res.status(400).json({ message: 'Bad Request', errors });
   const where = {};
