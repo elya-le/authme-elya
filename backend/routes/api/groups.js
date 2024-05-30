@@ -428,7 +428,8 @@ router.post('/:groupId/events', authenticated, validateEvent, handleValidationEr
     }
 
     if (type === 'In person' && !venueId) {
-      return res.status(400).json({ message: 'Validation error', errors: ['Venue is required for in-person events'] });
+      console.log('Validation error: Venue is required for in-person events');
+      return res.status(400).json({ message: 'Validation error', errors: { venueId: 'Venue is required for in-person events' } });
     }
 
     const event = await Event.create({

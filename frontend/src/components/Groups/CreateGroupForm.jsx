@@ -6,7 +6,7 @@ const CreateGroupForm = () => {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [about, setAbout] = useState('');
-  const [type, setType] = useState('Online');
+  const [type, setType] = useState('In Person');
   const [privateGroup, setPrivateGroup] = useState(false);
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
