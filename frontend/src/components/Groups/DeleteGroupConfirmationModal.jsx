@@ -1,6 +1,6 @@
-import './DeleteConfirmationModal.css';
+import './DeleteGroupConfirmationModal.css';
 
-const DeleteConfirmationModal = ({ show, onClose, onConfirm }) => {
+const DeleteGroupConfirmationModal = ({ show, onClose, onConfirm }) => {
   if (!show) {
     return null;
   }
@@ -16,4 +16,4 @@ const DeleteConfirmationModal = ({ show, onClose, onConfirm }) => {
   );
 };
 
-export default DeleteConfirmationModal;
+export default DeleteGroupConfirmationModal;

@@ -1,17 +1,21 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom'; // useNavigate instead of useHistory
 import { useSelector } from 'react-redux';
 import './EventDetailPage.css';
 import '../../Main.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faClock, faDollarSign  } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faClock, faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import DeleteEventConfirmationModal from './DeleteEventConfirmationModal';
 
 const EventDetailPage = () => {
   const { eventId } = useParams();
+  const navigate = useNavigate(); // useNavigate instead of useHistory
   const [event, setEvent] = useState(null);
   const [error, setError] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const currentUser = useSelector(state => state.session.user);
+
   useEffect(() => {
     fetch(`/api/events/${eventId}`)
       .then(response => response.json())
@@ -24,18 +28,43 @@ const EventDetailPage = () => {
       })
       .catch(err => setError(err.message));
   }, [eventId]);
+
   if (error) {
     return <div>Error: {error}</div>;
   }
+
   if (!event) {
     return <div>Loading...</div>;
   }
+
   const isCurrentUserHost = () => {
     if (!currentUser || !event.Group) {
       return false;
     }
     return currentUser.id === event.Group.organizerId;
   };
+
+  const handleDeleteEvent = async () => {
+    try {
+      const csrfToken = document.cookie.split('=')[1]; // Get CSRF token from cookie
+      const response = await fetch(`/api/events/${eventId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'CSRF-Token': csrfToken, // Include CSRF token in the request headers
+        }
+      });
+      if (response.ok) {
+        navigate(`/groups/${event.groupId}`); // navigate instead of history.push
+      } else {
+        const data = await response.json();
+        setError(data.message || 'Failed to delete event');
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
     <div className='event-detail-page'>
       <div className='section1-event-header'>
@@ -74,7 +103,6 @@ const EventDetailPage = () => {
                     <p>START {new Date(event.startDate).toLocaleDateString()} · {new Date(event.startDate).toLocaleTimeString()} <br/> END {new Date(event.endDate).toLocaleDateString()} · {new Date(event.endDate).toLocaleTimeString()}</p><br/>
                   </div> <br></br>
                   <p><FontAwesomeIcon icon={faDollarSign} className='event-icon'/> {event.price ? `$${event.price}` : 'Free'} </p><br/>
-                  {/* <p><FontAwesomeIcon icon={faUser} className='event-icon' /> {event.type === 'In person' ? 'In person' : 'Online'} </p> */}
                   <p><FontAwesomeIcon icon={faUser} className='event-icon' /> {event.type === 'In person' ? 'In person' : 'Online'}</p>
                     {event.type === 'In person' && event.Venue && (
                       <>
@@ -90,7 +118,7 @@ const EventDetailPage = () => {
               {isCurrentUserHost() && (
               <div className='event-organizer-buttons'>
                 <button className='update-event-button'>Update</button>
-                <button className='delete-event-button'>Delete</button>
+                <button className='delete-event-button' onClick={() => setShowDeleteModal(true)}>Delete</button> 
               </div>
             )}
             </div>
@@ -104,11 +132,13 @@ const EventDetailPage = () => {
           </div>
         </div>
       </div>
+      <DeleteEventConfirmationModal 
+        show={showDeleteModal} 
+        onClose={() => setShowDeleteModal(false)} 
+        onConfirm={handleDeleteEvent} 
+      />
     </div>
   );
 };
 
 export default EventDetailPage;
-
-
-

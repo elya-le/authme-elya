@@ -451,13 +451,13 @@ router.delete('/:eventId', restoreUser, requireAuth, checkEventDeletionPermissio
   try {
     const event = await Event.findByPk(eventId);
     if (!event) {
-      return res.status(404).json({ message: "Event couldn't be found" });
+      return res.status(404).json({ message: "Event couldn't be found" }); 
     }
     await event.destroy();
-    return res.status(200).json({ message: "Successfully deleted" });
+    return res.status(200).json({ message: "Successfully deleted", eventId }); 
   } catch (error) {
     console.error('Failed to delete event:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' }); 
   }
 });
 

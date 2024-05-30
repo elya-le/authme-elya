@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import '../Events/EventCard.css';
 import './GroupDetailPage.css';
 import '../../Main.css';
-import DeleteConfirmationModal from './DeleteConfirmationModal';
+import DeleteGroupConfirmationModal from './DeleteGroupConfirmationModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faUsers, faUser } from '@fortawesome/free-solid-svg-icons';
 
@@ -210,7 +210,7 @@ const GroupDetailPage = () => {
           )}
         </div>
       </div>
-      <DeleteConfirmationModal show={showDeleteModal} onClose={() => setShowDeleteModal(false)} onConfirm={handleDelete} />
+      <DeleteGroupConfirmationModal show={showDeleteModal} onClose={() => setShowDeleteModal(false)} onConfirm={handleDelete} />
     </div>
   );
 };
