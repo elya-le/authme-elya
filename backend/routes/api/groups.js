@@ -436,8 +436,8 @@ router.post('/:groupId/events', authenticated, validateEvent, handleValidationEr
       groupId,
       name,
       type,
-      capacity,
-      price,
+      capacity: parseInt(capacity, 10), // ensure capacity is an integer
+      price: parseInt(price, 10), // ensure price is an integer
       description,
       startDate,
       endDate,
@@ -453,9 +453,10 @@ router.post('/:groupId/events', authenticated, validateEvent, handleValidationEr
       console.log('Validation errors:', error.errors.map(e => e.message));
       return res.status(400).json({ message: 'Validation error', errors: error.errors.map(e => e.message) });
     }
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: 'Internal server error', details: error.message });
   }
 });
+
 
 // POST /api/groups/:groupId/membership - request membership for a group
 router.post('/:groupId/membership', restoreUser, requireAuth, async (req, res) => {

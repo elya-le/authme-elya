@@ -100,8 +100,8 @@ const CreateEventForm = () => {
           name,
           type,
           private: isPrivate === 'true',
-          price: parseFloat(price), // convert to number
-          capacity: parseInt(capacity, 10), // convert to number
+          price: parseInt(price, 10), // convert to integer
+          capacity: parseInt(capacity, 10), // convert to integer
           startDate,
           endDate,
           imageUrl,
@@ -119,16 +119,14 @@ const CreateEventForm = () => {
       } else {
         const errorData = await response.json();
         console.log('Error creating event:', errorData);
-        const formattedErrors = Object.keys(errorData.errors).reduce((acc, key) => {
-          acc[key] = errorData.errors[key].msg;
-          return acc;
-        }, {});
-        setErrors(formattedErrors);
+        setErrors(errorData.errors ? errorData.errors : { message: errorData.message });
       }
     } catch (error) {
       console.error('Network or server error:', error);
+      setErrors({ message: 'Network or server error: ' + error.message });
     }
   };
+  
   
 
   return (
