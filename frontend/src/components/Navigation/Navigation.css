@@ -47,12 +47,12 @@
 }
 
 .login-button:hover {
-  color: #02798a;
+  color:#049cac;
   font-weight: bold;
 }
 
 .signup-button {
-    background-color: #02798a;
+    background-color: #1B798A;
     color: white;
     padding: 10px 20px;
     border: none;
