@@ -60,30 +60,23 @@ const EventListPage = () => {
                     <img src='/images/img.png' alt='Default Event' className='event-card-thumbnail' />
                   )}
                 </div>
-                <div className='event-card-details'>
+                  <div className='event-card-details'>
                   <p className='event-card-time'>
-                    {/* {new Date(event.startDate).toLocaleDateString()} &middot; {new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} */}
-                    {new Date(event.startDate).toLocaleDateString('en-US', {
-                      weekday: 'short',
-                      month: 'short',
-                      day: 'numeric',
-                      hour: 'numeric',
-                      minute: 'numeric',
-                      hour12: true,
-                      timeZoneName: 'short'
-                    }).toUpperCase()}
+                  {new Date(event.startDate).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'short',
+                    day: 'numeric'
+                  }).toUpperCase()} &middot; {new Date(event.startDate).toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: true,
+                    timeZoneName: 'short'
+                  }).toUpperCase()}
                   </p>
                   <h3 className='event-card-name'>{event.name}</h3>
                   <p className='event-card-groupId'>
                     {event.Group?.name} &middot; {event.Venue?.city}, {event.Venue?.state}
                   </p>
-                  {/* <p className='event-card-location'>
-                  </p> */}
-                  {/* <p className='event-card-attendees'>
-                    {event.Attendees && event.Attendees.length > 0
-                      ? `${event.Attendees.length} attendees`
-                      : 'No attendees yet'}
-                  </p> */}
                 </div>
               </div>
               <div className='event-card-bottom'>
