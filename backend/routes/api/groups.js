@@ -308,19 +308,22 @@ const validateVenue = [
 
 // event validation
 const validateEvent = [
-  check('name', 'Name must be at least 5 characters long').isLength({ min: 5 }),
-  check('type', "Type must be 'Online' or 'In person'").isIn(['Online', 'In person', 'online', 'in person']),
-  check('capacity', 'Capacity must be an integer').isInt({ min: 1 }),
-  check('price', 'Price must be a non-negative number').isFloat({ min: 0 }),
-  check('description', 'Description is required').not().isEmpty(),
-  check('description', 'Description must be below 2,000 characters').isLength({ max: 2000 }), // Add max length validation
-  check('startDate', 'Start date must be in the format YYYY-MM-DD HH:mm:ss')
-    .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
-    .custom((value, { req }) => new Date(value) > new Date()),
-  check('endDate', 'End date must be in the format YYYY-MM-DD HH:mm:ss and after start date')
-    .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
-    .custom((value, { req }) => new Date(value) > new Date(req.body.startDate)),
-  check('venueId', 'Venue ID must be an integer').isInt()
+  check('name').exists({ checkFalsy: true }).withMessage('Name is required')
+      .isLength({ min: 5 }).withMessage('Name must be at least 5 characters'),
+  check('type').exists({ checkFalsy: true }).withMessage('Type is required')
+      .isIn(['Online', 'In person', 'online', 'in person']).withMessage("Type must be 'Online' or 'In person'"),
+  check('capacity')
+      .isInt({ min: 2 }).withMessage('Capacity must be an integer and at least 2'),
+  check('price')
+      .isFloat({ min: 0 }).withMessage('Price must be a non-negative number'),
+  check('description')
+      .exists({ checkFalsy: true }).withMessage('Description is required'),
+  check('startDate')
+      .isISO8601().withMessage('Start date must be a valid date')
+      .custom((value, { req }) => new Date(value) > new Date()).withMessage('Start date must be in the future'),
+  check('endDate')
+      .isISO8601().withMessage('End date must be a valid date')
+      .custom((value, { req }) => new Date(value) > new Date(req.body.startDate)).withMessage('End date must be after start date')
 ];
 
 // POST /api/groups - create a new group
