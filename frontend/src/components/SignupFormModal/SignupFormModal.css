@@ -72,16 +72,16 @@
 }
 
 .error {
-    color: red;
-    font-size: 12px;
-    margin-top: 5px;
+  color: red;
+  font-size: 16px;
+  margin: 0px 5px 10px 0px;
 }
 
 .demo-user-link {
     margin-top: 24px;
     text-align: center;
     cursor: pointer;
-    color: #007bff; /* Blue color for the link */
+    color: #02798a; /* Blue color for the link */
     text-decoration: none;
     font-weight: bold;
 }

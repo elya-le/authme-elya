@@ -46,14 +46,14 @@
     cursor: pointer;
 }
 
-.login-form form button:hover {
+/* .login-form form button:hover {
     background-color: #b81b1b;
-}
+} */
 
 .login-form button:disabled {
-    background-color: grey; /* greyed out background color */
-    cursor: not-allowed; /* change cursor to not-allowed */
-    opacity: 0.6; /* slightly transparent */
+    background-color: grey; 
+    cursor: not-allowed; 
+    opacity: 0.6; 
 }
 
 /* Add margin space between the login button and the demo user link */
@@ -61,7 +61,7 @@
     margin-top: 24px;
     text-align: center;
     cursor: pointer;
-    color: #007bff; /* Blue color for the link */
+    color: #02798a;
     text-decoration: none;
     font-weight: bold;
 }
@@ -87,6 +87,6 @@
 
 .error {
     color: red;
-    font-size: 12px;
-    margin-top: 5px;
+    font-size: 16px;
+    margin: 0px 5px 10px 0px;
 }

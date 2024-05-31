@@ -22,18 +22,27 @@ function SignupFormModal() {
   }, [email, username, password, firstName, lastName, confirmPassword]);
 
   const resetForm = () => {
-    setEmail(''); // reset email
-    setUsername(''); // reset username
-    setFirstName(''); // reset first name
-    setLastName(''); // reset last name
-    setPassword(''); // reset password
-    setConfirmPassword(''); // reset confirm password
+    setEmail(''); 
+    setUsername(''); 
+    setFirstName(''); 
+    setLastName(''); 
+    setPassword(''); 
+    setConfirmPassword(''); 
     setErrors({}); // clear errors
     setIsButtonDisabled(true); // disable button on reset
   };
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validateEmail(email)) {
+      setErrors({ email: 'The provided email is invalid' });
+      return;
+    }
     if (password !== confirmPassword) {
       setErrors({ confirmPassword: 'Confirm Password field must be the same as the Password field' }); // set password mismatch error
       return;
@@ -74,6 +83,7 @@ function SignupFormModal() {
       <button className='close-button' onClick={() => { closeModal(); resetForm(); }}>&times;</button> {/* close modal and reset form */}
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
+        {errors.firstName && <p className='error'>{errors.firstName}</p>} 
         <label>
           First Name
           <input
@@ -83,7 +93,7 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.firstName && <p className='error'>{errors.firstName}</p>} {/* display first name errors */}
+        {errors.lastName && <p className='error'>{errors.lastName}</p>} 
         <label>
           Last Name
           <input
@@ -93,7 +103,7 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.lastName && <p className='error'>{errors.lastName}</p>} {/* display last name errors */}
+        {errors.username && <p className='error'>{errors.username}</p>} 
         <label>
           Username
           <input
@@ -103,7 +113,7 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.username && <p className='error'>{errors.username}</p>} {/* display username errors */}
+        {errors.email && <p className='error'>{errors.email}</p>} 
         <label>
           Email
           <input
@@ -113,7 +123,8 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.email && <p className='error'>{errors.email}</p>} {/* display email errors */}
+        {errors.password && <p className='error'>{errors.password}</p>} 
+        {errors.confirmPassword && <p className='error'>{errors.confirmPassword}</p>} 
         <label>
           Password
           <input
@@ -123,7 +134,6 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.password && <p className='error'>{errors.password}</p>} {/* display password errors */}
         <label>
           Confirm Password
           <input
@@ -133,10 +143,9 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.confirmPassword && <p className='error'>{errors.confirmPassword}</p>} {/* display confirm password errors */}
-        <button type='submit' disabled={isButtonDisabled} className={isButtonDisabled ? 'disabled-button' : ''}>Sign Up</button> {/* submit button */}
-        <a href='#' onClick={loginDemoUser} className='demo-user-link'>Demo User</a> {/* demo user link */}
-        {errors.message && <p className='error'>{errors.message}</p>} {/* display general errors */}
+        <button type='submit' disabled={isButtonDisabled} className={isButtonDisabled ? 'disabled-button' : ''}>Sign Up</button> 
+        <a href='#' onClick={loginDemoUser} className='demo-user-link'>Log in as Demo User</a>
+        {errors.message && <p className='error'>{errors.message}</p>} 
       </form>
     </div>
   );

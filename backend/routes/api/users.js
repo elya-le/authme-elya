@@ -1,26 +1,28 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const { body, validationResult } = require('express-validator');
-const { User, sequelize } = require('../../db/models'); 
-const { setTokenCookie } = require('../../utils/auth'); 
+const { User, sequelize } = require('../../db/models');
+const { setTokenCookie } = require('../../utils/auth');
 
 const router = express.Router();
 
-router.use(express.json()); 
+router.use(express.json());
 
 // POST - user registration with input validations
 router.post('/',
   [
-    body('email').isEmail().withMessage('Invalid email'),
+    body('email')
+      .isEmail().withMessage('Invalid email address')
+      .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).withMessage('The provided email is invalid'), // ensures @ and . are present
     body('username').not().isEmpty().withMessage('Username is required'),
     body('firstName').not().isEmpty().withMessage('First Name is required'),
     body('lastName').not().isEmpty().withMessage('Last Name is required'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
   ],
   async (req, res) => {
-    const errors = validationResult(req);  
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: "Bad Request",
         errors: errors.array().reduce((acc, error) => ({
           ...acc,
@@ -28,7 +30,7 @@ router.post('/',
         }), {})
       });
     }
-    try { 
+    try {
       const { firstName, lastName, email, username, password } = req.body;
       const emailExists = await User.findOne({ where: { email } });
       if (emailExists) {
@@ -39,8 +41,8 @@ router.post('/',
       }
       const usernameExists = await User.findOne({
         where: {
-          username: sequelize.where( 
-            sequelize.fn('LOWER', sequelize.col('username')), 
+          username: sequelize.where(
+            sequelize.fn('LOWER', sequelize.col('username')),
             sequelize.fn('LOWER', username)
           )
         }
@@ -59,8 +61,8 @@ router.post('/',
         username,
         hashedPassword
       });
-      setTokenCookie(res, user); 
-      res.status(200).json({ 
+      setTokenCookie(res, user);
+      res.status(200).json({
         user: {
           id: user.id,
           firstName: user.firstName,
@@ -70,7 +72,7 @@ router.post('/',
         }
       });
     } catch (error) {
-      console.error(error); 
+      console.error(error);
       return res.status(500).json({
         message: "An unexpected error occurred",
         errors: { general: "An unexpected error occurred, please try again" }

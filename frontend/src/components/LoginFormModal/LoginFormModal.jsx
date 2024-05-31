@@ -79,7 +79,7 @@ function LoginFormModal() {
         {errors.password && <p className='error'>{errors.password}</p>}
         {errors.message && <p className='error'>{errors.message}</p>}
         <button type='submit' disabled={isButtonDisabled}>Log In</button>
-        <a href='#' onClick={loginDemoUser} className='demo-user-link'>Demo User</a>
+        <a href='#' onClick={loginDemoUser} className='demo-user-link'>Log in as Demo User</a>
       </form>
     </div>
   );
