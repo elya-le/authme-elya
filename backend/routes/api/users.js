@@ -32,8 +32,8 @@ router.post('/',
       const { firstName, lastName, email, username, password } = req.body;
       const emailExists = await User.findOne({ where: { email } });
       if (emailExists) {
-        return res.status(500).json({
-          message: "User already exists",
+        return res.status(400).json({
+          message: "Bad Request",
           errors: { email: "User with that email already exists" }
         });
       }
@@ -46,10 +46,10 @@ router.post('/',
         }
       });
       if (usernameExists) {
-          return res.status(500).json({
-            message: "User already exists",
-            errors: { username: "User with that username already exists" }
-          });
+        return res.status(400).json({
+          message: "Bad Request",
+          errors: { username: "User with that username already exists" }
+        });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = await User.create({
@@ -70,18 +70,11 @@ router.post('/',
         }
       });
     } catch (error) {
-      if (error.name === 'SequelizeValidationError') { 
-        return res.status(400).json({
-          message: "Validation error",
-          errors: error.errors.map(e => ({ [e.path]: e.message }))
-        });
-      } else {
-        console.error(error); 
-        return res.status(500).json({
-          message: "An unexpected error occurred",
-          errors: { general: "An unexpected error occurred, please try again" }
-        });
-      }
+      console.error(error); 
+      return res.status(500).json({
+        message: "An unexpected error occurred",
+        errors: { general: "An unexpected error occurred, please try again" }
+      });
     }
   }
 );

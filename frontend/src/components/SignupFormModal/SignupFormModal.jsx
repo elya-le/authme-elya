@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import * as sessionActions from '../../store/session';
@@ -6,6 +6,7 @@ import './SignupFormModal.css';
 
 function SignupFormModal() {
   const dispatch = useDispatch();
+  const { closeModal } = useModal();
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -13,25 +14,64 @@ function SignupFormModal() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
-  const { closeModal } = useModal();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    const isValid = email && username.length >= 4 && password.length >= 6 && firstName && lastName && confirmPassword;
+    setIsButtonDisabled(!isValid); // disable button if invalid
+  }, [email, username, password, firstName, lastName, confirmPassword]);
+
+  const resetForm = () => {
+    setEmail(''); // reset email
+    setUsername(''); // reset username
+    setFirstName(''); // reset first name
+    setLastName(''); // reset last name
+    setPassword(''); // reset password
+    setConfirmPassword(''); // reset confirm password
+    setErrors({}); // clear errors
+    setIsButtonDisabled(true); // disable button on reset
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
-      setErrors({});
-      return dispatch(
-        sessionActions.signup({ email, username, firstName, lastName, password })
-      )
-      .then(closeModal)
+    if (password !== confirmPassword) {
+      setErrors({ confirmPassword: 'Confirm Password field must be the same as the Password field' }); // set password mismatch error
+      return;
+    }
+    setErrors({}); // clear errors
+    return dispatch(sessionActions.signup({ email, username, firstName, lastName, password }))
+      .then(() => {
+        closeModal(); // close modal on successful signup
+        resetForm(); // reset form
+      })
       .catch(async (res) => {
         const data = await res.json();
-        if (data?.errors) setErrors(data.errors);
+        if (data?.errors) setErrors(data.errors); // set errors from response
       });
-    }
-    return setErrors({ confirmPassword: 'Confirm Password field must be the same as the Password field' });
   };
+
+  const loginDemoUser = (e) => {
+    e.preventDefault();
+    const demoCredential = 'demo@user.io';
+    const demoPassword = 'password';
+    return dispatch(sessionActions.login({ credential: demoCredential, password: demoPassword }))
+      .then(() => {
+        closeModal(); // close modal on successful login
+        window.location.href = window.location.pathname; // hard refresh without hash fragment
+      })
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors); // set errors from response
+        } else {
+          setErrors({ message: "The provided credentials were invalid" }); // set custom error message
+        }
+      });
+  };
+
   return (
     <div className='signup-form'>
-      <button className='close-button' onClick={closeModal}>&times;</button>
+      <button className='close-button' onClick={() => { closeModal(); resetForm(); }}>&times;</button> {/* close modal and reset form */}
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -43,7 +83,7 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.firstName && <p className='error'>{errors.firstName}</p>}
+        {errors.firstName && <p className='error'>{errors.firstName}</p>} {/* display first name errors */}
         <label>
           Last Name
           <input
@@ -53,7 +93,7 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.lastName && <p className='error'>{errors.lastName}</p>}
+        {errors.lastName && <p className='error'>{errors.lastName}</p>} {/* display last name errors */}
         <label>
           Username
           <input
@@ -63,7 +103,7 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.username && <p className='error'>{errors.username}</p>}
+        {errors.username && <p className='error'>{errors.username}</p>} {/* display username errors */}
         <label>
           Email
           <input
@@ -73,7 +113,7 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.email && <p className='error'>{errors.email}</p>}
+        {errors.email && <p className='error'>{errors.email}</p>} {/* display email errors */}
         <label>
           Password
           <input
@@ -83,7 +123,7 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.password && <p className='error'>{errors.password}</p>}
+        {errors.password && <p className='error'>{errors.password}</p>} {/* display password errors */}
         <label>
           Confirm Password
           <input
@@ -93,13 +133,14 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.confirmPassword && (
-          <p className='error'>{errors.confirmPassword}</p>
-        )}
-        <button type='submit'>Sign Up</button>
+        {errors.confirmPassword && <p className='error'>{errors.confirmPassword}</p>} {/* display confirm password errors */}
+        <button type='submit' disabled={isButtonDisabled} className={isButtonDisabled ? 'disabled-button' : ''}>Sign Up</button> {/* submit button */}
+        <a href='#' onClick={loginDemoUser} className='demo-user-link'>Demo User</a> {/* demo user link */}
+        {errors.message && <p className='error'>{errors.message}</p>} {/* display general errors */}
       </form>
     </div>
   );
 }
 
 export default SignupFormModal;
+

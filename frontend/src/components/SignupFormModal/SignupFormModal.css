@@ -50,6 +50,12 @@
     background-color: #b81b1b;
 }
 
+.signup-form form button:disabled, .signup-form form .disabled-button {
+    background-color: grey; /* greyed out background color */
+    cursor: not-allowed; /* change cursor to not-allowed */
+    opacity: 0.6; /* slightly transparent */
+}
+
 .signup-form form p {
     color: red;
     margin-top: 10px;
@@ -69,4 +75,17 @@
     color: red;
     font-size: 12px;
     margin-top: 5px;
+}
+
+.demo-user-link {
+    margin-top: 24px;
+    text-align: center;
+    cursor: pointer;
+    color: #007bff; /* Blue color for the link */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.demo-user-link:hover {
+    text-decoration: underline;
 }
