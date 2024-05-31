@@ -39,7 +39,7 @@
     font-size: 18px;
     width: 100%;
     padding: 10px;
-    background-color: #d92323;
+    background-color: #f64060;
     color: white;
     border: none;
     border-radius: 5px;
@@ -47,7 +47,7 @@
 }
 
 .signup-form form button:hover {
-    background-color: #b81b1b;
+    background-color: #fa6666;
 }
 
 .signup-form form button:disabled, .signup-form form .disabled-button {
@@ -57,7 +57,7 @@
 }
 
 .signup-form form p {
-    color: red;
+    color: #f64060;
     margin-top: 10px;
 }
 
@@ -72,7 +72,7 @@
 }
 
 .error {
-  color: red;
+  color: #f64060;
   font-size: 16px;
   margin: 0px 5px 10px 0px;
 }

@@ -68,11 +68,11 @@ h4 {
 }
 
 .field-error {
-  color: red;
+  color: #f64060;
 }
 
 .form-incomplete-error {
-  color: red;
+  color: #f64060;
   margin-top: 10px;
   text-align: left;
 }

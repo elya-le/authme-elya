@@ -44,7 +44,7 @@
 }
 
 .join-group-button {
-    background-color: red;
+    background-color: #f64060;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -66,18 +66,13 @@
     cursor: pointer;
 }
 
-.group-button-container .join-group-button:hover,
-.organizer-buttons button:hover {
-    background-color: gray;
-}
-
 .group-button-container{
     margin: 10px 0px 0px 0px;
 }
 
 
 .join-group-button:hover {
-    background-color: rgb(253, 72, 72);
+    background-color: #fa6666;
 }
 
 .organizer-buttons {
