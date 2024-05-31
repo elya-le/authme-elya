@@ -13,7 +13,7 @@ function LoginFormModal() {
   const { closeModal } = useModal();
 
   useEffect(() => {
-    const isValid = credential.length >= 4 && password.length >= 6; // check if credentials are valid
+    const isValid = credential.length >= 4 && password.length >= 6; 
     setIsButtonDisabled(!isValid); // disable button if invalid
   }, [credential, password]);
 

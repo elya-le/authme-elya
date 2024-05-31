@@ -51,9 +51,9 @@
 }
 
 .signup-form form button:disabled, .signup-form form .disabled-button {
-    background-color: grey; /* greyed out background color */
-    cursor: not-allowed; /* change cursor to not-allowed */
-    opacity: 0.6; /* slightly transparent */
+    background-color: grey; 
+    cursor: not-allowed; 
+    opacity: 0.6; 
 }
 
 .signup-form form p {
@@ -81,7 +81,7 @@
     margin-top: 24px;
     text-align: center;
     cursor: pointer;
-    color: #02798a; /* Blue color for the link */
+    color: #02798a; 
     text-decoration: none;
     font-weight: bold;
 }
