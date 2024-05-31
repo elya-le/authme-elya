@@ -122,19 +122,6 @@ const CreateGroupForm = () => {
     }
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setImageUrl(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
-
   return (
     <div className='form-container'>
       <form onSubmit={handleSubmit}>
@@ -226,13 +213,6 @@ const CreateGroupForm = () => {
               placeholder='Image URL'
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
-            />
-            <br></br><br></br>
-            <input
-              type='file'
-              accept='image/*'
-              onChange={handleImageUpload}
-              className='image-upload-button'
             />
           </div>
         </div>
