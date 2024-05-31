@@ -35,6 +35,7 @@ function ProfileButtonMenu({ user }) {
     dispatch(sessionActions.logout())
       .then(() => {
         navigate('/'); // navigate to home page on logout
+        window.location.reload(true); // hard refresh without cache
       });
   };
 
