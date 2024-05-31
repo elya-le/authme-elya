@@ -62,7 +62,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: true, 
+        len: [10, 2000], 
+      }
     },
     type: {
       type: DataTypes.ENUM('Online', 'In person', 'online', 'in person'),

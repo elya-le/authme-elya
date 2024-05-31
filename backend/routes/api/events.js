@@ -220,6 +220,7 @@ const validateEvent = [
   check('capacity', 'Capacity must be an integer').isInt({ min: 1 }),
   check('price', 'Price must be a non-negative number').isFloat({ min: 0 }),
   check('description', 'Description is required').not().isEmpty(),
+  check('description', 'Description must be below 2,000 characters').isLength({ max: 2000 }), // Add max length validation
   check('startDate', 'Start date must be in the format YYYY-MM-DD HH:mm:ss')
     .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
     .custom((value, { req }) => new Date(value) > new Date()),
@@ -228,6 +229,7 @@ const validateEvent = [
     .custom((value, { req }) => new Date(value) > new Date(req.body.startDate)),
   check('venueId', 'Venue ID must be an integer').isInt()
 ];
+
 
 // POST /api/events/:eventId/attendance - attend an event based on event id
 router.post('/:eventId/attendance', requireAuth, async (req, res) => {
