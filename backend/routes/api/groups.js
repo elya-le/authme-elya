@@ -286,7 +286,7 @@ const validateGroup = [
   check('about')
     .isLength({ min: 30 }).withMessage('Description needs 30 or more characters'),
   check('type')
-    .isIn(['Online', 'In person', 'online', 'in person']).withMessage("Type must be 'Online' or 'In person'"),
+    .isIn(['Online', 'In person']).withMessage("Type must be 'Online' or 'In person'"),
   check('private')
     .isBoolean().withMessage('Private must be a boolean'),
   check('city')
@@ -295,6 +295,7 @@ const validateGroup = [
     .notEmpty().withMessage('State is required')
     .isLength({ min: 2, max: 2 }).withMessage('State must be 2 characters')
 ];
+
 // venue validation
 const validateVenue = [
   check('address').exists({ checkFalsy: true }).withMessage('Street address is required'),

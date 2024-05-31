@@ -6,7 +6,7 @@ const CreateGroupForm = () => {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [about, setAbout] = useState('');
-  const [type, setType] = useState('In Person');
+  const [type, setType] = useState('In person');
   const [privateGroup, setPrivateGroup] = useState(false);
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
@@ -199,7 +199,7 @@ const CreateGroupForm = () => {
           <label>Is this an in-person or online group?</label><br />
           <select value={type} onChange={(e) => setType(e.target.value)}>
             <option value='Online'>Online</option>
-            <option value='In person'>In person</option> {/* Capitalized to match state */}
+            <option value='In person'>In person</option> 
           </select>
         </div>
 
