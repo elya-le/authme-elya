@@ -151,18 +151,6 @@ const CreateEventForm = () => {
             <option value="In person">In person</option>
           </select>
         </div>
-        {type === 'In person' && (
-          <div className="section-create-event">
-            <label>Venue ID for the event:</label><br />
-            {errors.venueId && <p className="field-error">{errors.venueId}</p>}
-            <input
-              type="text"
-              placeholder="Venue ID"
-              value={venueId}
-              onChange={(e) => setVenueId(e.target.value)}
-            />
-          </div>
-        )}
         <div className="section-create-event">
           <label>Is this event private or public?</label><br />
           {errors.isPrivate && <p className="field-error">{errors.isPrivate}</p>}
@@ -179,17 +167,7 @@ const CreateEventForm = () => {
             placeholder="0"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-          />
-        </div>
-        <div className="section-create-event">
-          <label>What is the capacity for your event?</label><br />
-          {errors.capacity && <p className="field-error">{errors.capacity}</p>}
-          <input
-            type="number"
-            placeholder="Capacity"
-            value={capacity}
-            onChange={(e) => setCapacity(e.target.value)}
-          />
+            />
         </div>
         <div className="section-create-event">
           <label>When does your event start?</label><br />
@@ -198,7 +176,7 @@ const CreateEventForm = () => {
             type="datetime-local"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-          />
+            />
         </div>
         <div className="section-create-event">
           <label>When does your event end?</label><br />
@@ -207,7 +185,7 @@ const CreateEventForm = () => {
             type="datetime-local"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-          />
+            />
         </div>
         <div className="section-create-event">
           <label>Please add an image URL for your event below:</label><br />
@@ -228,6 +206,28 @@ const CreateEventForm = () => {
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
+        <div className="section-create-event">
+          <label>What is the capacity for your event?</label><br />
+          {errors.capacity && <p className="field-error">{errors.capacity}</p>}
+          <input
+            type="number"
+            placeholder="Capacity"
+            value={capacity}
+            onChange={(e) => setCapacity(e.target.value)}
+            />
+        </div>
+            {type === 'In person' && (
+              <div className="section-create-event">
+                <label>Venue ID for the event:</label><br />
+                {errors.venueId && <p className="field-error">{errors.venueId}</p>}
+                <input
+                  type="text"
+                  placeholder="Venue ID"
+                  value={venueId}
+                  onChange={(e) => setVenueId(e.target.value)}
+                />
+              </div>
+            )}
         <div className="section-create-event-submit">
           <hr />
           {formIncomplete && (

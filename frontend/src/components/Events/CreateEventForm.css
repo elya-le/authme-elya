@@ -22,11 +22,15 @@ select {
   font-size: 18px;
   width: 100%;
   padding: 10px;
-  background-color: #d92323;
+  background-color:#f64060 ;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.create-event-button:hover {
+  background-color:#fa6666;
 }
 
 .create-event-button.grey {
