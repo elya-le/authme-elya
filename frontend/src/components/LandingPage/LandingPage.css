@@ -137,6 +137,7 @@ a {
 }
 
 .section3 .link:hover {
+    background-color:#049cac;
     text-decoration: underline;
     cursor: pointer;
 }
