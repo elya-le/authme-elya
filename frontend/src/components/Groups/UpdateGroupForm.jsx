@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
 
 const UpdateGroupForm = () => {
   const { groupId } = useParams();
   const navigate = useNavigate();
+  const currentUser = useSelector(state => state.session.user);
   const [name, setName] = useState('');
   const [about, setAbout] = useState('');
   const [type, setType] = useState('Online');
@@ -14,6 +16,7 @@ const UpdateGroupForm = () => {
   const [state, setState] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [errors, setErrors] = useState([]);
+  const [isOwner, setIsOwner] = useState(false);
 
   const formatCityName = (city) => {
     if (city.length === 3) {
@@ -23,9 +26,14 @@ const UpdateGroupForm = () => {
   };
 
   useEffect(() => {
-    fetch(`/api/groups/${groupId}`) // fetch the current group details to pre-populate the form
+    fetch(`/api/groups/${groupId}`)
       .then(response => response.json())
       .then(data => {
+        if (!currentUser || data.organizerId !== currentUser.id) {
+          navigate('/');
+          return;
+        }
+        setIsOwner(true);
         setName(data.name);
         setAbout(data.about);
         setType(data.type);
@@ -35,7 +43,7 @@ const UpdateGroupForm = () => {
         setImageUrl(data.previewImage || '');
       })
       .catch(err => setErrors([err.message]));
-  }, [groupId]);
+  }, [groupId, currentUser, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,6 +76,10 @@ const UpdateGroupForm = () => {
       setErrors(Object.values(errorData.errors));
     }
   };
+
+  if (!isOwner) {
+    return null; // Optionally, you could display a loading spinner or message here
+  }
 
   return (
     <div className='form-container'>

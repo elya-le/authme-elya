@@ -124,7 +124,7 @@ const EventDetailPage = () => {
                     </p><br/>
                   </div> <br></br>
                   <p><FontAwesomeIcon icon={faDollarSign} className='event-icon'/> 
-                    {event.price && event.price > 0 ? `$${event.price}` : 'FREE'}</p><br/>
+                    {event.price && event.price > 0 ? `${event.price}` : 'FREE'}</p><br/>
                   <p><FontAwesomeIcon icon={faUser} className='event-icon' /> 
                   {event.type === 'In person' ? 'In person' : 'Online'}</p>
                     {event.type === 'In person' && event.Venue && (
