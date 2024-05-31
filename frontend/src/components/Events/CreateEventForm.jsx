@@ -21,8 +21,7 @@ const CreateEventForm = () => {
   const [groupName, setGroupName] = useState('');
 
   useEffect(() => {
-    // Fetch CSRF token
-    fetch('/api/csrf/restore', {
+    fetch('/api/csrf/restore', { // fetch CSRF token
       method: 'GET',
       credentials: 'include',
     })
@@ -34,8 +33,7 @@ const CreateEventForm = () => {
         console.error('Error fetching CSRF token:', error);
       });
 
-    // Fetch group details
-    fetch(`/api/groups/${groupId}`)
+    fetch(`/api/groups/${groupId}`) // fetch group details
       .then((response) => response.json())
       .then((data) => {
         if (data.name) {
@@ -49,15 +47,15 @@ const CreateEventForm = () => {
     return () => {
       // clear form data and errors on unmount
       setName('');
-      setType('In person'); // Reset to default
-      setIsPrivate('false'); // Reset to default
+      setType('In person'); // reset to default
+      setIsPrivate('false'); // reset to default
       setPrice('');
-      setCapacity(''); // Reset capacity
+      setCapacity(''); // reset capacity
       setStartDate('');
       setEndDate('');
       setImageUrl('');
       setDescription('');
-      setVenueId(''); // Reset venueId
+      setVenueId(''); // reset venueId
       setErrors({});
       setFormIncomplete(false);
     };
@@ -106,7 +104,7 @@ const CreateEventForm = () => {
           endDate,
           imageUrl,
           description,
-          venueId: type === 'In person' ? venueId : null, // Include venueId only for in-person events
+          venueId: type === 'In person' ? venueId : null, // include venueId only for in-person events
         }),
       });
   

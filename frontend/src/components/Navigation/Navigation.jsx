@@ -9,8 +9,6 @@ import './Navigation.css';
 // path to your logo image in the public directory
 const meetupLogo = '/images/meet-up-logo-3.png';
 
-
-
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
   const sessionLinks = sessionUser ? (

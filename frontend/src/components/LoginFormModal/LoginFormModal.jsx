@@ -13,22 +13,24 @@ function LoginFormModal() {
   const { closeModal } = useModal();
 
   useEffect(() => {
-    const isValid = credential.length >= 4 && password.length >= 6;
-    setIsButtonDisabled(!isValid);
+    const isValid = credential.length >= 4 && password.length >= 6; // check if credentials are valid
+    setIsButtonDisabled(!isValid); // disable button if invalid
   }, [credential, password]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors({});
+    setErrors({}); // clear previous errors
     return dispatch(sessionActions.login({ credential, password }))
       .then(() => {
-        closeModal();
+        closeModal(); // close modal on successful login
         window.location.href = window.location.pathname; // hard refresh without hash fragment
       })
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {
-          setErrors(data.errors);
+          setErrors(data.errors); // set errors from response
+        } else {
+          setErrors({ message: "The provided credentials were invalid" }); // set custom error message
         }
       });
   };

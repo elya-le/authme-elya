@@ -1,20 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // import useNavigate for navigation
 import { FaUserCircle, FaAngleDown, FaAngleUp } from 'react-icons/fa'; 
 import * as sessionActions from '../../store/session';
 import './ProfileButtonMenu.css';
 
 function ProfileButtonMenu({ user }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // initialize useNavigate for navigation
   const [showMenu, setShowMenu] = useState(false);
   const [arrowDirection, setArrowDirection] = useState('down'); // state for arrow direction
   const ulRef = useRef();
+
   const toggleMenu = (e) => {
     e.stopPropagation(); // keep click from bubbling up to document and triggering closeMenu
     setShowMenu(!showMenu);
     setArrowDirection(showMenu ? 'down' : 'up'); // toggle arrow direction
   };
+
   useEffect(() => {
     if (!showMenu) return;
     const closeMenu = (e) => {
@@ -26,13 +29,15 @@ function ProfileButtonMenu({ user }) {
     document.addEventListener('click', closeMenu);
     return () => document.removeEventListener('click', closeMenu);
   }, [showMenu]);
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout())
       .then(() => {
-        window.location.reload(true); // hard refresh without cache
+        navigate('/'); // navigate to home page on logout
       });
   };
+
   return (
     <div className='profile-button-container'>
       <button onClick={toggleMenu} className='profile-icon'>

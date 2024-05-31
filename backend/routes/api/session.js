@@ -43,7 +43,7 @@ router.post('/',
         });
       }
       const { credential, password } = req.body;
-      const normalizedCredential = credential.toLowerCase();
+      const normalizedCredential = credential.toLowerCase(); // normalize credential for comparison
       const user = await User.findOne({
         where: {
           [Op.or]: [
@@ -54,9 +54,9 @@ router.post('/',
         attributes: ['id', 'email', 'username', 'firstName', 'lastName', 'hashedPassword']
       });
       if (user) {
-        const hashedPassword = user.hashedPassword.toString();
-        if (bcrypt.compareSync(password, hashedPassword)) {
-          const token = setTokenCookie(res, user);
+        const hashedPassword = user.hashedPassword.toString(); // get user's hashed password
+        if (bcrypt.compareSync(password, hashedPassword)) { // compare provided password with stored hash
+          const token = setTokenCookie(res, user); // set token cookie
           // console.log('Token set in cookie during login:', token); // debug log for token
           return res.json({
             user: {
@@ -70,20 +70,21 @@ router.post('/',
         }
       }
       return res.status(401).json({
-        message: 'Invalid credentials'
+        message: 'Invalid credentials' // return invalid credentials error
       });
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error('Error during login:', error); // log error
       return res.status(500).json({
-        message: 'Internal Server Error'
+        message: 'Internal Server Error' // return server error
       });
     }
   });
-  // logout route
+
+// logout route
 router.delete('/', (req, res) => {
-  res.clearCookie('token');
-  res.status(200).json({ message: 'Logout successful' });
+  res.clearCookie('token'); // clear token cookie
+  res.status(200).json({ message: 'Logout successful' }); // return logout success message
 });
 
-
 module.exports = router;
+
