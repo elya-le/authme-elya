@@ -198,7 +198,7 @@ const GroupDetailPage = () => {
                     <div className='event-card-details'>
                       <p className='event-card-time'>
                         {new Date(event.startDate).toLocaleDateString('en-US', {
-                          weekday: 'short',
+                          weekday: 'long',
                           month: 'short',
                           day: 'numeric'
                         }).toUpperCase()} &middot; {new Date(event.startDate).toLocaleTimeString('en-US', {
