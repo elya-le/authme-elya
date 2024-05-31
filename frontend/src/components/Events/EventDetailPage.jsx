@@ -4,8 +4,11 @@ import { useSelector } from 'react-redux';
 import './EventDetailPage.css';
 import '../../Main.css';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faClock, faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import { MdOutlineAttachMoney } from "react-icons/md";
+import { GoClock } from "react-icons/go";
+import { FiMapPin } from "react-icons/fi";
+
+
 import DeleteEventConfirmationModal from './DeleteEventConfirmationModal';
 
 const EventDetailPage = () => {
@@ -99,7 +102,7 @@ const EventDetailPage = () => {
             <div className='event-details-event-card'>
                 <div className='event-card-info'>
                   <div className='event-details-card-time'>    
-                    <FontAwesomeIcon icon={faClock} className='clock-icon' /> 
+                  <GoClock />
                     <p>
                       START: {new Date(event.startDate).toLocaleDateString('en-US', {
                         weekday: 'long',
@@ -123,9 +126,11 @@ const EventDetailPage = () => {
                       }).toUpperCase()}
                     </p><br/>
                   </div> <br></br>
-                  <p><FontAwesomeIcon icon={faDollarSign} className='event-icon'/> 
+                  <p>
+                    <MdOutlineAttachMoney /> &nbsp; 
                     {event.price && event.price > 0 ? `${event.price}` : 'FREE'}</p><br/>
-                  <p><FontAwesomeIcon icon={faUser} className='event-icon' /> 
+                  <p>
+                  <FiMapPin />&nbsp;&nbsp;
                   {event.type === 'In person' ? 'In person' : 'Online'}</p>
                     {event.type === 'In person' && event.Venue && (
                       <>

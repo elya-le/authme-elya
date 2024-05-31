@@ -5,8 +5,10 @@ import '../Events/EventCard.css';
 import './GroupDetailPage.css';
 import '../../Main.css';
 import DeleteGroupConfirmationModal from './DeleteGroupConfirmationModal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarkerAlt, faUsers, faUser } from '@fortawesome/free-solid-svg-icons';
+
+import { FiMapPin } from "react-icons/fi"; 
+import { BsCalendar4Event } from "react-icons/bs";
+import { FaRegUser } from "react-icons/fa";
 
 const GroupDetailPage = () => {
   const { groupId } = useParams();
@@ -86,9 +88,9 @@ const GroupDetailPage = () => {
         <div className="group-detail-info-container">
           <h1>{group.name}</h1>
           <div className='group-card-info'>
-            <p><FontAwesomeIcon icon={faMapMarkerAlt} /> {group.city}, {group.state}</p><br />
-            <p><FontAwesomeIcon icon={faUsers} /> {group.numEvents} events &middot;{" "} {group.private ? 'Private' : 'Public'}</p><br />
-            <p><FontAwesomeIcon icon={faUser} /> Organized by: <b> {group.Organizer.firstName} {group.Organizer.lastName} </b></p>
+            <p><FiMapPin /> {group.city}, {group.state}</p><br />
+            <p><BsCalendar4Event /> {group.numEvents} events &middot;{" "} {group.private ? 'Private' : 'Public'}</p><br />
+            <p><FaRegUser /> Organized by: <b> {group.Organizer.firstName} {group.Organizer.lastName} </b></p>
           </div>
           <div className='group-button-container'>
             {isLoggedIn && !isOrganizer && (
