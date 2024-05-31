@@ -101,29 +101,29 @@ const EventDetailPage = () => {
                   <div className='event-details-card-time'>    
                     <FontAwesomeIcon icon={faClock} className='clock-icon' /> 
                     <p>
-  START: {new Date(event.startDate).toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'short',
-    day: 'numeric'
-  }).toUpperCase()} &middot; {new Date(event.startDate).toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-    timeZoneName: 'short'
-  }).toUpperCase()} <br/>
-  END: {new Date(event.endDate).toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'short',
-    day: 'numeric'
-  }).toUpperCase()} &middot; {new Date(event.endDate).toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-    timeZoneName: 'short'
-  }).toUpperCase()}
-</p><br/>
+                    START: {new Date(event.startDate).toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      month: 'short',
+                      day: 'numeric'
+                    }).toUpperCase()} &middot; {new Date(event.startDate).toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: 'numeric',
+                      hour12: true,
+                      timeZoneName: 'short'
+                    }).toUpperCase()} <br/>
+                    END: {new Date(event.endDate).toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      month: 'short',
+                      day: 'numeric'
+                    }).toUpperCase()} &middot; {new Date(event.endDate).toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: 'numeric',
+                      hour12: true,
+                      timeZoneName: 'short'
+                    }).toUpperCase()}
+                    </p><br/>
                   </div> <br></br>
-                  <p><FontAwesomeIcon icon={faDollarSign} className='event-icon'/> {event.price ? `$${event.price}` : 'Free'} </p><br/>
+                  <p><FontAwesomeIcon icon={faDollarSign} className='event-icon'/> {event.price ? `$${event.price}` : 'FREE'} </p><br/>
                   <p><FontAwesomeIcon icon={faUser} className='event-icon' /> {event.type === 'In person' ? 'In person' : 'Online'}</p>
                     {event.type === 'In person' && event.Venue && (
                       <>
@@ -163,3 +163,4 @@ const EventDetailPage = () => {
 };
 
 export default EventDetailPage;
+
