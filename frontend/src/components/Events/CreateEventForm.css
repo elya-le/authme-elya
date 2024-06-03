@@ -6,6 +6,16 @@
   margin-bottom: 20px;
 }
 
+.section-create-event-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.section-create-event-row .section-create-event {
+  flex: 1;
+}
+
 input[type="text"],
 input[type="number"],
 input[type="datetime-local"],
@@ -22,7 +32,7 @@ select {
   font-size: 18px;
   width: 100%;
   padding: 10px;
-  background-color:#f64060 ;
+  background-color: #f64060;
   color: white;
   border: none;
   border-radius: 5px;
@@ -30,7 +40,7 @@ select {
 }
 
 .create-event-button:hover {
-  background-color:#fa6666;
+  background-color: #fa6666;
 }
 
 .create-event-button.grey {
