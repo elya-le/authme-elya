@@ -140,6 +140,7 @@ const CreateEventForm = () => {
           newVenueId = venueData.id;
         } else {
           const venueErrorData = await venueResponse.json();
+          console.error('Venue creation error:', venueErrorData);
           setErrors(venueErrorData.errors ? venueErrorData.errors : { message: venueErrorData.message });
           return;
         }
@@ -183,7 +184,17 @@ const CreateEventForm = () => {
         navigate(`/events/${eventData.id}`);
       } else {
         const eventErrorData = await eventResponse.json();
-        setErrors(eventErrorData.errors ? eventErrorData.errors : { message: eventErrorData.message });
+        console.error('Event creation error:', eventErrorData);
+        // Map error objects to strings for rendering
+        const formattedErrors = {};
+        if (eventErrorData.errors) {
+          for (const key in eventErrorData.errors) {
+            formattedErrors[key] = eventErrorData.errors[key].msg;
+          }
+        } else {
+          formattedErrors.message = eventErrorData.message;
+        }
+        setErrors(formattedErrors);
       }
     } catch (error) {
       console.error('Error in handleSubmit:', error);
@@ -292,7 +303,7 @@ const CreateEventForm = () => {
                 onChange={(e) => setVenueAddress(e.target.value)}
               />
             </div>
-            <div className="section-create-event-row"> {/* new row class for city and state */}
+            <div className="section-create-event-row">
               <div className="section-create-event">
                 <label>Venue City:</label><br />
                 {errors.venueCity && <p className="field-error">{errors.venueCity}</p>}
@@ -319,7 +330,7 @@ const CreateEventForm = () => {
                 </select>
               </div>
             </div>
-            <div className="section-create-event-row"> {/* new row class for lat and lng */}
+            <div className="section-create-event-row">
               <div className="section-create-event">
                 <label>Venue Latitude:</label><br />
                 {errors.venueLat && <p className="field-error">{errors.venueLat}</p>}
@@ -357,6 +368,10 @@ const CreateEventForm = () => {
             Create Event
           </button>
         </div>
+        {errors.message && <p className="field-error">{errors.message}</p>}
+        {errors && Object.keys(errors).map((key, idx) => (
+          <p key={idx} className="field-error">{errors[key]}</p>
+        ))}
       </form>
     </div>
   );

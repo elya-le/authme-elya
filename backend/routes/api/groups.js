@@ -460,6 +460,7 @@ router.post('/:groupId/events', authenticated, validateEvent, handleValidationEr
   }
 });
 
+
 // POST /api/groups/:groupId/membership - request membership for a group
 router.post('/:groupId/membership', restoreUser, requireAuth, async (req, res) => {
   const { groupId } = req.params;

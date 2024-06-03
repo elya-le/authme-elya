@@ -32,10 +32,11 @@ function Navigation({ isLoaded }) {
       />
     </>
   );
+  
   return (
     <nav className='navigation-bar'>
       <div className='logo'>
-        <NavLink exact to="/">
+        <NavLink exact to="/">  
           <img src={meetupLogo} alt='Meetup Logo' />
         </NavLink>
       </div>
