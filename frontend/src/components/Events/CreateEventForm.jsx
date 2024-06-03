@@ -244,23 +244,25 @@ const CreateEventForm = () => {
             onChange={(e) => setPrice(e.target.value)}
             />
         </div>
-        <div className="section-create-event">
-          <label>When does your event start?</label><br />
-          {errors.startDate && <p className="field-error">{errors.startDate}</p>}
-          <input
-            type="datetime-local"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            />
-        </div>
-        <div className="section-create-event">
-          <label>When does your event end?</label><br />
-          {errors.endDate && <p className="field-error">{errors.endDate}</p>}
-          <input
-            type="datetime-local"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            />
+        <div className="section-create-event-row">
+          <div className="section-create-event">
+            <label>When does your event start?</label><br />
+            {errors.startDate && <p className="field-error">{errors.startDate}</p>}
+            <input
+              type="datetime-local"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              />
+          </div>
+          <div className="section-create-event">
+            <label>When does your event end?</label><br />
+            {errors.endDate && <p className="field-error">{errors.endDate}</p>}
+            <input
+              type="datetime-local"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              />
+          </div>
         </div>
         <div className="section-create-event">
           <label>Please add an image URL for your event below:</label><br />
