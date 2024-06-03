@@ -110,6 +110,15 @@ const CreateEventForm = () => {
       let newVenueId = venueId;
 
       if (type === 'In person') {
+        console.log('Posting to /api/venues with data:', {
+          groupId,
+          address: venueAddress,
+          city: venueCity,
+          state: venueState,
+          lat: venueLat ? parseFloat(venueLat) : null,
+          lng: venueLng ? parseFloat(venueLng) : null,
+        });
+
         const venueResponse = await fetch('/api/venues', {
           method: 'POST',
           headers: {
@@ -135,6 +144,19 @@ const CreateEventForm = () => {
           return;
         }
       }
+
+      console.log('Sending event creation request with data:', {
+        name,
+        type,
+        private: isPrivate === 'true',
+        price: parseInt(price, 10),
+        capacity: parseInt(capacity, 10),
+        startDate,
+        endDate,
+        imageUrl,
+        description,
+        venueId: type === 'In person' ? newVenueId : null,
+      });
 
       const eventResponse = await fetch(`/api/groups/${groupId}/events`, {
         method: 'POST',
@@ -164,6 +186,7 @@ const CreateEventForm = () => {
         setErrors(eventErrorData.errors ? eventErrorData.errors : { message: eventErrorData.message });
       }
     } catch (error) {
+      console.error('Error in handleSubmit:', error);
       setErrors({ message: 'Network or server error: ' + error.message });
     }
   };
@@ -210,25 +233,23 @@ const CreateEventForm = () => {
             onChange={(e) => setPrice(e.target.value)}
             />
         </div>
-        <div className="section-create-event-row">
-          <div className="section-create-event">
-            <label>When does your event start?</label><br />
-            {errors.startDate && <p className="field-error">{errors.startDate}</p>}
-            <input
-              type="datetime-local"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              />
-          </div>
-          <div className="section-create-event">
-            <label>When does your event end?</label><br />
-            {errors.endDate && <p className="field-error">{errors.endDate}</p>}
-            <input
-              type="datetime-local"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              />
-          </div>
+        <div className="section-create-event">
+          <label>When does your event start?</label><br />
+          {errors.startDate && <p className="field-error">{errors.startDate}</p>}
+          <input
+            type="datetime-local"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            />
+        </div>
+        <div className="section-create-event">
+          <label>When does your event end?</label><br />
+          {errors.endDate && <p className="field-error">{errors.endDate}</p>}
+          <input
+            type="datetime-local"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            />
         </div>
         <div className="section-create-event">
           <label>Please add an image URL for your event below:</label><br />
@@ -266,24 +287,24 @@ const CreateEventForm = () => {
               {errors.venueAddress && <p className="field-error">{errors.venueAddress}</p>}
               <input
                 type="text"
-                placeholder="Address"
+                placeholder="Venue Address"
                 value={venueAddress}
                 onChange={(e) => setVenueAddress(e.target.value)}
               />
             </div>
-            <div className="section-create-event-row"> 
+            <div className="section-create-event-row"> {/* new row class for city and state */}
               <div className="section-create-event">
-                <label>City:</label><br />
+                <label>Venue City:</label><br />
                 {errors.venueCity && <p className="field-error">{errors.venueCity}</p>}
                 <input
                   type="text"
-                  placeholder="City"
+                  placeholder="Venue City"
                   value={venueCity}
                   onChange={(e) => setVenueCity(e.target.value)}
                 />
               </div>
               <div className="section-create-event">
-                <label>State:</label><br />
+                <label>Venue State:</label><br />
                 {errors.venueState && <p className="field-error">{errors.venueState}</p>}
                 <select
                   value={venueState}
@@ -298,23 +319,23 @@ const CreateEventForm = () => {
                 </select>
               </div>
             </div>
-            <div className="section-create-event-row"> 
+            <div className="section-create-event-row"> {/* new row class for lat and lng */}
               <div className="section-create-event">
-                <label>Latitude:</label><br />
+                <label>Venue Latitude:</label><br />
                 {errors.venueLat && <p className="field-error">{errors.venueLat}</p>}
                 <input
                   type="text"
-                  placeholder="(Latitude Optional)"
+                  placeholder="Venue Latitude"
                   value={venueLat}
                   onChange={(e) => setVenueLat(e.target.value)}
                 />
               </div>
               <div className="section-create-event">
-                <label>Longitude:</label><br />
+                <label>Venue Longitude:</label><br />
                 {errors.venueLng && <p className="field-error">{errors.venueLng}</p>}
                 <input
                   type="text"
-                  placeholder="(Longitude Optional)"
+                  placeholder="Venue Longitude"
                   value={venueLng}
                   onChange={(e) => setVenueLng(e.target.value)}
                 />

@@ -28,12 +28,18 @@ const handleValidationErrors = (req, res, next) => {
 // POST /api/venues - create a new venue
 router.post('/', restoreUser, requireAuth, validateVenue, handleValidationErrors, async (req, res) => {
   const { address, city, state, lat, lng, groupId } = req.body;
+
+  console.log('Received venue creation request:', { address, city, state, lat, lng, groupId });
+  console.log('User:', req.user);
+
   try {
     const group = await Group.findByPk(groupId);
     if (!group) {
+      console.log("Group couldn't be found");
       return res.status(404).json({ message: "Group couldn't be found" });
     }
     if (req.user.id !== group.organizerId) {
+      console.log('Forbidden: User is not authorized to create a venue for this group');
       return res.status(403).json({ message: "Forbidden: You are not authorized to create a venue for this group" });
     }
     const venue = await Venue.create({
@@ -44,6 +50,7 @@ router.post('/', restoreUser, requireAuth, validateVenue, handleValidationErrors
       lng: lng !== undefined ? lng : null,
       groupId
     });
+    console.log('Venue created successfully:', venue);
     return res.status(201).json(venue);
   } catch (error) {
     console.error('Error creating venue:', error);
@@ -55,6 +62,10 @@ router.post('/', restoreUser, requireAuth, validateVenue, handleValidationErrors
 router.put('/:venueId', restoreUser, requireAuth, validateVenue, handleValidationErrors, async (req, res) => {
   const { venueId } = req.params;
   const { address, city, state, lat, lng } = req.body;
+
+  console.log('Received venue update request:', { venueId, address, city, state, lat, lng });
+  console.log('User:', req.user);
+
   try {
     const venue = await Venue.findByPk(venueId, {
       include: {
@@ -63,11 +74,17 @@ router.put('/:venueId', restoreUser, requireAuth, validateVenue, handleValidatio
       }
     });
     if (!venue) {
+      console.log("Venue couldn't be found");
       return res.status(404).json({ message: "Venue couldn't be found" });
     }
     const group = venue.Group;
     if (!group) {
+      console.log("Group couldn't be found");
       return res.status(404).json({ message: "Group couldn't be found" });
+    }
+    if (req.user.id !== group.organizerId) {
+      console.log('Forbidden: User is not authorized to update this venue');
+      return res.status(403).json({ message: "Forbidden: You are not authorized to update this venue" });
     }
     const updatedVenue = await venue.update({
       address,
@@ -76,6 +93,7 @@ router.put('/:venueId', restoreUser, requireAuth, validateVenue, handleValidatio
       lat: lat !== undefined ? lat : null,
       lng: lng !== undefined ? lng : null
     });
+    console.log('Venue updated successfully:', updatedVenue);
     const response = {
       id: updatedVenue.id,
       groupId: updatedVenue.groupId,

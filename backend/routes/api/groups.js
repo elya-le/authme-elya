@@ -439,13 +439,13 @@ router.post('/:groupId/events', authenticated, validateEvent, handleValidationEr
       groupId,
       name,
       type,
-      capacity: parseInt(capacity, 10), // ensure capacity is an integer
-      price: parseInt(price, 10), // ensure price is an integer
+      capacity: parseInt(capacity, 10),
+      price: parseInt(price, 10),
       description,
       startDate,
       endDate,
       imageUrl,
-      venueId: type === 'In person' ? venueId : null // include venueId conditionally
+      venueId: type === 'In person' ? venueId : null
     });
 
     console.log('Event created successfully:', event);
