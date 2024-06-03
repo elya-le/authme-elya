@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
+
   Event.init({
     id: {
       type: DataTypes.INTEGER,
@@ -65,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: true, 
-        len: [10, 2000], 
+        len: [30, 2000], // updated validation length between 30 and 2000 characters
       }
     },
     type: {
@@ -97,5 +98,6 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Event',
     timestamps: true,
   });
+
   return Event;
 };

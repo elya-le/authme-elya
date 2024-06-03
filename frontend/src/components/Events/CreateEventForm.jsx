@@ -6,22 +6,22 @@ const CreateEventForm = () => {
   const { groupId } = useParams();
   const navigate = useNavigate();
   const [name, setName] = useState('');
-  const [type, setType] = useState('In person'); // default to "In person"
-  const [isPrivate, setIsPrivate] = useState('false'); // default to "public"
+  const [type, setType] = useState('In person');
+  const [isPrivate, setIsPrivate] = useState('false');
   const [price, setPrice] = useState('0');
-  const [capacity, setCapacity] = useState(''); // add capacity state
+  const [capacity, setCapacity] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [description, setDescription] = useState('');
-  const [venueId, setVenueId] = useState(''); // add venueId state
+  const [venueId, setVenueId] = useState('');
   const [errors, setErrors] = useState({});
   const [csrfToken, setCsrfToken] = useState('');
   const [formIncomplete, setFormIncomplete] = useState(false);
   const [groupName, setGroupName] = useState('');
 
   useEffect(() => {
-    fetch('/api/csrf/restore', { // fetch CSRF token
+    fetch('/api/csrf/restore', {
       method: 'GET',
       credentials: 'include',
     })
@@ -33,7 +33,7 @@ const CreateEventForm = () => {
         console.error('Error fetching CSRF token:', error);
       });
 
-    fetch(`/api/groups/${groupId}`) // fetch group details
+    fetch(`/api/groups/${groupId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.name) {
@@ -45,17 +45,16 @@ const CreateEventForm = () => {
       });
 
     return () => {
-      // clear form data and errors on unmount
       setName('');
-      setType('In person'); // reset to default
-      setIsPrivate('false'); // reset to default
+      setType('In person');
+      setIsPrivate('false');
       setPrice('');
-      setCapacity(''); // reset capacity
+      setCapacity('');
       setStartDate('');
       setEndDate('');
       setImageUrl('');
       setDescription('');
-      setVenueId(''); // reset venueId
+      setVenueId('');
       setErrors({});
       setFormIncomplete(false);
     };
@@ -63,11 +62,11 @@ const CreateEventForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({}); // clear previous errors
-    setFormIncomplete(false); // reset form incomplete error
-  
+    setErrors({});
+    setFormIncomplete(false);
+
     const newErrors = {};
-  
+
     if (!name) newErrors.name = 'Name is required';
     if (!type) newErrors.type = 'Event type is required';
     if (!isPrivate) newErrors.isPrivate = 'Visibility is required';
@@ -76,17 +75,17 @@ const CreateEventForm = () => {
     if (!startDate) newErrors.startDate = 'Event start is required';
     if (!endDate) newErrors.endDate = 'Event end is required';
     if (!imageUrl) newErrors.imageUrl = 'Image URL is required';
-    if (!description || description.length < 30) newErrors.description = 'Description needs 30 or more characters';
+    if (!description) newErrors.description = 'Description is required';
+    if (description.length < 30) newErrors.description = 'Description needs 30 or more characters'; // added min length validation
+    if (description.length > 2000) newErrors.description = 'Description cannot exceed 2000 characters'; // added max length validation
     if (type === 'In person' && !venueId) newErrors.venueId = 'Venue is required for in-person events';
-  
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       setFormIncomplete(true);
       return;
     }
-  
-    console.log('Submitting event:', { name, type, isPrivate, price, capacity, startDate, endDate, imageUrl, description, venueId });
-  
+
     try {
       const response = await fetch(`/api/groups/${groupId}/events`, {
         method: 'POST',
@@ -98,34 +97,27 @@ const CreateEventForm = () => {
           name,
           type,
           private: isPrivate === 'true',
-          price: parseInt(price, 10), // convert to integer
-          capacity: parseInt(capacity, 10), // convert to integer
+          price: parseInt(price, 10),
+          capacity: parseInt(capacity, 10),
           startDate,
           endDate,
           imageUrl,
           description,
-          venueId: type === 'In person' ? venueId : null, // include venueId only for in-person events
+          venueId: type === 'In person' ? venueId : null,
         }),
       });
-  
-      console.log('Response status:', response.status);
-  
+
       if (response.ok) {
         const data = await response.json();
-        console.log('Event created:', data);
         navigate(`/events/${data.id}`);
       } else {
         const errorData = await response.json();
-        console.log('Error creating event:', errorData);
         setErrors(errorData.errors ? errorData.errors : { message: errorData.message });
       }
     } catch (error) {
-      console.error('Network or server error:', error);
       setErrors({ message: 'Network or server error: ' + error.message });
     }
   };
-  
-  
 
   return (
     <div className="form-container">
@@ -237,7 +229,7 @@ const CreateEventForm = () => {
           )}
           <button
             type="submit"
-            className={`create-event-button ${!name || !type || !isPrivate || !price || !capacity || !startDate || !endDate || !imageUrl || !description || description.length < 30 ? 'grey' : ''}`}
+            className={`create-event-button ${!name || !type || !isPrivate || !price || !capacity || !startDate || !endDate || !imageUrl || !description || description.length < 30 || description.length > 2000 ? 'grey' : ''}`}
           >
             Create Event
           </button>

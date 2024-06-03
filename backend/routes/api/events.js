@@ -220,7 +220,8 @@ const validateEvent = [
   check('capacity', 'Capacity must be an integer').isInt({ min: 1 }),
   check('price', 'Price must be a non-negative number').isFloat({ min: 0 }),
   check('description', 'Description is required').not().isEmpty(),
-  check('description', 'Description must be below 2,000 characters').isLength({ max: 2000 }), // add max length validation
+  check('description', 'Description needs 30 or more characters').isLength({ min: 30 }),
+  check('description', 'Description cannot exceed 2000 characters').isLength({ max: 2000 }), // added max length validation
   check('startDate', 'Start date must be in the format YYYY-MM-DD HH:mm:ss')
     .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
     .custom((value, { req }) => new Date(value) > new Date()),
