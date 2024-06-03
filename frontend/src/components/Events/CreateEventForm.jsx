@@ -26,11 +26,11 @@ const CreateEventForm = () => {
   const [groupName, setGroupName] = useState('');
 
   const stateAbbreviations = [
-    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-    "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-    "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-    "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-    "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
+    'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+    'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
+    'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+    'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+    'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
   ];
 
   useEffect(() => {
@@ -203,127 +203,127 @@ const CreateEventForm = () => {
   };
 
   return (
-    <div className="form-container">
+    <div className='form-container'>
       <form onSubmit={handleSubmit}>
-        <div className="section-create-event-header">
+        <div className='section-create-event-header'>
           <h2>Create a new event for {groupName}</h2>
         </div>
-        <div className="section-create-event">
+        <div className='section-create-event'>
           <label>What is the name of your event?</label><br />
-          {errors.name && <p className="field-error">{errors.name}</p>}
+          {errors.name && <p className='field-error'>{errors.name}</p>}
           <input
-            type="text"
-            placeholder="Event Name"
+            type='text'
+            placeholder='Event Name'
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <div className="section-create-event">
+        <div className='section-create-event'>
           <label>Is this an in-person or online event?</label><br />
-          {errors.type && <p className="field-error">{errors.type}</p>}
+          {errors.type && <p className='field-error'>{errors.type}</p>}
           <select value={type} onChange={(e) => setType(e.target.value)}>
-            <option value="Online">Online</option>
-            <option value="In person">In person</option>
+            <option value='Online'>Online</option>
+            <option value='In person'>In person</option>
           </select>
         </div>
-        <div className="section-create-event">
+        <div className='section-create-event'>
           <label>Is this event private or public?</label><br />
-          {errors.isPrivate && <p className="field-error">{errors.isPrivate}</p>}
+          {errors.isPrivate && <p className='field-error'>{errors.isPrivate}</p>}
           <select value={isPrivate} onChange={(e) => setIsPrivate(e.target.value)}>
-            <option value="true">Private</option>
-            <option value="false">Public</option>
+            <option value='true'>Private</option>
+            <option value='false'>Public</option>
           </select>
         </div>
-        <div className="section-create-event">
+        <div className='section-create-event'>
           <label>What is the price for your event?</label><br />
-          {errors.price && <p className="field-error">{errors.price}</p>}
+          {errors.price && <p className='field-error'>{errors.price}</p>}
           <input
-            type="number"
-            placeholder="0"
+            type='number'
+            placeholder='0'
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            />
+          />
         </div>
-        <div className="section-create-event-row">
-          <div className="section-create-event">
+        <div className='section-create-event-row'>
+          <div className='section-create-event'>
             <label>When does your event start?</label><br />
-            {errors.startDate && <p className="field-error">{errors.startDate}</p>}
+            {errors.startDate && <p className='field-error'>{errors.startDate}</p>}
             <input
-              type="datetime-local"
+              type='datetime-local'
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              />
+            />
           </div>
-          <div className="section-create-event">
+          <div className='section-create-event'>
             <label>When does your event end?</label><br />
-            {errors.endDate && <p className="field-error">{errors.endDate}</p>}
+            {errors.endDate && <p className='field-error'>{errors.endDate}</p>}
             <input
-              type="datetime-local"
+              type='datetime-local'
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              />
+            />
           </div>
         </div>
-        <div className="section-create-event">
+        <div className='section-create-event'>
           <label>Please add an image URL for your event below:</label><br />
-          {errors.imageUrl && <p className="field-error">{errors.imageUrl}</p>}
+          {errors.imageUrl && <p className='field-error'>{errors.imageUrl}</p>}
           <input
-            type="text"
-            placeholder="Image URL"
+            type='text'
+            placeholder='Image URL'
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
           />
         </div>
-        <div className="section-create-event">
+        <div className='section-create-event'>
           <label>Please describe your event:</label><br />
-          {errors.description && <p className="field-error">{errors.description}</p>}
+          {errors.description && <p className='field-error'>{errors.description}</p>}
           <textarea
-            placeholder="Please include at least 30 characters"
+            placeholder='Please include at least 30 characters'
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
-        <div className="section-create-event">
+        <div className='section-create-event'>
           <label>What is the capacity for your event?</label><br />
-          {errors.capacity && <p className="field-error">{errors.capacity}</p>}
+          {errors.capacity && <p className='field-error'>{errors.capacity}</p>}
           <input
-            type="number"
-            placeholder="Capacity"
+            type='number'
+            placeholder='Capacity'
             value={capacity}
             onChange={(e) => setCapacity(e.target.value)}
-            />
+          />
         </div>
         {type === 'In person' && (
           <>
-            <div className="section-create-event">
-              <label>Venue Address:</label><br />
-              {errors.venueAddress && <p className="field-error">{errors.venueAddress}</p>}
+            <div className='section-create-event'>
+              <label>Address:</label><br />
+              {errors.venueAddress && <p className='field-error'>{errors.venueAddress}</p>}
               <input
-                type="text"
-                placeholder="Venue Address"
+                type='text'
+                placeholder='Venue Address'
                 value={venueAddress}
                 onChange={(e) => setVenueAddress(e.target.value)}
               />
             </div>
-            <div className="section-create-event-row">
-              <div className="section-create-event">
-                <label>Venue City:</label><br />
-                {errors.venueCity && <p className="field-error">{errors.venueCity}</p>}
+            <div className='section-create-event-row'>
+              <div className='section-create-event'>
+                <label>City:</label><br />
+                {errors.venueCity && <p className='field-error'>{errors.venueCity}</p>}
                 <input
-                  type="text"
-                  placeholder="Venue City"
+                  type='text'
+                  placeholder='City'
                   value={venueCity}
                   onChange={(e) => setVenueCity(e.target.value)}
                 />
               </div>
-              <div className="section-create-event">
-                <label>Venue State:</label><br />
-                {errors.venueState && <p className="field-error">{errors.venueState}</p>}
+              <div className='section-create-event'>
+                <label>State:</label><br />
+                {errors.venueState && <p className='field-error'>{errors.venueState}</p>}
                 <select
                   value={venueState}
                   onChange={(e) => setVenueState(e.target.value)}
                 >
-                  <option value="">Select State</option>
+                  <option value=''>Select State</option>
                   {stateAbbreviations.map((state) => (
                     <option key={state} value={state}>
                       {state}
@@ -332,23 +332,23 @@ const CreateEventForm = () => {
                 </select>
               </div>
             </div>
-            <div className="section-create-event-row">
-              <div className="section-create-event">
-                <label>Venue Latitude:</label><br />
-                {errors.venueLat && <p className="field-error">{errors.venueLat}</p>}
+            <div className='section-create-event-row'>
+              <div className='section-create-event'>
+                <label>Latitude (Optional):</label><br />
+                {errors.venueLat && <p className='field-error'>{errors.venueLat}</p>}
                 <input
-                  type="text"
-                  placeholder="Venue Latitude"
+                  type='text'
+                  placeholder='Must be within -90 and 90'
                   value={venueLat}
                   onChange={(e) => setVenueLat(e.target.value)}
                 />
               </div>
-              <div className="section-create-event">
-                <label>Venue Longitude:</label><br />
-                {errors.venueLng && <p className="field-error">{errors.venueLng}</p>}
+              <div className='section-create-event'>
+                <label>Longitude (Optional):</label><br />
+                {errors.venueLng && <p className='field-error'>{errors.venueLng}</p>}
                 <input
-                  type="text"
-                  placeholder="Venue Longitude"
+                  type='text'
+                  placeholder='Must be within -180 and 180'
                   value={venueLng}
                   onChange={(e) => setVenueLng(e.target.value)}
                 />
@@ -356,23 +356,23 @@ const CreateEventForm = () => {
             </div>
           </>
         )}
-        <div className="section-create-event-submit">
+        <div className='section-create-event-submit'>
           <hr />
           {formIncomplete && (
-            <div className="form-incomplete-error">
+            <div className='form-incomplete-error'>
               <p>Incomplete form - see requirements above</p>
             </div>
           )}
           <button
-            type="submit"
+            type='submit'
             className={`create-event-button ${!name || !type || !isPrivate || !price || !capacity || !startDate || !endDate || !imageUrl || !description || description.length < 30 || description.length > 2000 || (type === 'In person' && (!venueAddress || !venueCity || !venueState)) ? 'grey' : ''}`}
           >
             Create Event
           </button>
         </div>
-        {errors.message && <p className="field-error">{errors.message}</p>}
+        {errors.message && <p className='field-error'>{errors.message}</p>}
         {errors && Object.keys(errors).map((key, idx) => (
-          <p key={idx} className="field-error">{errors[key]}</p>
+          <p key={idx} className='field-error'>{errors[key]}</p>
         ))}
       </form>
     </div>
