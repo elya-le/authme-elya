@@ -3,15 +3,14 @@ const router = express.Router();
 const { Venue, Group } = require('../../db/models');
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { check, validationResult } = require('express-validator');
-const { Op } = require('sequelize');
 
 const validateVenue = [
   check('address').exists({ checkFalsy: true }).withMessage('Street address is required'),
   check('city').exists({ checkFalsy: true }).withMessage('City is required'),
   check('state').exists({ checkFalsy: true }).withMessage('State is required')
     .isLength({ min: 2, max: 2 }).withMessage('State must be 2 characters'),
-  check('lat').isFloat({ min: -90, max: 90 }).withMessage('Latitude must be within -90 and 90'),
-  check('lng').isFloat({ min: -180, max: 180 }).withMessage('Longitude must be within -180 and 180'),
+  check('lat').optional({ checkFalsy: true }).isFloat({ min: -90, max: 90 }).withMessage('Latitude must be within -90 and 90'),
+  check('lng').optional({ checkFalsy: true }).isFloat({ min: -180, max: 180 }).withMessage('Longitude must be within -180 and 180'),
 ];
 
 // middleware for validation errors
@@ -25,6 +24,32 @@ const handleValidationErrors = (req, res, next) => {
   }
   next();
 };
+
+// POST /api/venues - create a new venue
+router.post('/', restoreUser, requireAuth, validateVenue, handleValidationErrors, async (req, res) => {
+  const { address, city, state, lat, lng, groupId } = req.body;
+  try {
+    const group = await Group.findByPk(groupId);
+    if (!group) {
+      return res.status(404).json({ message: "Group couldn't be found" });
+    }
+    if (req.user.id !== group.organizerId) {
+      return res.status(403).json({ message: "Forbidden: You are not authorized to create a venue for this group" });
+    }
+    const venue = await Venue.create({
+      address,
+      city,
+      state,
+      lat: lat !== undefined ? lat : null,
+      lng: lng !== undefined ? lng : null,
+      groupId
+    });
+    return res.status(201).json(venue);
+  } catch (error) {
+    console.error('Error creating venue:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 // PUT /api/venues/:venueId - edits a venue specified by its id
 router.put('/:venueId', restoreUser, requireAuth, validateVenue, handleValidationErrors, async (req, res) => {
@@ -48,8 +73,8 @@ router.put('/:venueId', restoreUser, requireAuth, validateVenue, handleValidatio
       address,
       city,
       state,
-      lat,
-      lng
+      lat: lat !== undefined ? lat : null,
+      lng: lng !== undefined ? lng : null
     });
     const response = {
       id: updatedVenue.id,

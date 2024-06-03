@@ -15,6 +15,11 @@ const CreateEventForm = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [description, setDescription] = useState('');
   const [venueId, setVenueId] = useState('');
+  const [venueAddress, setVenueAddress] = useState(''); // new state for venue address
+  const [venueCity, setVenueCity] = useState(''); // new state for venue city
+  const [venueState, setVenueState] = useState(''); // new state for venue state
+  const [venueLat, setVenueLat] = useState(''); // new state for venue latitude
+  const [venueLng, setVenueLng] = useState(''); // new state for venue longitude
   const [errors, setErrors] = useState({});
   const [csrfToken, setCsrfToken] = useState('');
   const [formIncomplete, setFormIncomplete] = useState(false);
@@ -55,6 +60,11 @@ const CreateEventForm = () => {
       setImageUrl('');
       setDescription('');
       setVenueId('');
+      setVenueAddress('');
+      setVenueCity('');
+      setVenueState('');
+      setVenueLat('');
+      setVenueLng('');
       setErrors({});
       setFormIncomplete(false);
     };
@@ -76,9 +86,11 @@ const CreateEventForm = () => {
     if (!endDate) newErrors.endDate = 'Event end is required';
     if (!imageUrl) newErrors.imageUrl = 'Image URL is required';
     if (!description) newErrors.description = 'Description is required';
-    if (description.length < 30) newErrors.description = 'Description needs 30 or more characters'; // added min length validation
-    if (description.length > 2000) newErrors.description = 'Description cannot exceed 2000 characters'; // added max length validation
-    if (type === 'In person' && !venueId) newErrors.venueId = 'Venue is required for in-person events';
+    if (description.length < 30) newErrors.description = 'Description needs 30 or more characters';
+    if (description.length > 2000) newErrors.description = 'Description cannot exceed 2000 characters';
+    if (type === 'In person' && (!venueAddress || !venueCity || !venueState)) {
+      newErrors.venueAddress = 'Venue address, city, and state are required for in-person events';
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -87,7 +99,36 @@ const CreateEventForm = () => {
     }
 
     try {
-      const response = await fetch(`/api/groups/${groupId}/events`, {
+      let newVenueId = venueId;
+
+      if (type === 'In person') {
+        const venueResponse = await fetch('/api/venues', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'CSRF-Token': csrfToken,
+          },
+          body: JSON.stringify({
+            groupId,
+            address: venueAddress,
+            city: venueCity,
+            state: venueState,
+            lat: venueLat ? parseFloat(venueLat) : null,
+            lng: venueLng ? parseFloat(venueLng) : null,
+          }),
+        });
+
+        if (venueResponse.ok) {
+          const venueData = await venueResponse.json();
+          newVenueId = venueData.id;
+        } else {
+          const venueErrorData = await venueResponse.json();
+          setErrors(venueErrorData.errors ? venueErrorData.errors : { message: venueErrorData.message });
+          return;
+        }
+      }
+
+      const eventResponse = await fetch(`/api/groups/${groupId}/events`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -103,16 +144,16 @@ const CreateEventForm = () => {
           endDate,
           imageUrl,
           description,
-          venueId: type === 'In person' ? venueId : null,
+          venueId: type === 'In person' ? newVenueId : null,
         }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        navigate(`/events/${data.id}`);
+      if (eventResponse.ok) {
+        const eventData = await eventResponse.json();
+        navigate(`/events/${eventData.id}`);
       } else {
-        const errorData = await response.json();
-        setErrors(errorData.errors ? errorData.errors : { message: errorData.message });
+        const eventErrorData = await eventResponse.json();
+        setErrors(eventErrorData.errors ? eventErrorData.errors : { message: eventErrorData.message });
       }
     } catch (error) {
       setErrors({ message: 'Network or server error: ' + error.message });
@@ -208,18 +249,60 @@ const CreateEventForm = () => {
             onChange={(e) => setCapacity(e.target.value)}
             />
         </div>
-            {type === 'In person' && (
-              <div className="section-create-event">
-                <label>Venue ID for the event:</label><br />
-                {errors.venueId && <p className="field-error">{errors.venueId}</p>}
-                <input
-                  type="text"
-                  placeholder="Venue ID"
-                  value={venueId}
-                  onChange={(e) => setVenueId(e.target.value)}
-                />
-              </div>
-            )}
+        {type === 'In person' && (
+          <>
+            <div className="section-create-event">
+              <label>Venue Address:</label><br />
+              {errors.venueAddress && <p className="field-error">{errors.venueAddress}</p>}
+              <input
+                type="text"
+                placeholder="Venue Address"
+                value={venueAddress}
+                onChange={(e) => setVenueAddress(e.target.value)}
+              />
+            </div>
+            <div className="section-create-event">
+              <label>Venue City:</label><br />
+              {errors.venueCity && <p className="field-error">{errors.venueCity}</p>}
+              <input
+                type="text"
+                placeholder="Venue City"
+                value={venueCity}
+                onChange={(e) => setVenueCity(e.target.value)}
+              />
+            </div>
+            <div className="section-create-event">
+              <label>Venue State:</label><br />
+              {errors.venueState && <p className="field-error">{errors.venueState}</p>}
+              <input
+                type="text"
+                placeholder="Venue State"
+                value={venueState}
+                onChange={(e) => setVenueState(e.target.value)}
+              />
+            </div>
+            <div className="section-create-event">
+              <label>Venue Latitude:</label><br />
+              {errors.venueLat && <p className="field-error">{errors.venueLat}</p>}
+              <input
+                type="text"
+                placeholder="Venue Latitude"
+                value={venueLat}
+                onChange={(e) => setVenueLat(e.target.value)}
+              />
+            </div>
+            <div className="section-create-event">
+              <label>Venue Longitude:</label><br />
+              {errors.venueLng && <p className="field-error">{errors.venueLng}</p>}
+              <input
+                type="text"
+                placeholder="Venue Longitude"
+                value={venueLng}
+                onChange={(e) => setVenueLng(e.target.value)}
+              />
+            </div>
+          </>
+        )}
         <div className="section-create-event-submit">
           <hr />
           {formIncomplete && (
@@ -229,7 +312,7 @@ const CreateEventForm = () => {
           )}
           <button
             type="submit"
-            className={`create-event-button ${!name || !type || !isPrivate || !price || !capacity || !startDate || !endDate || !imageUrl || !description || description.length < 30 || description.length > 2000 ? 'grey' : ''}`}
+            className={`create-event-button ${!name || !type || !isPrivate || !price || !capacity || !startDate || !endDate || !imageUrl || !description || description.length < 30 || description.length > 2000 || (type === 'In person' && (!venueAddress || !venueCity || !venueState)) ? 'grey' : ''}`}
           >
             Create Event
           </button>

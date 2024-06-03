@@ -46,16 +46,36 @@ module.exports = (sequelize, DataTypes) => {
       },
       lat: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: true,
         validate: {
-        isFloat: true  
+          isFloat: {
+            msg: 'Latitude must be a float'
+          },
+          min: {
+            args: -90,
+            msg: 'Latitude must be between -90 and 90'
+          },
+          max: {
+            args: 90,
+            msg: 'Latitude must be between -90 and 90'
+          }
         }
       },
       lng: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: true,
         validate: {
-          isFloat: true  
+          isFloat: {
+            msg: 'Longitude must be a float'
+          },
+          min: {
+            args: -180,
+            msg: 'Longitude must be between -180 and 180'
+          },
+          max: {
+            args: 180,
+            msg: 'Longitude must be between -180 and 180'
+          }
         }
       }
     }, {
