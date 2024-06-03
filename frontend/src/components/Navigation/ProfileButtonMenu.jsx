@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'; // import useNavigate for navigation
-import { FaUserCircle, FaAngleDown, FaAngleUp } from 'react-icons/fa'; 
+import { LuDog } from "react-icons/lu";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import * as sessionActions from '../../store/session';
 import './ProfileButtonMenu.css';
 
@@ -45,9 +46,9 @@ function ProfileButtonMenu({ user }) {
         {user.profileImageUrl ? (
           <img src={user.profileImageUrl} alt='profile' className='profile-image' />
         ) : (
-          <FaUserCircle className='default-icon' />
+          <LuDog size={45} className='default-icon'  />
         )}
-        {arrowDirection === 'down' ? <FaAngleDown /> : <FaAngleUp />}
+        {arrowDirection === 'down' ? <IoIosArrowDown size={30} className='bold-icon' /> : <IoIosArrowUp size={30} className='bold-icon' />}
       </button>
       <ul className={`profile-dropdown ${showMenu ? "" : 'hidden'}`} ref={ulRef}>
         <li>Hello, {user.username}<br></br><br></br>

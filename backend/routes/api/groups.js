@@ -333,12 +333,8 @@ router.post('/', validateGroup, async (req, res, next) => {
   const { user } = req;
   const { name, about, type, private, city, state } = req.body;
 
-  console.log('Received group creation request:', { name, about, type, private, city, state });
-  console.log('User:', user);
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log('Validation errors:', errors.mapped());
     return res.status(400).json({
       message: 'Bad Request',
       errors: errors.mapped()
@@ -357,8 +353,6 @@ router.post('/', validateGroup, async (req, res, next) => {
       city,
       state
     }, { transaction: t });
-
-    console.log('Group created:', group);
 
     // create a membership for the organizer
     await Membership.create({
@@ -382,9 +376,6 @@ router.post('/:groupId/images', authenticated, async (req, res) => {
   const { groupId } = req.params;
   const { url, preview } = req.body;
 
-  console.log('Received image upload request:', { groupId, url, preview });
-  console.log('User:', req.user);
-
   try {
       const group = await Group.findByPk(groupId);
 
@@ -402,7 +393,6 @@ router.post('/:groupId/images', authenticated, async (req, res) => {
           preview
       });
 
-      console.log('Group image added:', groupImage);
       res.status(201).json(groupImage);
   } catch (error) {
       console.error('Error adding image to group:', error);
@@ -414,9 +404,6 @@ router.post('/:groupId/images', authenticated, async (req, res) => {
 router.post('/:groupId/events', authenticated, validateEvent, handleValidationErrors, async (req, res) => {
   const { groupId } = req.params;
   const { name, type, startDate, endDate, description, capacity, price, imageUrl, venueId } = req.body;
-
-  console.log('Received event creation request:', { groupId, name, type, startDate, endDate, description, capacity, price, imageUrl, venueId });
-  console.log('User:', req.user);
 
   try {
     const group = await Group.findByPk(groupId);
@@ -447,8 +434,7 @@ router.post('/:groupId/events', authenticated, validateEvent, handleValidationEr
       imageUrl,
       venueId: type === 'In person' ? venueId : null
     });
-
-    console.log('Event created successfully:', event);
+    
     res.status(201).json(event);
   } catch (error) {
     console.error('Failed to create event:', error);
@@ -459,6 +445,7 @@ router.post('/:groupId/events', authenticated, validateEvent, handleValidationEr
     res.status(500).json({ message: 'Internal server error', details: error.message });
   }
 });
+
 
 
 // POST /api/groups/:groupId/membership - request membership for a group

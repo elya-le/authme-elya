@@ -1,3 +1,4 @@
+// CreateEventForm.jsx
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './CreateEventForm.css';
@@ -110,15 +111,6 @@ const CreateEventForm = () => {
       let newVenueId = venueId;
 
       if (type === 'In person') {
-        console.log('Posting to /api/venues with data:', {
-          groupId,
-          address: venueAddress,
-          city: venueCity,
-          state: venueState,
-          lat: venueLat ? parseFloat(venueLat) : null,
-          lng: venueLng ? parseFloat(venueLng) : null,
-        });
-
         const venueResponse = await fetch('/api/venues', {
           method: 'POST',
           headers: {
@@ -140,24 +132,10 @@ const CreateEventForm = () => {
           newVenueId = venueData.id;
         } else {
           const venueErrorData = await venueResponse.json();
-          console.error('Venue creation error:', venueErrorData);
           setErrors(venueErrorData.errors ? venueErrorData.errors : { message: venueErrorData.message });
           return;
         }
       }
-
-      console.log('Sending event creation request with data:', {
-        name,
-        type,
-        private: isPrivate === 'true',
-        price: parseInt(price, 10),
-        capacity: parseInt(capacity, 10),
-        startDate,
-        endDate,
-        imageUrl,
-        description,
-        venueId: type === 'In person' ? newVenueId : null,
-      });
 
       const eventResponse = await fetch(`/api/groups/${groupId}/events`, {
         method: 'POST',
@@ -184,8 +162,6 @@ const CreateEventForm = () => {
         navigate(`/events/${eventData.id}`);
       } else {
         const eventErrorData = await eventResponse.json();
-        console.error('Event creation error:', eventErrorData);
-        // Map error objects to strings for rendering
         const formattedErrors = {};
         if (eventErrorData.errors) {
           for (const key in eventErrorData.errors) {
@@ -197,7 +173,6 @@ const CreateEventForm = () => {
         setErrors(formattedErrors);
       }
     } catch (error) {
-      console.error('Error in handleSubmit:', error);
       setErrors({ message: 'Network or server error: ' + error.message });
     }
   };

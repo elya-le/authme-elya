@@ -1,5 +1,6 @@
+// EventDetailPage.jsx
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom'; // useNavigate instead of useHistory
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './EventDetailPage.css';
 import '../../Main.css';
@@ -8,12 +9,11 @@ import { MdOutlineAttachMoney } from "react-icons/md";
 import { GoClock } from "react-icons/go";
 import { FiMapPin } from "react-icons/fi";
 
-
 import DeleteEventConfirmationModal from './DeleteEventConfirmationModal';
 
 const EventDetailPage = () => {
   const { eventId } = useParams();
-  const navigate = useNavigate(); // useNavigate instead of useHistory
+  const navigate = useNavigate();
   const [event, setEvent] = useState(null);
   const [error, setError] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -49,16 +49,16 @@ const EventDetailPage = () => {
 
   const handleDeleteEvent = async () => {
     try {
-      const csrfToken = document.cookie.split('=')[1]; // Get CSRF token from cookie
+      const csrfToken = document.cookie.split('=')[1];
       const response = await fetch(`/api/events/${eventId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'CSRF-Token': csrfToken, // Include CSRF token in the request headers
+          'CSRF-Token': csrfToken,
         }
       });
       if (response.ok) {
-        navigate(`/groups/${event.groupId}`); // navigate instead of history.push
+        navigate(`/groups/${event.groupId}`);
       } else {
         const data = await response.json();
         setError(data.message || 'Failed to delete event');
@@ -83,11 +83,11 @@ const EventDetailPage = () => {
       <div className='section2-event-body'>
         <div className='event-detail-top-container'>
           <div className='event-image-container'>
-          {event.EventImages && event.EventImages.length > 0 ? (
-            <img src={event.EventImages[0].url} alt={`${event.name}`} className='event-detail-image' /> 
-          ) : (
-            <img src='/images/img.png' alt={`${event.name} Image`} className='event-detail-image' /> 
-          )}
+            {event.imageUrl ? (
+              <img src={event.imageUrl} alt={`${event.name}`} className='event-detail-image' /> 
+            ) : (
+              <img src='/images/img.png' alt={`${event.name} Image`} className='event-detail-image' /> 
+            )}
           </div>
           <div className='event-details-info-container'>
             <Link to={`/groups/${event.groupId}`} className='group-info-link'>

@@ -21,6 +21,7 @@
   font-weight: bold;
   justify-content: center;
   align-items: center;
+  margin: 0px 20px 0px 0px;
 }
 
 .start-new-group-link:hover {

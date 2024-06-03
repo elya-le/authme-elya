@@ -3,7 +3,6 @@ const { jwtConfig } = require('../config');
 const { secret, expiresIn } = jwtConfig;
 const { User } = require('../db/models');
 
-// console.log('JWT secret used in auth.js:', secret); // debug log the secret
 
 const setTokenCookie = (res, user) => {
   const safeUser = {
@@ -16,8 +15,7 @@ const setTokenCookie = (res, user) => {
     secret,
     { expiresIn: parseInt(expiresIn, 10) }
   );
-  // console.log('Generated token:', token); // debug log
-  // console.log('Using secret to sign:', secret); // debug log
+
   const isProduction = process.env.NODE_ENV === 'production';
   res.cookie('token', token, {
     maxAge: expiresIn * 1000,
@@ -36,9 +34,6 @@ const restoreUser = async (req, res, next) => {
         console.log('No token found');
         return next();
     }
-
-    // console.log('Token to be verified:', token); // debug log
-    // console.log('Using secret to verify:', secret); // debug log
 
     jwt.verify(token, secret, async (err, jwtPayload) => {
         if (err) {

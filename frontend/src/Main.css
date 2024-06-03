@@ -81,3 +81,12 @@ label {
   font-weight: bold;
 }
 
+.default-icon{
+  stroke: grey;
+}
+.bold-icon {
+  font-size: 20px; /* Adjust the size as needed */
+  fill: grey; /* Removes the fill color */
+
+  stroke-width: 5;
+}
