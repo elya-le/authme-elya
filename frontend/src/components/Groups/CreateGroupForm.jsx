@@ -10,7 +10,7 @@ const CreateGroupForm = () => {
   const [privateGroup, setPrivateGroup] = useState(false);
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
   const [csrfToken, setCsrfToken] = useState('');
   const [formIncomplete, setFormIncomplete] = useState(false);
@@ -46,7 +46,7 @@ const CreateGroupForm = () => {
       setPrivateGroup(false);
       setCity('');
       setState('');
-      setImageUrl('');
+      setImage(null);
       setErrors({});
       setFormIncomplete(false);
     };
@@ -72,7 +72,7 @@ const CreateGroupForm = () => {
       return;
     }
 
-    const response = await fetch('/api/groups', {
+    const groupResponse = await fetch('/api/groups', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -88,32 +88,44 @@ const CreateGroupForm = () => {
       }),
     });
 
-    if (response.ok) {
-      const data = await response.json();
+    if (groupResponse.ok) {
+      const groupData = await groupResponse.json();
 
-      if (imageUrl) {
-        const imageResponse = await fetch(`/api/groups/${data.id}/images`, {
+      if (image) {
+        const formData = new FormData();
+        formData.append('image', image);
+
+        const imageResponse = await fetch(`/api/uploads`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
             'CSRF-Token': csrfToken,
           },
-          body: JSON.stringify({
-            url: imageUrl,
-            preview: true,
-          }),
+          body: formData,
         });
 
-        if (!imageResponse.ok) {
+        if (imageResponse.ok) {
+          const imageData = await imageResponse.json();
+          await fetch(`/api/groups/${groupData.id}/images`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'CSRF-Token': csrfToken,
+            },
+            body: JSON.stringify({
+              url: imageData.url,
+              preview: true,
+            }),
+          });
+        } else {
           const imageErrorData = await imageResponse.json();
-          setErrors((prevErrors) => ({ ...prevErrors, imageUrl: imageErrorData.errors.url }));
+          setErrors((prevErrors) => ({ ...prevErrors, image: imageErrorData.errors.url }));
           return;
         }
       }
 
-      navigate(`/groups/${data.id}`);
+      navigate(`/groups/${groupData.id}`);
     } else {
-      const errorData = await response.json();
+      const errorData = await groupResponse.json();
       const formattedErrors = Object.keys(errorData.errors).reduce((acc, key) => {
         acc[key] = errorData.errors[key].msg;
         return acc;
@@ -206,16 +218,20 @@ const CreateGroupForm = () => {
         <div className='section7-create-group-image'>
           <hr />
           <label>Please add an image URL for your group below:</label><br />
-          {errors.imageUrl && <p className='field-error'>{errors.imageUrl}</p>}
-          <div className='image-url-input-container'>
+          {errors.image && <p className='field-error'>{errors.image}</p>}
+          <input
+            type='file'
+            onChange={(e) => setImage(e.target.files[0])}
+          />
+        </div>
+          {/* <div className='image-url-input-container'>
             <input
               type='text'
               placeholder='Image URL'
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
             />
-          </div>
-        </div>
+          </div> */}
 
         <div className='section8-create-group-submit'>
           <hr />
@@ -223,7 +239,7 @@ const CreateGroupForm = () => {
             <div className='form-incomplete-error'>
               <p>Incomplete form - see requirements above</p>
             </div>
-          )} <br></br>
+          )}
           <button
             type='submit'
             className={`create-group-button ${!name || !about || about.length < 30 || !city || !state ? 'grey' : ''}`}
@@ -237,3 +253,4 @@ const CreateGroupForm = () => {
 };
 
 export default CreateGroupForm;
+

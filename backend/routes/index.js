@@ -2,8 +2,11 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const apiRouter = require('./api');
+const uploadRouter = require('./api/uploads');
 
 router.use('/api', apiRouter);
+
+router.use('/api/uploads', uploadRouter);
 
 // static routes
 // serve React build files in production
