@@ -134,11 +134,24 @@ const CreateGroupForm = () => {
     }
   };
 
+  const handleAutoPopulate = () => {
+    setName('Test Group Name');
+    setAbout('This is a sample group description. It has more than 30 characters to pass validation.');
+    setType('In person');
+    setPrivateGroup(false);
+    setCity('Sample City');
+    setState('NY');
+    setImage(null);
+  };
+
   return (
     <div className='form-container'>
       <form onSubmit={handleSubmit}>
         <div className='section1-create-group-header'>
-          <h2>Start a New Group</h2>
+          <h2>Start a New Group</h2><br></br>
+          <button type='button' onClick={handleAutoPopulate} className='auto-populate-button'>
+          Auto Populate
+          </button>
         </div>
         <div className='section2-create-group-location'>
           <hr />
@@ -224,14 +237,6 @@ const CreateGroupForm = () => {
             onChange={(e) => setImage(e.target.files[0])}
           />
         </div>
-          {/* <div className='image-url-input-container'>
-            <input
-              type='text'
-              placeholder='Image URL'
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-            />
-          </div> */}
 
         <div className='section8-create-group-submit'>
           <hr />
@@ -247,10 +252,10 @@ const CreateGroupForm = () => {
             Create Group
           </button>
         </div>
+      
       </form>
     </div>
   );
 };
 
 export default CreateGroupForm;
-

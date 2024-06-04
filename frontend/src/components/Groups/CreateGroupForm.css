@@ -40,3 +40,18 @@ select {
   cursor: pointer;
 }
 
+.auto-populate-button {
+  width: 200px;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: darkgrey;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.auto-populate-button:hover {
+  background-color: grey;
+}

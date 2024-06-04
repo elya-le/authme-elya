@@ -78,6 +78,22 @@ const CreateEventForm = () => {
     };
   }, [groupId]);
 
+  const handleAutoPopulate = () => {
+    setName('Test Event Name');
+    setType('In person');
+    setIsPrivate('false');
+    setPrice('10');
+    setCapacity('50');
+    setStartDate('2024-06-10T18:00');
+    setEndDate('2024-06-10T20:00');
+    setDescription('This is a sample event description with more than 30 characters.');
+    setVenueAddress('123 Test St');
+    setVenueCity('Test City');
+    setVenueState('NY');
+    // setVenueLat('34.0522');
+    // setVenueLng('-118.2437');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -225,6 +241,9 @@ const CreateEventForm = () => {
       <form onSubmit={handleSubmit}>
         <div className='section-create-event-header'>
           <h2>Create a new event for {groupName}</h2>
+          <button type="button" className="auto-populate-button" onClick={handleAutoPopulate}>
+            Auto Populate
+          </button>
         </div>
         <div className='section-create-event'>
           <label>What is the name of your event?</label><br />
