@@ -1,7 +1,7 @@
 .group-card {
   border-radius: 8px;
   overflow: hidden;
-  margin: 30px;
+  /* margin: 30px; */
   padding: 20px;
   width: 100%;
   max-width: 320px;
