@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './CreateEventForm.css';
 
-const CreateEventForm = () => {
-  const { groupId } = useParams();
+const UpdateEventForm = () => {
+  const { eventId } = useParams();
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [type, setType] = useState('In person');
@@ -23,7 +23,6 @@ const CreateEventForm = () => {
   const [errors, setErrors] = useState({});
   const [csrfToken, setCsrfToken] = useState('');
   const [formIncomplete, setFormIncomplete] = useState(false);
-  const [groupName, setGroupName] = useState('');
 
   const stateAbbreviations = [
     'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
@@ -46,37 +45,30 @@ const CreateEventForm = () => {
         console.error('Error fetching CSRF token:', error);
       });
 
-    fetch(`/api/groups/${groupId}`)
+    fetch(`/api/events/${eventId}`)
       .then((response) => response.json())
       .then((data) => {
-        if (data.name) {
-          setGroupName(data.name);
+        setName(data.name);
+        setType(data.type);
+        setIsPrivate(data.private ? 'true' : 'false');
+        setPrice(data.price);
+        setCapacity(data.capacity);
+        setStartDate(data.startDate.replace(' ', 'T')); // Convert to datetime-local format
+        setEndDate(data.endDate.replace(' ', 'T')); // Convert to datetime-local format
+        setDescription(data.description);
+        if (data.Venue) {
+          setVenueId(data.Venue.id);
+          setVenueAddress(data.Venue.address);
+          setVenueCity(data.Venue.city);
+          setVenueState(data.Venue.state);
+          setVenueLat(data.Venue.lat);
+          setVenueLng(data.Venue.lng);
         }
       })
       .catch((error) => {
-        console.error('Error fetching group details:', error);
+        console.error('Error fetching event details:', error);
       });
-
-    return () => {
-      setName('');
-      setType('In person');
-      setIsPrivate('false');
-      setPrice('');
-      setCapacity('');
-      setStartDate('');
-      setEndDate('');
-      setImage(null); // Reset image
-      setDescription('');
-      setVenueId('');
-      setVenueAddress('');
-      setVenueCity('');
-      setVenueState('');
-      setVenueLat('');
-      setVenueLng('');
-      setErrors({});
-      setFormIncomplete(false);
-    };
-  }, [groupId]);
+  }, [eventId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,14 +101,13 @@ const CreateEventForm = () => {
       let newVenueId = venueId;
 
       if (type === 'In person') {
-        const venueResponse = await fetch('/api/venues', {
-          method: 'POST',
+        const venueResponse = await fetch(`/api/venues/${venueId}`, {
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             'CSRF-Token': csrfToken,
           },
           body: JSON.stringify({
-            groupId,
             address: venueAddress,
             city: venueCity,
             state: venueState,
@@ -125,15 +116,14 @@ const CreateEventForm = () => {
           }),
         });
 
-        if (venueResponse.ok) {
-          const venueData = await venueResponse.json();
-          newVenueId = venueData.id;
-        } else {
+        if (!venueResponse.ok) {
           const venueErrorData = await venueResponse.json();
           setErrors(venueErrorData.errors ? venueErrorData.errors : { message: venueErrorData.message });
           return;
         }
       }
+
+      const formatDateTime = (dateTime) => dateTime.replace('T', ' ');
 
       const eventPayload = {
         name,
@@ -141,16 +131,16 @@ const CreateEventForm = () => {
         private: isPrivate === 'true',
         price: parseInt(price, 10),
         capacity: parseInt(capacity, 10),
-        startDate,
-        endDate,
+        startDate: formatDateTime(startDate),
+        endDate: formatDateTime(endDate),
         description,
         venueId: type === 'In person' ? newVenueId : null,
       };
 
       console.log('Event Payload:', eventPayload);
 
-      const eventResponse = await fetch(`/api/groups/${groupId}/events`, {
-        method: 'POST',
+      const eventResponse = await fetch(`/api/events/${eventId}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'CSRF-Token': csrfToken,
@@ -204,7 +194,7 @@ const CreateEventForm = () => {
         navigate(`/events/${eventData.id}`);
       } else {
         const eventErrorData = await eventResponse.json();
-        console.log('Event Creation Error:', eventErrorData);
+        console.log('Event Update Error:', eventErrorData);
         const formattedErrors = {};
         if (eventErrorData.errors) {
           for (const key in eventErrorData.errors) {
@@ -224,7 +214,7 @@ const CreateEventForm = () => {
     <div className='form-container'>
       <form onSubmit={handleSubmit}>
         <div className='section-create-event-header'>
-          <h2>Create a new event for {groupName}</h2>
+          <h2>Update your event</h2>
         </div>
         <div className='section-create-event'>
           <label>What is the name of your event?</label><br />
@@ -274,7 +264,7 @@ const CreateEventForm = () => {
           </div>
           <div className='section-create-event'>
             <label>When does your event end?</label><br />
-            {errors.endDate && <p className='field-error'>{errors.endDate}</p>}
+            {errors.endDate && <p classname='field-error'>{errors.endDate}</p>}
             <input
               type='datetime-local'
               value={endDate}
@@ -383,7 +373,7 @@ const CreateEventForm = () => {
             type='submit'
             className={`create-event-button ${!name || !type || !isPrivate || !price || !capacity || !startDate || !endDate || !description || description.length < 30 || description.length > 2000 || (type === 'In person' && (!venueAddress || !venueCity || !venueState)) ? 'grey' : ''}`}
           >
-            Create Event
+            Update Event
           </button>
         </div>
         {errors.message && <p className='field-error'>{errors.message}</p>}
@@ -395,4 +385,4 @@ const CreateEventForm = () => {
   );
 };
 
-export default CreateEventForm;
+export default UpdateEventForm;

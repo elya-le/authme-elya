@@ -1,4 +1,3 @@
-// EventDetailPage.jsx
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -83,8 +82,13 @@ const EventDetailPage = () => {
       <div className='section2-event-body'>
         <div className='event-detail-top-container'>
           <div className='event-image-container'>
-            {event.imageUrl ? (
-              <img src={event.imageUrl} alt={`${event.name}`} className='event-detail-image' /> 
+            {event.EventImages && event.EventImages.length > 0 ? (
+              <img
+                src={event.EventImages[0].url}
+                alt={`${event.name}`}
+                className='event-detail-image'
+                onError={(e) => e.target.src = '/images/img.png'} // Fallback image
+              /> 
             ) : (
               <img src='/images/img.png' alt={`${event.name} Image`} className='event-detail-image' /> 
             )}
@@ -145,7 +149,9 @@ const EventDetailPage = () => {
               </div>
               {isCurrentUserHost() && (
               <div className='event-organizer-buttons'>
-                <button className='update-event-button'>Update</button>
+                <Link to={`/events/${eventId}/update`}>
+                  <button className='update-event-button'>Update</button>
+                </Link>
                 <button className='delete-event-button' onClick={() => setShowDeleteModal(true)}>Delete</button> 
               </div>
             )}

@@ -7,10 +7,10 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 router.post('/', upload.single('image'), async (req, res) => {
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME, // your bucket name
+    Bucket: process.env.AWS_BUCKET_NAME,
     Key: `${Date.now()}_${req.file.originalname}`,
     Body: req.file.buffer,
-    ContentType: req.file.mimetype,
+    ContentType: req.file.mimetype
   };
 
   try {

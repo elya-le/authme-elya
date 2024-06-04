@@ -11,6 +11,7 @@ import EventDetailPage from './components/Events/EventDetailPage';
 import CreateGroupPage from './components/Groups/CreateGroupPage';
 import UpdateGroupForm from './components/Groups/UpdateGroupForm';
 import CreateEventForm from './components/Events/CreateEventForm';
+import UpdateEventForm from './components/Events/UpdateEventForm';
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: 'events/:eventId',
         element: <EventDetailPage />
+      },
+      {
+        path: 'events/:eventId/update',
+        element: <UpdateEventForm />
       },
       {
         path: 'groups/new',

@@ -13,7 +13,7 @@ function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
   const sessionLinks = sessionUser ? (
     <div className='profile'>
-      <NavLink to='/groups/new' className='start-new-group-link'> 
+      <NavLink to='/groups/new' className='start-new-group-link'>
         Start a new group
       </NavLink>
       <ProfileButtonMenu user={sessionUser} />
@@ -32,11 +32,11 @@ function Navigation({ isLoaded }) {
       />
     </>
   );
-  
+
   return (
     <nav className='navigation-bar'>
       <div className='logo'>
-        <NavLink exact to="/">  
+        <NavLink to="/"> 
           <img src={meetupLogo} alt='Meetup Logo' />
         </NavLink>
       </div>

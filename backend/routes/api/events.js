@@ -1,15 +1,51 @@
 const express = require('express');
-const router = express.Router();
 const { Event, Group, User, Membership, Attendance, EventImage, Venue } = require('../../db/models'); // Adjust the path as needed
 const { check, validationResult } = require('express-validator');
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { sequelize } = require('../../db/models');
 const { handleValidationErrors } = require('../../utils/validation');
-const { where } = require('sequelize');
+const multer = require('multer');
+const s3 = require('../../config/aws'); 
+const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.use(restoreUser);
 
 const authenticated = [restoreUser, requireAuth];
+
+// middleware to check if the current user can edit the event
+const checkEventPermission = async (req, res, next) => {
+  const { eventId } = req.params;
+  const event = await Event.findByPk(eventId, {
+    include: {
+      model: Group,
+      as: 'Group',
+      include: [
+        {
+          model: User,
+          as: 'Organizer',
+        },
+        {
+          model: Membership,
+          as: 'Memberships',
+          where: {
+            userId: req.user.id,
+          },
+          required: false
+        }
+      ]
+    }
+  });
+  if (!event) {
+    return res.status(404).json({ message: "Event couldn't be found" });
+  }
+  const isOrganizer = req.user.id === event.Group.organizerId;
+  const isCoHost = event.Group.Memberships.some(membership => membership.status === 'co-host');
+  if (!isOrganizer && !isCoHost) {
+    return res.status(403).json({ message: "Forbidden: You are not allowed to edit this event" });
+  }
+  next();
+};
 
 // GET /api/events - returns all events
 router.get('/', async (req, res) => {
@@ -127,61 +163,28 @@ router.get('/', async (req, res) => {
   }
 });
 
-// middleware to check if the current user can edit the event
-const checkEventPermission = async (req, res, next) => {
-  const { eventId } = req.params;
-  const event = await Event.findByPk(eventId, {
-    include: {
-      model: Group,
-      as: 'Group',
-      include: [
-        {
-          model: User,
-          as: 'Organizer',
-        },
-        {
-          model: Membership,
-          as: 'Memberships',
-          where: {
-            userId: req.user.id,
-          },
-          required: false
-        }
-      ]
-    }
-  });
-  if (!event) {
-    return res.status(404).json({ message: "Event couldn't be found" });
-  }
-  const isOrganizer = req.user.id === event.Group.organizerId;
-  const isCoHost = event.Group.Memberships.some(membership => membership.status === 'co-host');
-  if (!isOrganizer && !isCoHost) {
-    return res.status(403).json({ message: "Forbidden: You are not allowed to edit this event" });
-  }
-  next();
-};
 
 // GET /api/events/:eventId/attendees - get all attendees for an event
 router.get('/:eventId/attendees', async (req, res) => {
   const { eventId } = req.params;
   const userId = req.user ? req.user.id : null;
   const event = await Event.findByPk(eventId, {
+    include: {
+      model: Group,
+      as: 'Group',
       include: {
-          model: Group,
-          as: 'Group',
-          include: {
-              model: Membership,
-              as: 'Memberships',
-              where: {
-                  userId: userId,
-                  status: ['member', 'inactive', 'pending']
-              },
-              required: false
-          }
+        model: Membership,
+        as: 'Memberships',
+        where: {
+          userId: userId,
+          status: ['member', 'inactive', 'pending']
+        },
+        required: false
       }
+    }
   });
   if (!event) {
-      return res.status(404).json({ message: "Event couldn't be found" });
+    return res.status(404).json({ message: "Event couldn't be found" });
   }
   const attendees = await Attendance.findAll({
     where: { eventId },
@@ -269,32 +272,75 @@ router.post('/:eventId/attendance', requireAuth, async (req, res) => {
   });
 });
 
+router.post('/:groupId/events', authenticated, validateEvent, handleValidationErrors, async (req, res) => {
+  const { groupId } = req.params;
+  const { name, type, startDate, endDate, description, capacity, price, imageUrl, venueId } = req.body;
+
+  try {
+    const group = await Group.findByPk(groupId);
+    if (!group) {
+      return res.status(404).json({ message: "Group couldn't be found" });
+    }
+
+    if (req.user.id !== group.organizerId) {
+      return res.status(403).json({ message: "Forbidden: You are not allowed to create events for this group" });
+    }
+
+    const event = await Event.create({
+      groupId,
+      name,
+      type,
+      startDate,
+      endDate,
+      description,
+      capacity,
+      price,
+      venueId,
+      previewImage: imageUrl
+    });
+
+    res.status(201).json(event);
+  } catch (error) {
+    console.error('Failed to create event:', error);
+    res.status(500).json({ message: 'Internal server error', errors: error.errors.map(e => e.message) });
+  }
+});
+
 // POST /api/events/:eventId/images - add an image to an event
-router.post('/:eventId/images', restoreUser, requireAuth, [
-  check('url')
-    .exists({ checkFalsy: true }).withMessage('Image URL is required')
-    .isURL().withMessage('Image URL must be a valid URL'),
-  check('preview')
-    .isBoolean().withMessage('Preview must be a boolean')
-], handleValidationErrors, async (req, res) => {
-  const { url, preview } = req.body;
+router.post('/:eventId/images', upload.single('image'), restoreUser, requireAuth, async (req, res) => {
   const { eventId } = req.params;
+
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded' });
+  }
+
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME, // your bucket name
+    Key: `${Date.now()}_${req.file.originalname}`,
+    Body: req.file.buffer,
+    ContentType: req.file.mimetype,
+  };
+
   try {
     const event = await Event.findByPk(eventId);
     if (!event) {
       return res.status(404).json({ message: "Event couldn't be found" });
     }
+
+    const data = await s3.upload(params).promise();
     const image = await EventImage.create({
       eventId,
-      url,
-      preview
+      url: data.Location,
+      preview: true // Assuming you want all uploaded images to be previews
     });
+
     return res.status(200).json(image);
   } catch (error) {
     console.error('Failed to add image to event:', error);
-    return res.status(500).json({ message: 'Internal server error', errors: error.errors.map(e => e.message) });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 // PUT /api/events/:eventId - edit an event
 router.put('/:eventId', authenticated, checkEventPermission, validateEvent, handleValidationErrors, async (req, res) => {
@@ -333,7 +379,7 @@ router.put('/:eventId', authenticated, checkEventPermission, validateEvent, hand
     res.status(200).json(event);
   } catch (error) {
       console.error('Failed to edit event:', error);
-      res.status(500).json({ message: 'Internal server error', errors: error.errors.map(e => e.message) });
+      res.status(500).json({ message: 'Internal server error' });
   }
 });
 
