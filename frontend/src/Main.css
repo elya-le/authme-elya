@@ -82,11 +82,11 @@ label {
 }
 
 .default-icon{
-  stroke: grey;
+  stroke: black;
 }
 .bold-icon {
-  font-size: 20px; /* Adjust the size as needed */
-  fill: grey; /* Removes the fill color */
+  font-size: 20px; 
+  fill: black; 
 
   stroke-width: 5;
 }
