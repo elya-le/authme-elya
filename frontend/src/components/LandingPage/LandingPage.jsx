@@ -53,14 +53,14 @@ const LandingPage = () => {
       <section className='section3'>
         <Link to='/groups' className='section3-link'>
           <div className='column'>
-            <img src='../../images/img.png' alt='Icon' className='small-icon' />
+            <img src='images/1-see-group.png' alt='Icon' className='small-icon' />
             <a href='/events' className='section3-group-link'>See all groups</a>
             <p>Find your pack among our groups. MeetPup has a community for every breed, age, and size!</p>
           </div>
         </Link>
         <Link to='/events' className='section3-link'>
           <div className='column'>
-            <img src='../../images/img.png' alt='Icon' className='small-icon' />
+            <img src='images/2-find-event.png' alt='Icon' className='small-icon' />
             <a href='/groups' className='section3-event-link'>Find an event</a>
             <p>Sniff out events. MeetPup makes it easy to connect, socialize, and share experiences with your local dog community.</p>
           </div>
@@ -68,7 +68,7 @@ const LandingPage = () => {
         {currentUser ? (
           <Link to='/groups/new' className='section3-link'>
             <div className='column'>
-              <img src='../../images/img.png' alt='Icon' className='small-icon' />
+              <img src='images/3-new-group.png' alt='Icon' className='small-icon' />
               <span className='section3-start-link-enabled'>Start a new group</span>
               <p>If you haven&apos;t found what you&apos;re looking for yet... create your own MeetPup group and watch as pups come wagging to join your adventures!</p>
             </div>
