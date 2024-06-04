@@ -47,14 +47,14 @@
 
 /* section 2 styling */
 .section2 {
-  padding: 20px 20px 80px 20px;
+  padding: 20px 20px 40px 20px;
 }
 
 /* section 3 styling */
 .section3 {
   display: flex;
   justify-content: space-evenly;
-  padding: 10px 10px 80px 10px;
+  padding: 10px 10px 40px 10px;
 }
 
 
@@ -74,7 +74,6 @@
     border-radius: 8px;
 }
 
-
 a {
     text-decoration: none; /* removes the underline */
     color: black
@@ -85,7 +84,7 @@ a {
     margin: 15px 0px 0px 0px;
     font-size: 20px;
     font-weight: bold;
-    color: #1B798A;
+    color: #0E455D;
 }
 
 
@@ -97,7 +96,7 @@ a {
     margin: 15px 0px 0px 0px;
     font-size: 20px;
     font-weight: bold;
-    color: #1B798A;
+    color: #0E455D;
 }
 
 .section3-event-link:hover{
