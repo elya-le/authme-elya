@@ -139,7 +139,7 @@ const CreateGroupForm = () => {
     setAbout('This is a sample group description. It has more than 30 characters to pass validation.');
     setType('In person');
     setPrivateGroup(false);
-    setCity('Sample City');
+    setCity('Test City');
     setState('NY');
     setImage(null);
   };
@@ -148,9 +148,9 @@ const CreateGroupForm = () => {
     <div className='form-container'>
       <form onSubmit={handleSubmit}>
         <div className='section1-create-group-header'>
-          <h2>Start a New Group</h2><br></br>
-          <button type='button' onClick={handleAutoPopulate} className='auto-populate-button'>
-          Auto Populate
+          <h2>Start a New Group</h2>
+          <br></br><button type='button' onClick={handleAutoPopulate} className='auto-populate-button'>
+          Auto populate this form for testing
           </button>
         </div>
         <div className='section2-create-group-location'>

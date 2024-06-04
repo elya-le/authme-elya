@@ -240,11 +240,11 @@ const CreateEventForm = () => {
     <div className='form-container'>
       <form onSubmit={handleSubmit}>
         <div className='section-create-event-header'>
-          <h2>Create a new event for {groupName}</h2>
+          <h2>Create a new event for {groupName}</h2> 
           <button type="button" className="auto-populate-button" onClick={handleAutoPopulate}>
-            Auto Populate
+            Auto populate this form for testing
           </button>
-        </div>
+        </div><br></br>
         <div className='section-create-event'>
           <label>What is the name of your event?</label><br />
           {errors.name && <p className='field-error'>{errors.name}</p>}
