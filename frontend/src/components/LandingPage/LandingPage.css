@@ -81,7 +81,7 @@ a {
 
 
 .section3-group-link {
-    margin: 15px 0px 0px 0px;
+    margin: 15px 0px 10px 0px;
     font-size: 20px;
     font-weight: bold;
     color: #0E455D;
@@ -93,7 +93,7 @@ a {
 }
 
 .section3-event-link {
-    margin: 15px 0px 0px 0px;
+    margin: 15px 0px 10px 0px;
     font-size: 20px;
     font-weight: bold;
     color: #0E455D;
@@ -103,10 +103,10 @@ a {
   text-decoration: underline;
 }
 .section3-start-link-enabled {
-    margin: 15px 0px 0px 0px;
+    margin: 15px 0px 10px 0px;
     font-size: 20px;
     font-weight: bold;
-    color:#1B798A;
+    color:#0E455D;
 }
 
 .section3-start-link-enabled:hover {
