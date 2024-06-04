@@ -47,14 +47,14 @@
 
 /* section 2 styling */
 .section2 {
-  padding: 20px;
+  padding: 20px 20px 80px 20px;
 }
 
 /* section 3 styling */
 .section3 {
   display: flex;
   justify-content: space-evenly;
-  padding: 10px;
+  padding: 10px 10px 80px 10px;
 }
 
 

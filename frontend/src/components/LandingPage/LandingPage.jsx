@@ -50,6 +50,7 @@ const LandingPage = () => {
         <h2>How MeetPup Works</h2><br></br>
         <h4>Join a group, attend an event, or start your own... The fun awaits!</h4>
       </section>
+    
       <section className='section3'>
         <Link to='/groups' className='section3-link'>
           <div className='column'>
