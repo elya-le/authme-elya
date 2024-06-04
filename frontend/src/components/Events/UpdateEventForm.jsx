@@ -264,7 +264,7 @@ const UpdateEventForm = () => {
           </div>
           <div className='section-create-event'>
             <label>When does your event end?</label><br />
-            {errors.endDate && <p classname='field-error'>{errors.endDate}</p>}
+            {errors.endDate && <p className='field-error'>{errors.endDate}</p>}
             <input
               type='datetime-local'
               value={endDate}
