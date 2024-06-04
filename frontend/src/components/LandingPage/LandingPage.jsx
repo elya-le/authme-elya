@@ -37,11 +37,13 @@ const LandingPage = () => {
     <div className='landing-page'>
       <section className='section1'>
         <div className='title'>
-          <h1>Welcome to MeetPup</h1><br></br>
+          <h1>The pup platform—<br></br>
+          Where interests become friendships
+          </h1><br></br>
           <p className='intro-text'>Whatever your adventure, from city strolls and beach romps to playful pup events, there are thousands of furry friends waiting to connect on MeetPup. PAW-some activities are happening daily.</p>
         </div>
         <div className='infographic'>
-          <img src='../../images/lp-infographic1.png' alt='Infographic' />
+          <img src='../../images/lp-infographic3.png' alt='Infographic' />
         </div>
       </section>
       <section className='section2'>

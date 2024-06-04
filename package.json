@@ -19,6 +19,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "cloudinary": "^2.2.0",
     "express-session": "^1.18.0",
     "react-icons": "^5.2.1"
   }
