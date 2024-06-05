@@ -21,8 +21,8 @@ const GroupListPage = () => {
   }, []);
 
   const handleImageError = (e) => {
-    e.target.src = '/images/img.png'; // Set fallback image only once
-    e.target.onerror = null; // Remove onError handler to prevent infinite loop
+    e.target.src = '/images/img.png'; // set fallback image only once
+    e.target.onerror = null; // remove onError handler to prevent infinite loop
   };
 
   if (error) {
@@ -49,10 +49,10 @@ const GroupListPage = () => {
                 <div className="group-image">
                   {group.GroupImages && group.GroupImages.length > 0 ? (
                     <img
-                      src={group.GroupImages[0].url}
+                      src={group.GroupImages[group.GroupImages.length - 1].url} // display the most recent image
                       alt="Group Thumbnail"
                       className='group-card-thumbnail'
-                      onError={handleImageError} // Updated onError handler
+                      onError={handleImageError} // updated onError handler
                     />
                   ) : (
                     <img

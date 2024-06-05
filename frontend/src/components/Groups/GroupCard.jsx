@@ -2,9 +2,8 @@ import { Link } from 'react-router-dom';
 import './GroupCard.css';
 
 const GroupCard = ({ group }) => {
-  // assuming each group will have an array of images, we take the first one
   const imageUrl = group.GroupImages && group.GroupImages.length > 0
-    ? group.GroupImages[0].url
+    ? group.GroupImages[group.GroupImages.length - 1].url
     : '/public/images/img.png'; 
 
   const handleImageError = (e) => {
