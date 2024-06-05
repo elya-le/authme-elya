@@ -79,7 +79,7 @@ const CreateEventForm = () => {
   }, [groupId]);
 
   const handleAutoPopulate = () => {
-    setName('Test Event Name');
+    setName('EVENT - test name');
     setType('In person');
     setIsPrivate('false');
     setPrice('0');

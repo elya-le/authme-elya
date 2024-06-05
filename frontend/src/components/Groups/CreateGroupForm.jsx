@@ -140,7 +140,7 @@ const CreateGroupForm = () => {
   };
 
   const handleAutoPopulate = () => {
-    setName('Test Group Name');
+    setName('GROUP - name test');
     setAbout('This is a sample group description. It has more than 30 characters to pass validation.');
     setType('In person');
     setPrivateGroup(false);

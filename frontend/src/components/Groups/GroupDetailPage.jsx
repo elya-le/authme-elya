@@ -78,10 +78,10 @@ const GroupDetailPage = () => {
       <div className='section2-group-detail-container'>
         {group.GroupImages && group.GroupImages.length > 0 ? (
           <img
-            src={group.GroupImages[group.GroupImages.length - 1].url} // Display the most recent image
+            src={group.GroupImages[group.GroupImages.length - 1].url} // display the most recent image
             alt="Group Thumbnail"
             className="group-detail-image"
-            onError={(e) => e.target.src = '/images/img.png'} // Fallback image
+            onError={(e) => e.target.src = '/images/img.png'} // fallback image
           />
         ) : (
           <img
@@ -137,16 +137,12 @@ const GroupDetailPage = () => {
                       {event.EventImages && event.EventImages.length > 0 ? (
                         <img
                           src={event.EventImages[0].url}
-                          alt="Event Thumbnail"
+                          alt={`${event.name}`}
                           className='event-card-thumbnail'
                           onError={(e) => e.target.src = '/images/img.png'} // Fallback image
-                        />
+                        /> 
                       ) : (
-                        <img
-                          src='/images/img.png'
-                          alt='Default Event'
-                          className='event-card-thumbnail'
-                        />
+                        <img src='/images/img.png' alt={`${event.name} Image`} className='event-card-thumbnail' /> 
                       )}
                     </div>
                     <div className='event-card-details'>
@@ -185,19 +181,15 @@ const GroupDetailPage = () => {
                 <Link to={`/events/${event.id}`} key={event.id} className="event-card-link">
                   <div className='event-card-top'>
                     <div className='event-card-image'>
-                      {event.EventImages && event.EventImages.length > 0 ? (
+                    {event.EventImages && event.EventImages.length > 0 ? (
                         <img
                           src={event.EventImages[0].url}
-                          alt="Event Thumbnail"
+                          alt={`${event.name}`}
                           className='event-card-thumbnail'
                           onError={(e) => e.target.src = '/images/img.png'} // Fallback image
-                        />
+                        /> 
                       ) : (
-                        <img
-                          src='/images/img.png'
-                          alt='Default Event'
-                          className='event-card-thumbnail'
-                        />
+                        <img src='/images/img.png' alt={`${event.name} Image`} className='event-card-thumbnail' /> 
                       )}
                     </div>
                     <div className='event-card-details'>
