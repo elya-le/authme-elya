@@ -39,7 +39,7 @@ const CreateGroupForm = () => {
         console.error('Error fetching CSRF token:', error);
       });
 
-    return () => { // clear form data and errors on unmount
+    return () => {
       setName('');
       setAbout('');
       setType('In person');
@@ -54,8 +54,8 @@ const CreateGroupForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({}); // clear previous errors
-    setFormIncomplete(false); // reset form incomplete error
+    setErrors({});
+    setFormIncomplete(false);
 
     const formattedCity = formatCityName(city);
 
@@ -71,6 +71,8 @@ const CreateGroupForm = () => {
       setFormIncomplete(true);
       return;
     }
+
+    console.log('Submitting group data:', { name, about, type, private: privateGroup, city: formattedCity, state });
 
     const groupResponse = await fetch('/api/groups', {
       method: 'POST',
@@ -90,10 +92,12 @@ const CreateGroupForm = () => {
 
     if (groupResponse.ok) {
       const groupData = await groupResponse.json();
+      console.log('Group created:', groupData);
 
       if (image) {
         const formData = new FormData();
         formData.append('image', image);
+        console.log('Submitting image file:', image);
 
         const imageResponse = await fetch(`/api/uploads`, {
           method: 'POST',
@@ -105,6 +109,7 @@ const CreateGroupForm = () => {
 
         if (imageResponse.ok) {
           const imageData = await imageResponse.json();
+          console.log('Image uploaded:', imageData);
           await fetch(`/api/groups/${groupData.id}/images`, {
             method: 'POST',
             headers: {
@@ -118,6 +123,7 @@ const CreateGroupForm = () => {
           });
         } else {
           const imageErrorData = await imageResponse.json();
+          console.error('Error uploading image:', imageErrorData);
           setErrors((prevErrors) => ({ ...prevErrors, image: imageErrorData.errors.url }));
           return;
         }
@@ -130,6 +136,7 @@ const CreateGroupForm = () => {
         acc[key] = errorData.errors[key].msg;
         return acc;
       }, {});
+      console.error('Error creating group:', formattedErrors);
       setErrors(formattedErrors);
     }
   };

@@ -6,6 +6,8 @@ const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
 router.post('/', upload.single('image'), async (req, res) => {
+  console.log('Received file:', req.file);
+
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: `${Date.now()}_${req.file.originalname}`,
@@ -15,9 +17,10 @@ router.post('/', upload.single('image'), async (req, res) => {
 
   try {
     const data = await s3.upload(params).promise();
+    console.log('File uploaded successfully:', data);
     res.json({ url: data.Location });
   } catch (error) {
-    console.error(error);
+    console.error('Error uploading file:', error);
     res.status(500).json({ error: 'Error uploading file' });
   }
 });
