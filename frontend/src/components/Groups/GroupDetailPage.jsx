@@ -19,17 +19,22 @@ const GroupDetailPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/api/groups/${groupId}`)
-      .then(response => response.json())
-      .then(data => {
+    const fetchGroupData = async () => {
+      try {
+        const response = await fetch(`/api/groups/${groupId}`);
+        const data = await response.json();
         if (data) {
           console.log('Group data fetched:', data);
           setGroup(data);
         } else {
           setError('Group not found');
         }
-      })
-      .catch(err => setError(err.message));
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchGroupData();
   }, [groupId]);
 
   const handleDelete = async () => {
@@ -73,7 +78,7 @@ const GroupDetailPage = () => {
       <div className='section2-group-detail-container'>
         {group.GroupImages && group.GroupImages.length > 0 ? (
           <img
-            src={group.GroupImages[0].url}
+            src={group.GroupImages[group.GroupImages.length - 1].url} // Display the most recent image
             alt="Group Thumbnail"
             className="group-detail-image"
             onError={(e) => e.target.src = '/images/img.png'} // Fallback image
