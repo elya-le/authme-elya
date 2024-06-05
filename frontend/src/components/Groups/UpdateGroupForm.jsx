@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-const states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
-
 const UpdateGroupForm = () => {
   const { groupId } = useParams();
   const navigate = useNavigate();
@@ -14,9 +12,12 @@ const UpdateGroupForm = () => {
   const [privateGroup, setPrivateGroup] = useState(false);
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [errors, setErrors] = useState([]);
+  const [image, setImage] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [csrfToken, setCsrfToken] = useState('');
   const [isOwner, setIsOwner] = useState(false);
+
+  const states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
 
   const formatCityName = (city) => {
     if (city.length === 3) {
@@ -40,22 +41,47 @@ const UpdateGroupForm = () => {
         setPrivateGroup(data.private);
         setCity(data.city);
         setState(data.state);
-        setImageUrl(data.previewImage || '');
       })
       .catch(err => setErrors([err.message]));
+
+    fetch('/api/csrf/restore', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setCsrfToken(data['XSRF-Token']);
+      })
+      .catch((error) => {
+        console.error('Error fetching CSRF token:', error);
+      });
+
   }, [groupId, currentUser, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const formattedCity = formatCityName(city);
-    
-    const csrfToken = document.cookie.split('XSRF-TOKEN=')[1]; // Get CSRF token from cookie
-    
-    const response = await fetch(`/api/groups/${groupId}`, {
+
+    const newErrors = {};
+
+    if (!name) newErrors.name = 'Name is required';
+    if (!about || about.length < 30) newErrors.about = 'Description needs 30 or more characters';
+    if (!formattedCity) newErrors.city = 'City is required';
+    if (!state) newErrors.state = 'State is required';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    console.log('Submitting group data:', { name, about, type, private: privateGroup, city: formattedCity, state });
+
+    const groupResponse = await fetch(`/api/groups/${groupId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'XSRF-Token': csrfToken, // Add CSRF token to the headers
+        'CSRF-Token': csrfToken,
       },
       body: JSON.stringify({
         name,
@@ -64,21 +90,62 @@ const UpdateGroupForm = () => {
         private: privateGroup,
         city: formattedCity,
         state,
-        previewImage: imageUrl,
       }),
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      navigate(`/groups/${data.id}`);
+    if (groupResponse.ok) {
+      const groupData = await groupResponse.json();
+      console.log('Group updated:', groupData);
+
+      if (image) {
+        const formData = new FormData();
+        formData.append('image', image);
+        console.log('Submitting image file:', image);
+
+        const imageResponse = await fetch(`/api/uploads`, {
+          method: 'POST',
+          headers: {
+            'CSRF-Token': csrfToken,
+          },
+          body: formData,
+        });
+
+        if (imageResponse.ok) {
+          const imageData = await imageResponse.json();
+          console.log('Image uploaded:', imageData);
+          await fetch(`/api/groups/${groupData.id}/images`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'CSRF-Token': csrfToken,
+            },
+            body: JSON.stringify({
+              url: imageData.url,
+              preview: true,
+            }),
+          });
+        } else {
+          const imageErrorData = await imageResponse.json();
+          console.error('Error uploading image:', imageErrorData);
+          setErrors((prevErrors) => ({ ...prevErrors, image: imageErrorData.errors.url }));
+          return;
+        }
+      }
+
+      navigate(`/groups/${groupData.id}`);
     } else {
-      const errorData = await response.json();
-      setErrors(Object.values(errorData.errors));
+      const errorData = await groupResponse.json();
+      const formattedErrors = Object.keys(errorData.errors).reduce((acc, key) => {
+        acc[key] = errorData.errors[key].msg;
+        return acc;
+      }, {});
+      console.error('Error updating group:', formattedErrors);
+      setErrors(formattedErrors);
     }
   };
 
   if (!isOwner) {
-    return null; // Optionally, you could display a loading spinner or message here
+    return null;
   }
 
   return (
@@ -166,13 +233,11 @@ const UpdateGroupForm = () => {
 
         <div className='section7-create-group-image'>
           <hr />
-          <label>Please add an image URL for your group below:</label><br />
-          {errors.imageUrl && <p className='field-error'>{errors.imageUrl}</p>}
+          <label>Please add an image for your group below:</label><br />
+          {errors.image && <p className='field-error'>{errors.image}</p>}
           <input
-            type='text'
-            placeholder='Image URL'
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
+            type='file'
+            onChange={(e) => setImage(e.target.files[0])}
           />
         </div>
 
