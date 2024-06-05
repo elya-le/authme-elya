@@ -76,18 +76,12 @@ const GroupDetailPage = () => {
         <Link to='/groups' className='breadcrumb-text'>Groups</Link>
       </div>
       <div className='section2-group-detail-container'>
-        {group.GroupImages && group.GroupImages.length > 0 ? (
+        {group.GroupImages && group.GroupImages.length > 0 && (
           <img
             src={`${group.GroupImages[group.GroupImages.length - 1].url}?${new Date().getTime()}`} // add timestamp to URL
             alt="Group Thumbnail"
             className="group-detail-image"
-            onError={(e) => e.target.src = '/images/img.png'} // fallback image
-          />
-        ) : (
-          <img
-            src='/images/img.png'
-            alt="Default Group"
-            className="group-detail-image"
+            onError={(e) => e.target.src = ''} // Remove image on error
           />
         )}
         <div className="group-detail-info-container">
@@ -134,15 +128,13 @@ const GroupDetailPage = () => {
                 <Link to={`/events/${event.id}`} key={event.id} className='event-card-link'>
                   <div className='event-card-top'>
                     <div className='event-card-image'>
-                      {event.EventImages && event.EventImages.length > 0 ? (
+                      {event.EventImages && event.EventImages.length > 0 && (
                         <img
-                          src={event.EventImages[0].url}
+                          src={`${event.EventImages[0].url}?${new Date().getTime()}`} // add timestamp to URL
                           alt={`${event.name}`}
                           className='event-card-thumbnail'
-                          onError={(e) => e.target.src = '/images/img.png'} // Fallback image
-                        /> 
-                      ) : (
-                        <img src='/images/img.png' alt={`${event.name} Image`} className='event-card-thumbnail' /> 
+                          onError={(e) => e.target.src = ''} // Remove image on error
+                        />
                       )}
                     </div>
                     <div className='event-card-details'>
@@ -181,15 +173,13 @@ const GroupDetailPage = () => {
                 <Link to={`/events/${event.id}`} key={event.id} className="event-card-link">
                   <div className='event-card-top'>
                     <div className='event-card-image'>
-                    {event.EventImages && event.EventImages.length > 0 ? (
+                      {event.EventImages && event.EventImages.length > 0 && (
                         <img
-                          src={event.EventImages[0].url}
+                          src={`${event.EventImages[0].url}?${new Date().getTime()}`} // add timestamp to URL
                           alt={`${event.name}`}
                           className='event-card-thumbnail'
-                          onError={(e) => e.target.src = '/images/img.png'} // Fallback image
-                        /> 
-                      ) : (
-                        <img src='/images/img.png' alt={`${event.name} Image`} className='event-card-thumbnail' /> 
+                          onError={(e) => e.target.src = ''} // Remove image on error
+                        />
                       )}
                     </div>
                     <div className='event-card-details'>
