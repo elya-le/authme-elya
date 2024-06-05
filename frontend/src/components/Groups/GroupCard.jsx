@@ -3,7 +3,7 @@ import './GroupCard.css';
 
 const GroupCard = ({ group }) => {
   const imageUrl = group.GroupImages && group.GroupImages.length > 0
-    ? group.GroupImages[group.GroupImages.length - 1].url
+    ? `${group.GroupImages[group.GroupImages.length - 1].url}?${new Date().getTime()}` // add timestamp to URL
     : '/public/images/img.png'; 
 
   const handleImageError = (e) => {

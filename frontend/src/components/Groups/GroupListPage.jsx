@@ -49,7 +49,7 @@ const GroupListPage = () => {
                 <div className="group-image">
                   {group.GroupImages && group.GroupImages.length > 0 ? (
                     <img
-                      src={group.GroupImages[group.GroupImages.length - 1].url} // display the most recent image
+                      src={`${group.GroupImages[group.GroupImages.length - 1].url}?${new Date().getTime()}`} // add timestamp to URL
                       alt="Group Thumbnail"
                       className='group-card-thumbnail'
                       onError={handleImageError} // updated onError handler
