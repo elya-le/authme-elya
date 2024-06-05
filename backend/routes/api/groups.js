@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Group, User, GroupImage, Venue, Event, Attendance, Membership } = require('../../db/models');
+const { Group, User, GroupImage, Venue, Event, EventImage, Attendance, Membership } = require('../../db/models'); // Include EventImage model
 const { check, validationResult } = require('express-validator');
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { sequelize } = require('../../db/models');
@@ -101,12 +101,19 @@ router.get('/:groupId', async (req, res) => {
         { 
           model: Event, 
           as: 'Events', 
-          include: [{ 
-            model: Venue, 
-            as: 'Venue', 
-            attributes: ['address', 'city', 'state']
-          }],
-          attributes: ['id', 'name', 'type', 'startDate', 'endDate', 'previewImage', 'description'] 
+          include: [
+            { 
+              model: Venue, 
+              as: 'Venue', 
+              attributes: ['address', 'city', 'state']
+            },
+            {
+              model: EventImage, // Include EventImage model
+              as: 'EventImages',
+              attributes: ['id', 'url', 'preview']
+            }
+          ],
+          attributes: ['id', 'name', 'type', 'startDate', 'endDate', 'description'] 
         }
       ]
     });

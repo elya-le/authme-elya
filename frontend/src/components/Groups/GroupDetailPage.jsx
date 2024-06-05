@@ -128,12 +128,18 @@ const GroupDetailPage = () => {
                 <Link to={`/events/${event.id}`} key={event.id} className='event-card-link'>
                   <div className='event-card-top'>
                     <div className='event-card-image'>
-                      {event.EventImages && event.EventImages.length > 0 && (
+                      {event.EventImages && event.EventImages.length > 0 ? (
                         <img
                           src={`${event.EventImages[0].url}?${new Date().getTime()}`} // add timestamp to URL
-                          alt={`${event.name}`}
-                          className='event-card-thumbnail'
-                          onError={(e) => e.target.src = ''} // Remove image on error
+                          alt={event.name}
+                          className='event-image'
+                          onError={(e) => e.target.src = '/images/default-event.png'}
+                        />
+                      ) : (
+                        <img
+                          src='/images/default-event.png'
+                          alt='Default Event'
+                          className='event-image'
                         />
                       )}
                     </div>
@@ -173,12 +179,18 @@ const GroupDetailPage = () => {
                 <Link to={`/events/${event.id}`} key={event.id} className="event-card-link">
                   <div className='event-card-top'>
                     <div className='event-card-image'>
-                      {event.EventImages && event.EventImages.length > 0 && (
+                      {event.EventImages && event.EventImages.length > 0 ? (
                         <img
                           src={`${event.EventImages[0].url}?${new Date().getTime()}`} // add timestamp to URL
-                          alt={`${event.name}`}
-                          className='event-card-thumbnail'
-                          onError={(e) => e.target.src = ''} // Remove image on error
+                          alt={event.name}
+                          className='event-image'
+                          onError={(e) => e.target.src = '/images/default-event.png'}
+                        />
+                      ) : (
+                        <img
+                          src='/images/default-event.png'
+                          alt='Default Event'
+                          className='event-image'
                         />
                       )}
                     </div>
@@ -217,3 +229,4 @@ const GroupDetailPage = () => {
 };
 
 export default GroupDetailPage;
+
