@@ -19,17 +19,29 @@ const EventDetailPage = () => {
   const currentUser = useSelector(state => state.session.user);
 
   useEffect(() => {
-    fetch(`/api/events/${eventId}`)
-      .then(response => response.json())
-      .then(data => {
+    const fetchEventData = async () => {
+      try {
+        const response = await fetch(`/api/events/${eventId}`);
+        const data = await response.json();
         if (data) {
+          console.log('Event data fetched:', data);
+          if (data.EventImages && data.EventImages.length > 0) {
+            console.log('Event images:', data.EventImages);
+          } else {
+            console.log('No images found for this event.');
+          }
           setEvent(data);
         } else {
           setError('Event not found');
         }
-      })
-      .catch(err => setError(err.message));
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+  
+    fetchEventData();
   }, [eventId]);
+  
 
   if (error) {
     return <div>Error: {error}</div>;

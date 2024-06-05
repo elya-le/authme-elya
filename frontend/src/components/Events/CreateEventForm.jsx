@@ -65,7 +65,7 @@ const CreateEventForm = () => {
       setCapacity('');
       setStartDate('');
       setEndDate('');
-      setImage(null); // Reset image
+      setImage(null); 
       setDescription('');
       setVenueId('');
       setVenueAddress('');
@@ -90,17 +90,15 @@ const CreateEventForm = () => {
     setVenueAddress('123 Test St');
     setVenueCity('Test City');
     setVenueState('NY');
-    // setVenueLat('34.0522');
-    // setVenueLng('-118.2437');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
     setFormIncomplete(false);
-
+  
     const newErrors = {};
-
+  
     if (!name) newErrors.name = 'Name is required';
     if (!type) newErrors.type = 'Event type is required';
     if (!isPrivate) newErrors.isPrivate = 'Visibility is required';
@@ -114,16 +112,16 @@ const CreateEventForm = () => {
     if (type === 'In person' && (!venueAddress || !venueCity || !venueState)) {
       newErrors.venueAddress = 'Venue address, city, and state are required for in-person events';
     }
-
+  
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       setFormIncomplete(true);
       return;
     }
-
+  
     try {
       let newVenueId = venueId;
-
+  
       if (type === 'In person') {
         const venueResponse = await fetch('/api/venues', {
           method: 'POST',
@@ -140,7 +138,7 @@ const CreateEventForm = () => {
             lng: venueLng ? parseFloat(venueLng) : null,
           }),
         });
-
+  
         if (venueResponse.ok) {
           const venueData = await venueResponse.json();
           newVenueId = venueData.id;
@@ -150,7 +148,7 @@ const CreateEventForm = () => {
           return;
         }
       }
-
+  
       const eventPayload = {
         name,
         type,
@@ -162,9 +160,9 @@ const CreateEventForm = () => {
         description,
         venueId: type === 'In person' ? newVenueId : null,
       };
-
+  
       console.log('Event Payload:', eventPayload);
-
+  
       const eventResponse = await fetch(`/api/groups/${groupId}/events`, {
         method: 'POST',
         headers: {
@@ -173,14 +171,17 @@ const CreateEventForm = () => {
         },
         body: JSON.stringify(eventPayload),
       });
-
+  
       if (eventResponse.ok) {
         const eventData = await eventResponse.json();
-
+        console.log('Event created:', eventData);
+  
         if (image) {
           const formData = new FormData();
           formData.append('image', image);
-
+  
+          console.log('Submitting image file:', image);
+  
           const imageResponse = await fetch(`/api/uploads`, {
             method: 'POST',
             headers: {
@@ -188,9 +189,11 @@ const CreateEventForm = () => {
             },
             body: formData,
           });
-
+  
           if (imageResponse.ok) {
             const imageData = await imageResponse.json();
+            console.log('Image uploaded:', imageData);
+  
             const imageAssociationResponse = await fetch(`/api/events/${eventData.id}/images`, {
               method: 'POST',
               headers: {
@@ -202,11 +205,14 @@ const CreateEventForm = () => {
                 preview: true,
               }),
             });
-
-            if (!imageAssociationResponse.ok) {
+  
+            if (imageAssociationResponse.ok) {
+              console.log('Image associated with event');
+              navigate(`/events/${eventData.id}`);
+            } else {
               const imageAssociationErrorData = await imageAssociationResponse.json();
               console.log('Image Association Error:', imageAssociationErrorData);
-              setErrors((prevErrors) => ({ ...prevErrors, image: imageAssociationErrorData.errors.url }));
+              setErrors((prevErrors) => ({ ...prevErrors, image: imageAssociationErrorData.message }));
               return;
             }
           } else {
@@ -215,9 +221,9 @@ const CreateEventForm = () => {
             setErrors((prevErrors) => ({ ...prevErrors, image: imageErrorData.errors.url }));
             return;
           }
+        } else {
+          navigate(`/events/${eventData.id}`);
         }
-
-        navigate(`/events/${eventData.id}`);
       } else {
         const eventErrorData = await eventResponse.json();
         console.log('Event Creation Error:', eventErrorData);
@@ -235,6 +241,7 @@ const CreateEventForm = () => {
       setErrors({ message: 'Network or server error: ' + error.message });
     }
   };
+  
 
   return (
     <div className='form-container'>

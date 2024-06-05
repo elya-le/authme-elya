@@ -6,6 +6,7 @@ import '../../Main.css';
 const GroupListPage = () => {
   const [groups, setGroups] = useState([]); 
   const [error, setError] = useState(null);
+
   useEffect(() => {
     fetch('/api/groups')
       .then(response => response.json())
@@ -18,9 +19,16 @@ const GroupListPage = () => {
       })
       .catch(err => setError(err.message));
   }, []);
+
+  const handleImageError = (e) => {
+    e.target.src = '/images/img.png'; // Set fallback image only once
+    e.target.onerror = null; // Remove onError handler to prevent infinite loop
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
+
   return (
     <div className='list-page'>
       <div className='list-section1'>
@@ -44,7 +52,7 @@ const GroupListPage = () => {
                       src={group.GroupImages[0].url}
                       alt="Group Thumbnail"
                       className='group-card-thumbnail'
-                      onError={(e) => e.target.src = '/images/img.png'} // Fallback image
+                      onError={handleImageError} // Updated onError handler
                     />
                   ) : (
                     <img

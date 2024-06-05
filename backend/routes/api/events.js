@@ -13,7 +13,7 @@ router.use(restoreUser);
 
 const authenticated = [restoreUser, requireAuth];
 
-// middleware to check if the current user can edit the event
+// Middleware to check if the current user can edit the event
 const checkEventPermission = async (req, res, next) => {
   const { eventId } = req.params;
   const event = await Event.findByPk(eventId, {
@@ -308,31 +308,38 @@ router.post('/:groupId/events', authenticated, validateEvent, handleValidationEr
 
 // POST /api/events/:eventId/images - add an image to an event
 router.post('/:eventId/images', upload.single('image'), restoreUser, requireAuth, async (req, res) => {
-  const { eventId } = req.params;
+  console.log('Event ID:', req.params.eventId);
+  console.log('File received for upload:', req.file);
 
   if (!req.file) {
+    console.error('No file uploaded');
     return res.status(400).json({ message: 'No file uploaded' });
   }
 
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME, // your bucket name
+    Bucket: process.env.AWS_BUCKET_NAME,
     Key: `${Date.now()}_${req.file.originalname}`,
     Body: req.file.buffer,
     ContentType: req.file.mimetype,
   };
 
   try {
-    const event = await Event.findByPk(eventId);
+    const event = await Event.findByPk(req.params.eventId);
     if (!event) {
+      console.error('Event not found');
       return res.status(404).json({ message: "Event couldn't be found" });
     }
 
     const data = await s3.upload(params).promise();
+    console.log('File uploaded to S3:', data);
+
     const image = await EventImage.create({
-      eventId,
+      eventId: req.params.eventId,
       url: data.Location,
-      preview: true // Assuming you want all uploaded images to be previews
+      preview: true
     });
+
+    console.log('Image associated with event:', image);
 
     return res.status(200).json(image);
   } catch (error) {
