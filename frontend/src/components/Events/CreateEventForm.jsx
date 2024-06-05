@@ -182,7 +182,7 @@ const CreateEventForm = () => {
   
           console.log('Submitting image file:', image);
   
-          const imageResponse = await fetch(`/api/uploads`, {
+          const imageResponse = await fetch(`/api/event-uploads`, {
             method: 'POST',
             headers: {
               'CSRF-Token': csrfToken,
@@ -242,7 +242,7 @@ const CreateEventForm = () => {
     }
   };
   
-
+  
   return (
     <div className='form-container'>
       <form onSubmit={handleSubmit}>

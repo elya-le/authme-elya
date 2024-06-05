@@ -234,6 +234,54 @@ const validateEvent = [
   check('venueId', 'Venue ID must be an integer').isInt()
 ];
 
+router.post('/', async (req, res) => {
+  const { name, date, imageUrl } = req.body;
+
+  try {
+    const newEvent = await Event.create({ name, date, imageUrl });
+    res.status(201).json(newEvent);
+  } catch (error) {
+    console.error('Error creating event:', error);
+    res.status(500).json({ error: 'Error creating event' });
+  }
+});
+// POST - route to associate image with event
+router.post('/:eventId/images', async (req, res) => {
+  const { eventId } = req.params;
+  const { url, preview } = req.body;
+
+  console.log('Event ID:', eventId);
+  console.log('URL:', url);
+  console.log('Preview:', preview);
+
+  if (!url) {
+    console.error('No URL provided');
+    return res.status(400).json({ message: 'No URL provided' });
+  }
+
+  try {
+    const event = await Event.findByPk(eventId);
+    if (!event) {
+      console.error('Event not found');
+      return res.status(404).json({ message: "Event couldn't be found" });
+    }
+
+    const image = await EventImage.create({
+      eventId,
+      url,
+      preview: !!preview
+    });
+
+    console.log('Image associated with event:', image);
+
+    return res.status(201).json(image);
+  } catch (error) {
+    console.error('Failed to add image to event:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
 
 // POST /api/events/:eventId/attendance - attend an event based on event id
 router.post('/:eventId/attendance', requireAuth, async (req, res) => {
