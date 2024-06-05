@@ -82,7 +82,7 @@ const CreateEventForm = () => {
     setName('Test Event Name');
     setType('In person');
     setIsPrivate('false');
-    setPrice('10');
+    setPrice('0');
     setCapacity('50');
     setStartDate('2024-06-10T18:00');
     setEndDate('2024-06-10T20:00');
