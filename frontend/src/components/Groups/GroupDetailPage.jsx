@@ -78,7 +78,7 @@ const GroupDetailPage = () => {
       <div className='section2-group-detail-container'>
         {group.GroupImages && group.GroupImages.length > 0 ? (
           <img
-            src={group.GroupImages[group.GroupImages.length - 1].url} // display the most recent image
+            src={`${group.GroupImages[group.GroupImages.length - 1].url}?${new Date().getTime()}`} // add timestamp to URL
             alt="Group Thumbnail"
             className="group-detail-image"
             onError={(e) => e.target.src = '/images/img.png'} // fallback image
