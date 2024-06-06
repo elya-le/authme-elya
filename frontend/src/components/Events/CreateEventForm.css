@@ -1,0 +1,48 @@
+.section-create-event-header,
+.section-create-event,
+.section-create-event-submit {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.section-create-event-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.section-create-event-row .section-create-event {
+  flex: 1;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="datetime-local"],
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.create-event-button {
+  font-size: 18px;
+  width: 100%;
+  padding: 10px;
+  /* background-color: #f64060; */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+
+.create-event-button.grey {
+  background-color: grey;
+  color: white;
+  cursor: not-allowed;
+}
