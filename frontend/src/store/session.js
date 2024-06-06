@@ -61,6 +61,18 @@ export const logout = () => async (dispatch) => {
     method: 'DELETE'
   });
   dispatch(removeUser());
+
+  // Fetch CSRF token again after logging out
+  const getCsrfToken = async () => {
+    const response = await csrfFetch('/api/csrf/restore', {
+      method: 'GET',
+      credentials: 'include'
+    });
+    const data = await response.json();
+    document.cookie = `XSRF-TOKEN=${data['XSRF-Token']}`;
+  };
+  await getCsrfToken();
+
   return response;
 };
 
@@ -76,3 +88,4 @@ const sessionReducer = (state = initialState, action) => {
 };
 
 export default sessionReducer;
+

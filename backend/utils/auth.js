@@ -3,7 +3,6 @@ const { jwtConfig } = require('../config');
 const { secret, expiresIn } = jwtConfig;
 const { User } = require('../db/models');
 
-
 const setTokenCookie = (res, user) => {
   const safeUser = {
     id: user.id,
@@ -28,45 +27,46 @@ const setTokenCookie = (res, user) => {
 
 // middleware
 const restoreUser = async (req, res, next) => {
-    const { token } = req.cookies;
+  const { token } = req.cookies;
 
-    if (!token) {
-        console.log('No token found');
-        return next();
+  if (!token) {
+    console.log('No token found');
+    return next();
+  }
+
+  jwt.verify(token, secret, async (err, jwtPayload) => {
+    if (err) {
+      console.log('Error verifying token:', err);
+      return next();
     }
 
-    jwt.verify(token, secret, async (err, jwtPayload) => {
-        if (err) {
-            console.log('Error verifying token:', err);
-            return next();
-        }
+    try {
+      const { id } = jwtPayload.data;
+      const user = await User.findByPk(id);
+      if (user) {
+        req.user = user;
+      } else {
+        console.log('No user found for token');
+      }
+    } catch (error) {
+      console.error('Error finding user:', error);
+      return next();
+    }
 
-        try {
-            const { id } = jwtPayload.data;
-            const user = await User.findByPk(id);
-            if (user) {
-                req.user = user;
-            } else {
-                console.log('No user found for token');
-            }
-        } catch (error) {
-            console.error('Error finding user:', error);
-            return next();
-        }
-
-        return next();
-    });
+    return next();
+  });
 };
 
 // if there is no current user, return an error
 const requireAuth = (req, res, next) => {
-    if (req.user) {
-        return next();
-    }
+  if (req.user) {
+    return next();
+  }
 
-    res.status(401).json({
-        message: 'Authentication required'
-    });
+  res.status(401).json({
+    message: 'Authentication required'
+  });
 };
 
 module.exports = { setTokenCookie, restoreUser, requireAuth };
+

@@ -37,7 +37,7 @@ function SignupFormModal() {
     return re.test(String(email).toLowerCase());
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateEmail(email)) {
       setErrors({ email: 'The provided email is invalid' });
@@ -59,7 +59,7 @@ function SignupFormModal() {
       });
   };
 
-  const loginDemoUser = (e) => {
+  const loginDemoUser = async (e) => {
     e.preventDefault();
     const demoCredential = 'demo@user.io';
     const demoPassword = 'password';
@@ -72,8 +72,6 @@ function SignupFormModal() {
         const data = await res.json();
         if (data && data.errors) {
           setErrors(data.errors); // set errors from response
-        } else {
-          setErrors({ message: "The provided credentials were invalid" }); // set custom error message
         }
       });
   };
@@ -152,4 +150,3 @@ function SignupFormModal() {
 }
 
 export default SignupFormModal;
-

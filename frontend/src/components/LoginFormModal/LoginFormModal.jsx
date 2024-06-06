@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
-import { fetchWithCsrf } from '../../utils/fetchWithCsrf'; // Correct import path
 import './LoginFormModal.css';
 
 function LoginFormModal() {
@@ -21,42 +20,36 @@ function LoginFormModal() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({}); // clear previous errors
-    try {
-      const response = await fetchWithCsrf('/api/session', {
-        method: 'POST',
-        body: JSON.stringify({ credential, password })
-      });
-      if (response.user) {
-        dispatch(sessionActions.setSession(response.user));
+    return dispatch(sessionActions.login({ credential, password }))
+      .then(() => {
         closeModal(); // close modal on successful login
         window.location.href = window.location.pathname; // hard refresh without hash fragment
-      } else if (response.errors) {
-        setErrors(response.errors); // set errors from response
-      }
-    } catch (error) {
-      setErrors({ message: 'The provided credentials were invalid' }); // set custom error message
-    }
+      })
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors); // set errors from response
+        } else {
+          setErrors({ message: 'The provided credentials were invalid' }); // set custom error message
+        }
+      });
   };
 
   const loginDemoUser = async (e) => {
     e.preventDefault();
     const demoCredential = 'demo@user.io';
     const demoPassword = 'password';
-    try {
-      const response = await fetchWithCsrf('/api/session', {
-        method: 'POST',
-        body: JSON.stringify({ credential: demoCredential, password: demoPassword })
-      });
-      if (response.user) {
-        dispatch(sessionActions.setSession(response.user));
+    return dispatch(sessionActions.login({ credential: demoCredential, password: demoPassword }))
+      .then(() => {
         closeModal();
         window.location.href = window.location.pathname; // hard refresh without hash fragment
-      } else if (response.errors) {
-        setErrors(response.errors);
-      }
-    } catch (error) {
-      setErrors({ message: 'The provided credentials were invalid' });
-    }
+      })
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
   };
 
   return (
@@ -93,3 +86,5 @@ function LoginFormModal() {
 }
 
 export default LoginFormModal;
+
+

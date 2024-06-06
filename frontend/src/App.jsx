@@ -14,25 +14,27 @@ import CreateEventForm from './components/Events/CreateEventForm';
 import UpdateEventForm from './components/Events/UpdateEventForm';
 import * as sessionActions from './store/session';
 
-// Fetch CSRF token and set it in a cookie
-const getCsrfToken = async () => {
-  const response = await fetch('/api/csrf/restore', {
-    method: 'GET',
-    credentials: 'include'
-  });
-  const data = await response.json();
-  document.cookie = `XSRF-TOKEN=${data['XSRF-Token']}`;
-};
-
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
+    const getCsrfToken = async () => {
+      const response = await fetch('/api/csrf/restore', {
+        method: 'GET',
+        credentials: 'include'
+      });
+      const data = await response.json();
+      document.cookie = `XSRF-TOKEN=${data['XSRF-Token']}`;
+    };
+
+    getCsrfToken(); // Fetch CSRF token on app initialization
+
     dispatch(sessionActions.restoreUser()).then(() => {
       setIsLoaded(true);
     });
-    getCsrfToken(); // Fetch CSRF token on app initialization
   }, [dispatch]);
+
   return (
     <>
       <Navigation isLoaded={isLoaded} />
@@ -45,46 +47,16 @@ const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
-      {
-        path: '/',
-        element: <LandingPage />
-      },
-      {
-        path: 'signup',
-        element: <SignupFormModal />
-      },
-      {
-        path: 'groups',
-        element: <GroupListPage />
-      },
-      {
-        path: 'groups/:groupId',
-        element: <GroupDetailPage />
-      },
-      {
-        path: 'groups/:groupId/update',
-        element: <UpdateGroupForm />
-      },
-      {
-        path: 'groups/:groupId/events',
-        element: <CreateEventForm />
-      },
-      {
-        path: 'events',
-        element: <EventListPage />
-      },
-      {
-        path: 'events/:eventId',
-        element: <EventDetailPage />
-      },
-      {
-        path: 'events/:eventId/update',
-        element: <UpdateEventForm />
-      },
-      {
-        path: 'groups/new',
-        element: <CreateGroupPage />
-      }
+      { path: '/', element: <LandingPage /> },
+      { path: 'signup', element: <SignupFormModal /> },
+      { path: 'groups', element: <GroupListPage /> },
+      { path: 'groups/:groupId', element: <GroupDetailPage /> },
+      { path: 'groups/:groupId/update', element: <UpdateGroupForm /> },
+      { path: 'groups/:groupId/events', element: <CreateEventForm /> },
+      { path: 'events', element: <EventListPage /> },
+      { path: 'events/:eventId', element: <EventDetailPage /> },
+      { path: 'events/:eventId/update', element: <UpdateEventForm /> },
+      { path: 'groups/new', element: <CreateGroupPage /> }
     ]
   }
 ]);
