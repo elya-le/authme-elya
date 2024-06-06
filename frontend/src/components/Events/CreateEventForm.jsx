@@ -78,19 +78,19 @@ const CreateEventForm = () => {
     };
   }, [groupId]);
 
-  const handleAutoPopulate = () => {
-    setName('EVENT - test name');
-    setType('In person');
-    setIsPrivate('false');
-    setPrice('0');
-    setCapacity('50');
-    setStartDate('2024-06-10T18:00');
-    setEndDate('2024-06-10T20:00');
-    setDescription('This is a sample event description with more than 30 characters.');
-    setVenueAddress('123 Test St');
-    setVenueCity('Test City');
-    setVenueState('NY');
-  };
+  // const handleAutoPopulate = () => {
+  //   setName('Test Event Name');
+  //   setType('In person');
+  //   setIsPrivate('false');
+  //   setPrice('0');
+  //   setCapacity('50');
+  //   setStartDate('2024-06-10T18:00');
+  //   setEndDate('2024-06-10T20:00');
+  //   setDescription('This is a sample event description with more than 30 characters.');
+  //   setVenueAddress('Central Park');
+  //   setVenueCity('New York');
+  //   setVenueState('NY');
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -241,16 +241,25 @@ const CreateEventForm = () => {
       setErrors({ message: 'Network or server error: ' + error.message });
     }
   };
-  
+
+  const isFormValid = () => {
+    if (!name || !type || !isPrivate || !price || !capacity || !startDate || !endDate || !description || description.length < 30 || description.length > 2000) {
+      return false;
+    }
+    if (type === 'In person' && (!venueAddress || !venueCity || !venueState)) {
+      return false;
+    }
+    return true;
+  };
   
   return (
     <div className='form-container'>
       <form onSubmit={handleSubmit}>
         <div className='section-create-event-header'>
           <h2>Create a new event for {groupName}</h2> 
-          <button type="button" className="auto-populate-button" onClick={handleAutoPopulate}>
+          {/* <button type="button" className="auto-populate-button" onClick={handleAutoPopulate}>
             Auto populate this form for testing
-          </button>
+          </button> */}
         </div><br></br>
         <div className='section-create-event'>
           <label>What is the name of your event?</label><br />
@@ -407,15 +416,13 @@ const CreateEventForm = () => {
           )}
           <button
             type='submit'
-            className={`create-event-button ${!name || !type || !isPrivate || !price || !capacity || !startDate || !endDate || !description || description.length < 30 || description.length > 2000 || (type === 'In person' && (!venueAddress || !venueCity || !venueState)) ? 'grey' : ''}`}
+            className={`create-event-button ${isFormValid() ? 'red' : ''}`}
           >
             Create Event
           </button>
         </div>
         {errors.message && <p className='field-error'>{errors.message}</p>}
-        {errors && Object.keys(errors).map((key, idx) => (
-          <p key={idx} className='field-error'>{errors[key]}</p>
-        ))}
+
       </form>
     </div>
   );

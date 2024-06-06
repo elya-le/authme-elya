@@ -110,10 +110,10 @@ a {
 }
 
 .section3-start-link-enabled:hover {
-  margin: 15px 0px 0px 0px;
+
   font-size: 20px;
   font-weight: bold;
-  color:#049cac;
+
   text-decoration: underline;
 }
 
