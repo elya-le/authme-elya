@@ -55,9 +55,14 @@ const EventListPage = () => {
               <div className='event-card-top'>
                 <div className='event-card-image'>
                   {event.EventImages && event.EventImages.length > 0 ? (
-                    <img src={event.EventImages[0].url} alt={`${event.name} Thumbnail`} className='event-card-thumbnail' />
-                  ) : (
-                    <img src='/images/img.png' alt='Default Event' className='event-card-thumbnail' />
+                    <img
+                      src={`${event.EventImages[event.EventImages.length - 1].url}?${new Date().getTime()}`} // add timestamp to URL
+                      alt={`${event.name}`}
+                      className='event-card-thumbnail'
+                      onError={(e) => e.target.src = '/images/img.png'} // fallback image
+                    /> 
+                    ) : (
+                    <img src='/images/img.png' alt={`${event.name} Image`} className='event-detail-image' /> 
                   )}
                 </div>
                   <div className='event-card-details'>

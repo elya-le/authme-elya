@@ -87,9 +87,9 @@ const GroupDetailPage = () => {
         <div className="group-detail-info-container">
           <h1>{group.name}</h1>
           <div className='group-card-info'>
-            <p><FiMapPin /> {group.city}, {group.state}</p><br />
-            <p><BsCalendar4Event /> {group.numEvents} events &middot;{" "} {group.private ? 'Private' : 'Public'}</p><br />
-            <p><FaRegUser /> Organized by: <b> {group.Organizer.firstName} {group.Organizer.lastName} </b></p>
+            <p><FiMapPin size={30} /> {group.city}, {group.state}</p><br />
+            <p><BsCalendar4Event size={30} /> {group.numEvents} events &middot;{" "} {group.private ? 'Private' : 'Public'}</p><br />
+            <p><FaRegUser size={30} /> Organized by: <b> {group.Organizer.firstName} {group.Organizer.lastName} </b></p>
           </div>
           <div className='group-button-container'>
             {isLoggedIn && !isOrganizer && (
@@ -130,7 +130,7 @@ const GroupDetailPage = () => {
                     <div className='event-card-image'>
                       {event.EventImages && event.EventImages.length > 0 ? (
                         <img
-                          src={`${event.EventImages[0].url}?${new Date().getTime()}`} // add timestamp to URL
+                          src={`${event.EventImages[event.EventImages.length - 1].url}?${new Date().getTime()}`} // add timestamp to URL
                           alt={event.name}
                           className='event-card-thumbnail'
                           onError={(e) => e.target.src = '/images/img.png'}
@@ -181,7 +181,7 @@ const GroupDetailPage = () => {
                     <div className='event-card-image'>
                       {event.EventImages && event.EventImages.length > 0 ? (
                         <img
-                          src={`${event.EventImages[0].url}?${new Date().getTime()}`} // add timestamp to URL
+                          src={`${event.EventImages[event.EventImages.length - 1].url}?${new Date().getTime()}`} // add timestamp to URL
                           alt={event.name}
                           className='event-card-thumbnail'
                           onError={(e) => e.target.src = '/images/img.png'}

@@ -106,7 +106,7 @@ router.get('/:eventId', async (req, res) => {
               model: GroupImage,
               as: 'GroupImages',
               attributes: ['id', 'url', 'preview'],
-              order: [['createdAt', 'DESC']] // Add order to get the most recent image first
+              order: [['createdAt', 'DESC']] // add order to get the most recent image first
             }
           ]
         },
@@ -123,7 +123,8 @@ router.get('/:eventId', async (req, res) => {
         {
           model: EventImage,
           as: 'EventImages',
-          attributes: ['id', 'url', 'preview']
+          attributes: ['id', 'url', 'preview'],
+          order: [['createdAt', 'DESC']] // add order to get the most recent image first
         }
       ]
     });
@@ -232,13 +233,32 @@ const validateEvent = [
   check('price', 'Price must be a non-negative number').isFloat({ min: 0 }),
   check('description', 'Description is required').not().isEmpty(),
   check('description', 'Description needs 30 or more characters').isLength({ min: 30 }),
-  check('description', 'Description cannot exceed 2000 characters').isLength({ max: 2000 }), // added max length validation
-  check('startDate', 'Start date must be in the format YYYY-MM-DD HH:mm:ss')
-    .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
-    .custom((value, { req }) => new Date(value) > new Date()),
-  check('endDate', 'End date must be in the format YYYY-MM-DD HH:mm:ss and after start date')
-    .matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)
-    .custom((value, { req }) => new Date(value) > new Date(req.body.startDate)),
+  check('description', 'Description cannot exceed 2000 characters').isLength({ max: 2000 }),
+  check('startDate', 'Start date must be in the format YYYY-MM-DDTHH:mm')
+    .matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/)
+    .custom((value) => {
+      const date = new Date(value);
+      if (isNaN(date.getTime())) {
+        throw new Error('Invalid date format');
+      }
+      if (date <= new Date()) {
+        throw new Error('Start date must be in the future');
+      }
+      return true;
+    }),
+  check('endDate', 'End date must be in the format YYYY-MM-DDTHH:mm and after start date')
+    .matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/)
+    .custom((value, { req }) => {
+      const startDate = new Date(req.body.startDate);
+      const endDate = new Date(value);
+      if (isNaN(endDate.getTime())) {
+        throw new Error('Invalid date format');
+      }
+      if (endDate <= startDate) {
+        throw new Error('End date must be after start date');
+      }
+      return true;
+    }),
   check('venueId', 'Venue ID must be an integer').isInt()
 ];
 

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './CreateEventForm.css';
+import { useSelector } from 'react-redux';
 
 const UpdateEventForm = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
+  const currentUser = useSelector(state => state.session.user);
   const [name, setName] = useState('');
   const [type, setType] = useState('In person');
   const [isPrivate, setIsPrivate] = useState('false');
@@ -22,199 +23,160 @@ const UpdateEventForm = () => {
   const [venueLng, setVenueLng] = useState('');
   const [errors, setErrors] = useState({});
   const [csrfToken, setCsrfToken] = useState('');
-  const [formIncomplete, setFormIncomplete] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+  const [groupName, setGroupName] = useState('');
 
-  const stateAbbreviations = [
-    'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
-    'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
-    'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
-    'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
-    'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-  ];
+  const stateAbbreviations = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
+
+  const formatDateForInput = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
 
   useEffect(() => {
-    fetch('/api/csrf/restore', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setCsrfToken(data['XSRF-Token']);
-      })
-      .catch((error) => {
-        console.error('Error fetching CSRF token:', error);
-      });
-
-    fetch(`/api/events/${eventId}`)
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchEventData = async () => {
+      try {
+        const response = await fetch(`/api/events/${eventId}`);
+        const data = await response.json();
+        if (data.Group.organizerId !== currentUser.id) {
+          navigate('/');
+          return;
+        }
+        setIsOwner(true);
         setName(data.name);
         setType(data.type);
         setIsPrivate(data.private ? 'true' : 'false');
         setPrice(data.price);
         setCapacity(data.capacity);
-        setStartDate(data.startDate.replace(' ', 'T')); // Convert to datetime-local format
-        setEndDate(data.endDate.replace(' ', 'T')); // Convert to datetime-local format
+        setStartDate(formatDateForInput(data.startDate));
+        setEndDate(formatDateForInput(data.endDate));
         setDescription(data.description);
-        if (data.Venue) {
-          setVenueId(data.Venue.id);
-          setVenueAddress(data.Venue.address);
-          setVenueCity(data.Venue.city);
-          setVenueState(data.Venue.state);
-          setVenueLat(data.Venue.lat);
-          setVenueLng(data.Venue.lng);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching event details:', error);
-      });
-  }, [eventId]);
+        setVenueId(data.Venue?.id || '');
+        setVenueAddress(data.Venue?.address || '');
+        setVenueCity(data.Venue?.city || '');
+        setVenueState(data.Venue?.state || '');
+        setVenueLat(data.Venue?.lat || '');
+        setVenueLng(data.Venue?.lng || '');
+        setGroupName(data.Group.name);
+      } catch (err) {
+        setErrors({ message: err.message });
+      }
+    };
+
+    if (currentUser) {
+      fetchEventData();
+    } else {
+      navigate('/');
+    }
+
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await fetch('/api/csrf/restore', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        const data = await response.json();
+        setCsrfToken(data['XSRF-Token']);
+      } catch (error) {
+        console.error('Error fetching CSRF token:', error);
+      }
+    };
+
+    fetchCsrfToken();
+  }, [eventId, currentUser, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
-    setFormIncomplete(false);
 
     const newErrors = {};
-
     if (!name) newErrors.name = 'Name is required';
-    if (!type) newErrors.type = 'Event type is required';
-    if (!isPrivate) newErrors.isPrivate = 'Visibility is required';
-    if (!price) newErrors.price = 'Price is required';
-    if (!capacity) newErrors.capacity = 'Capacity is required';
+    if (!description || description.length < 30) newErrors.description = 'Description needs 30 or more characters';
     if (!startDate) newErrors.startDate = 'Event start is required';
     if (!endDate) newErrors.endDate = 'Event end is required';
-    if (!description) newErrors.description = 'Description is required';
-    if (description.length < 30) newErrors.description = 'Description needs 30 or more characters';
-    if (description.length > 2000) newErrors.description = 'Description cannot exceed 2000 characters';
     if (type === 'In person' && (!venueAddress || !venueCity || !venueState)) {
       newErrors.venueAddress = 'Venue address, city, and state are required for in-person events';
     }
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      setFormIncomplete(true);
       return;
     }
 
-    try {
-      let newVenueId = venueId;
+    const eventPayload = {
+      name,
+      type,
+      private: isPrivate === 'true',
+      price: parseFloat(price),
+      capacity: parseInt(capacity, 10),
+      startDate,
+      endDate,
+      description,
+      venueId: type === 'In person' ? venueId : null,
+    };
 
-      if (type === 'In person') {
-        const venueResponse = await fetch(`/api/venues/${venueId}`, {
-          method: 'PUT',
+    const eventResponse = await fetch(`/api/events/${eventId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'CSRF-Token': csrfToken,
+      },
+      body: JSON.stringify(eventPayload),
+    });
+
+    if (eventResponse.ok) {
+      const eventData = await eventResponse.json();
+      if (image) {
+        const formData = new FormData();
+        formData.append('image', image);
+
+        const imageResponse = await fetch(`/api/event-uploads`, {
+          method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
             'CSRF-Token': csrfToken,
           },
-          body: JSON.stringify({
-            address: venueAddress,
-            city: venueCity,
-            state: venueState,
-            lat: venueLat ? parseFloat(venueLat) : null,
-            lng: venueLng ? parseFloat(venueLng) : null,
-          }),
+          body: formData,
         });
 
-        if (!venueResponse.ok) {
-          const venueErrorData = await venueResponse.json();
-          setErrors(venueErrorData.errors ? venueErrorData.errors : { message: venueErrorData.message });
+        if (imageResponse.ok) {
+          const imageData = await imageResponse.json();
+          await fetch(`/api/events/${eventData.id}/images`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'CSRF-Token': csrfToken,
+            },
+            body: JSON.stringify({
+              url: imageData.url,
+              preview: true,
+            }),
+          });
+        } else {
+          const imageErrorData = await imageResponse.json();
+          setErrors((prevErrors) => ({ ...prevErrors, image: imageErrorData.errors.url }));
           return;
         }
       }
 
-      const formatDateTime = (dateTime) => dateTime.replace('T', ' ');
-
-      const eventPayload = {
-        name,
-        type,
-        private: isPrivate === 'true',
-        price: parseInt(price, 10),
-        capacity: parseInt(capacity, 10),
-        startDate: formatDateTime(startDate),
-        endDate: formatDateTime(endDate),
-        description,
-        venueId: type === 'In person' ? newVenueId : null,
-      };
-
-      console.log('Event Payload:', eventPayload);
-
-      const eventResponse = await fetch(`/api/events/${eventId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'CSRF-Token': csrfToken,
-        },
-        body: JSON.stringify(eventPayload),
-      });
-
-      if (eventResponse.ok) {
-        const eventData = await eventResponse.json();
-
-        if (image) {
-          const formData = new FormData();
-          formData.append('image', image);
-
-          const imageResponse = await fetch(`/api/uploads`, {
-            method: 'POST',
-            headers: {
-              'CSRF-Token': csrfToken,
-            },
-            body: formData,
-          });
-
-          if (imageResponse.ok) {
-            const imageData = await imageResponse.json();
-            const imageAssociationResponse = await fetch(`/api/events/${eventData.id}/images`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'CSRF-Token': csrfToken,
-              },
-              body: JSON.stringify({
-                url: imageData.url,
-                preview: true,
-              }),
-            });
-
-            if (!imageAssociationResponse.ok) {
-              const imageAssociationErrorData = await imageAssociationResponse.json();
-              console.log('Image Association Error:', imageAssociationErrorData);
-              setErrors((prevErrors) => ({ ...prevErrors, image: imageAssociationErrorData.errors.url }));
-              return;
-            }
-          } else {
-            const imageErrorData = await imageResponse.json();
-            console.log('Image Upload Error:', imageErrorData);
-            setErrors((prevErrors) => ({ ...prevErrors, image: imageErrorData.errors.url }));
-            return;
-          }
-        }
-
-        navigate(`/events/${eventData.id}`);
-      } else {
-        const eventErrorData = await eventResponse.json();
-        console.log('Event Update Error:', eventErrorData);
-        const formattedErrors = {};
-        if (eventErrorData.errors) {
-          for (const key in eventErrorData.errors) {
-            formattedErrors[key] = eventErrorData.errors[key].msg;
-          }
-        } else {
-          formattedErrors.message = eventErrorData.message;
-        }
-        setErrors(formattedErrors);
-      }
-    } catch (error) {
-      setErrors({ message: 'Network or server error: ' + error.message });
+      navigate(`/events/${eventData.id}`);
+    } else {
+      const errorData = await eventResponse.json();
+      setErrors(errorData.errors || { message: errorData.message });
     }
   };
+
+  if (!isOwner) {
+    return null;
+  }
 
   return (
     <div className='form-container'>
       <form onSubmit={handleSubmit}>
         <div className='section-create-event-header'>
-          <h2>Update your event</h2>
+          <h2>Update Event for {groupName}</h2>
         </div>
         <div className='section-create-event'>
           <label>What is the name of your event?</label><br />
@@ -364,11 +326,6 @@ const UpdateEventForm = () => {
         )}
         <div className='section-create-event-submit'>
           <hr />
-          {formIncomplete && (
-            <div className='form-incomplete-error'>
-              <p>Incomplete form - see requirements above</p>
-            </div>
-          )}
           <button
             type='submit'
             className={`create-event-button ${!name || !type || !isPrivate || !price || !capacity || !startDate || !endDate || !description || description.length < 30 || description.length > 2000 || (type === 'In person' && (!venueAddress || !venueCity || !venueState)) ? 'grey' : ''}`}
@@ -376,10 +333,6 @@ const UpdateEventForm = () => {
             Update Event
           </button>
         </div>
-        {errors.message && <p className='field-error'>{errors.message}</p>}
-        {errors && Object.keys(errors).map((key, idx) => (
-          <p key={idx} className='field-error'>{errors[key]}</p>
-        ))}
       </form>
     </div>
   );

@@ -95,7 +95,7 @@ const EventDetailPage = () => {
           <div className='event-image-container'>
             {event.EventImages && event.EventImages.length > 0 ? (
               <img
-                src={event.EventImages[0].url}
+                src={`${event.EventImages[event.EventImages.length - 1].url}?${new Date().getTime()}`} // add timestamp to URL
                 alt={`${event.name}`}
                 className='event-detail-image'
                 onError={(e) => e.target.src = '/images/img.png'} // fallback image
@@ -109,8 +109,7 @@ const EventDetailPage = () => {
               <div className='event-details-group-card'>
                 {event.Group.GroupImages && event.Group.GroupImages.length > 0 && (
                   <img
-                  
-                    src={`${event.Group.GroupImages[0].url}?${new Date().getTime()}`} // add timestamp to URL
+                    src={`${event.Group.GroupImages[event.Group.GroupImages.length - 1].url}?${new Date().getTime()}`} // add timestamp to URL
                     alt="Group Thumbnail"
                     className="event-details-group-image"
                     onError={(e) => e.target.src = ''} // remove image on error
@@ -118,14 +117,14 @@ const EventDetailPage = () => {
                 )}
                 <div className='event-details-group-card-info'>
                   <h3 className='group-title'>{event.Group.name}</h3> 
-                  <p>{event.Group.private ? 'Private' : 'Public'}</p>  
+                  <p>{event.Group.private ? 'Private' : 'PUBLIC GROUP'}</p>  
                 </div>     
               </div>
             </Link>
             <div className='event-details-event-card'>
                 <div className='event-card-info'>
                   <div className='event-details-card-time'>    
-                  <GoClock />
+                  <GoClock size={30} />
                     <p>
                       START: {new Date(event.startDate).toLocaleDateString('en-US', {
                         weekday: 'long',
@@ -150,10 +149,10 @@ const EventDetailPage = () => {
                     </p><br/>
                   </div> <br></br>
                   <p>
-                    <MdOutlineAttachMoney /> &nbsp; 
+                    <MdOutlineAttachMoney size={30} /> &nbsp; 
                     {event.price && event.price > 0 ? `${event.price}` : 'FREE'}</p><br/>
                   <p>
-                  <FiMapPin />&nbsp;&nbsp;
+                  <FiMapPin size={30}/>&nbsp;&nbsp;
                   {event.type === 'In person' ? 'In person' : 'Online'}</p>
                     {event.type === 'In person' && event.Venue && (
                       <>
