@@ -54,7 +54,7 @@ const LandingPage = () => {
       <section className='section3'>
         <Link to='/groups' className='section3-link'>
           <div className='column'>
-            <img src='images/1-see-group.png' alt='Icon' className='small-icon' />
+            <img src='images/1-see-group-2.png' alt='Icon' className='small-icon' />
             <a href='/events' className='section3-group-link'>See all groups</a>
             <p>Find your pack among our groups. MeetPup has a community for every breed, age, and size!</p>
           </div>
