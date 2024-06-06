@@ -29,6 +29,11 @@ if (!isProduction) {
     origin: true,
     credentials: true,
   }));
+} else {
+  app.use(cors({
+    origin: ['https://meetpup-elya.onrender.com'], // replace with frontend URL?
+    credentials: true,
+  }));
 }
 
 app.use(helmet({
@@ -64,7 +69,7 @@ app.use(session({
   }
 }));
 
-// add the CSRF token restore route after setting CSRF middleware
+// add csrf token middleware before other middleware
 app.use(csrf({
   cookie: {
     secure: isProduction,
@@ -73,9 +78,14 @@ app.use(csrf({
   }
 }));
 
+// restore csrf token
 app.get('/api/csrf/restore', (req, res) => {
   const csrfToken = req.csrfToken();
-  res.cookie('XSRF-TOKEN', csrfToken);
+  res.cookie('XSRF-TOKEN', csrfToken, {
+    secure: isProduction,
+    sameSite: isProduction ? 'None' : 'Strict',
+    httpOnly: true
+  });
   res.status(200).json({
     'XSRF-Token': csrfToken
   });

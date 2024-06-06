@@ -86,5 +86,15 @@ router.delete('/', (req, res) => {
   res.status(200).json({ message: 'Logout successful' }); // return logout success message
 });
 
-module.exports = router;
+// 403 Error Handling
+router.use((err, req, res, next) => {
+  if (err.code === 'EBADCSRFTOKEN') {
+    res.status(403).json({
+      message: 'Invalid CSRF token'
+    });
+  } else {
+    next(err);
+  }
+});
 
+module.exports = router;
