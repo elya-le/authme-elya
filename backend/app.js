@@ -73,7 +73,7 @@ app.use(session({
 app.use(csrf({
   cookie: {
     secure: isProduction,
-    sameSite: isProduction ? 'None' : 'Strict',
+    sameSite: isProduction ? 'None' : 'Strict', // 'None' for cross-site requests
     httpOnly: true
   }
 }));
@@ -83,7 +83,7 @@ app.get('/api/csrf/restore', (req, res) => {
   const csrfToken = req.csrfToken();
   res.cookie('XSRF-TOKEN', csrfToken, {
     secure: isProduction,
-    sameSite: isProduction ? 'None' : 'Strict',
+    sameSite: isProduction ? 'None' : 'Strict', // 'None' for cross-site requests
     httpOnly: true
   });
   res.status(200).json({

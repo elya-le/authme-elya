@@ -14,6 +14,16 @@ import CreateEventForm from './components/Events/CreateEventForm';
 import UpdateEventForm from './components/Events/UpdateEventForm';
 import * as sessionActions from './store/session';
 
+// Fetch CSRF token and set it in a cookie
+const getCsrfToken = async () => {
+  const response = await fetch('/api/csrf/restore', {
+    method: 'GET',
+    credentials: 'include'
+  });
+  const data = await response.json();
+  document.cookie = `XSRF-TOKEN=${data['XSRF-Token']}`;
+};
+
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -21,6 +31,7 @@ function Layout() {
     dispatch(sessionActions.restoreUser()).then(() => {
       setIsLoaded(true);
     });
+    getCsrfToken(); // Fetch CSRF token on app initialization
   }, [dispatch]);
   return (
     <>
