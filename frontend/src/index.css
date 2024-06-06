@@ -1,0 +1,15 @@
+/* TODO: Add sitewide styles */
+/* index.css */
+
+body {
+  font-family: 'Roboto', sans-serif; /* Apply the font to the entire body */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
