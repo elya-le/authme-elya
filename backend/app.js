@@ -20,25 +20,25 @@ const routes = require('./routes');
 
 const app = express();
 
-app.use(morgan('dev'));
-app.use(cookieParser());
-app.use(express.json());
+app.use(morgan('dev')); // log HTTP requests
+app.use(cookieParser()); // parse cookies
+app.use(express.json()); // parse JSON request bodies
 
 if (!isProduction) {
   app.use(cors({
-    origin: true,
-    credentials: true,
+    origin: true, // allow all origins
+    credentials: true, // allow credentials
   }));
 } else {
   app.use(cors({
-    origin: ['https://meetpup-elya.onrender.com'], // replace with frontend URL?
-    credentials: true,
+    origin: ['https://meetpup-elya.onrender.com'], // replace with frontend URL
+    credentials: true, // allow credentials
   }));
 }
 
 app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" },
-  contentSecurityPolicy: false,
+  crossOriginResourcePolicy: { policy: "cross-origin" }, // allow cross-origin requests
+  contentSecurityPolicy: false, // disable CSP
 }));
 
 // serve static files from the "public/images" directory
@@ -48,8 +48,8 @@ app.use('/images', express.static(path.join(__dirname, 'public/images')));
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    require: true,
-    rejectUnauthorized: false,
+    require: true, // require SSL
+    rejectUnauthorized: false, // don't reject unauthorized SSL certificates
   },
 });
 
@@ -59,22 +59,22 @@ app.use(session({
     tableName: 'session' // use another table-name than the default "session"
   }),
   secret: process.env.SESSION_SECRET || 'secret-key', // use environment variable for security
-  resave: false,
-  saveUninitialized: false,
+  resave: false, // don't resave session if unmodified
+  saveUninitialized: false, // don't create session until something stored
   cookie: {
-    secure: isProduction,
+    secure: isProduction, // use secure cookies in production
     maxAge: 1000 * 60 * 60 * 24, // 1 day
-    httpOnly: true,
-    sameSite: isProduction ? 'None' : 'Lax',
+    httpOnly: true, // don't allow client-side JavaScript to access the cookie
+    sameSite: isProduction ? 'None' : 'Lax', // set to 'None' for cross-site requests
   }
 }));
 
 // add csrf token middleware before other middleware
 app.use(csrf({
   cookie: {
-    secure: isProduction,
-    sameSite: isProduction ? 'None' : 'Strict', // 'None' for cross-site requests
-    httpOnly: true
+    secure: isProduction, // use secure cookies in production
+    sameSite: isProduction ? 'None' : 'Strict', // set to 'None' for cross-site requests
+    httpOnly: true // don't allow client-side JavaScript to access the cookie
   }
 }));
 
@@ -82,9 +82,9 @@ app.use(csrf({
 app.get('/api/csrf/restore', (req, res) => {
   const csrfToken = req.csrfToken();
   res.cookie('XSRF-TOKEN', csrfToken, {
-    secure: isProduction,
-    sameSite: isProduction ? 'None' : 'Strict', // 'None' for cross-site requests
-    httpOnly: true
+    secure: isProduction, // use secure cookies in production
+    sameSite: isProduction ? 'None' : 'Strict', // set to 'None' for cross-site requests
+    httpOnly: false // allow client-side JavaScript to access the cookie
   });
   res.status(200).json({
     'XSRF-Token': csrfToken
